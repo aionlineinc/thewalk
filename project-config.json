@@ -1,0 +1,24 @@
+{
+  "projectName": "theWalk Redesign",
+  "clientName": "theWalk Ministries Inc",
+  "projectType": "Web application",
+  "productCategory": "Other / cross‑industry",
+  "designMode": "clone",
+  "styleFamily": "Minimal / clean",
+  "outputMode": "docs_scaffold_shell",
+  "platforms": "web, API",
+  "authRequired": "Yes",
+  "paymentsRequired": "Yes",
+  "crmRequired": "No",
+  "fileUploadsRequired": "Yes",
+  "notificationsRequired": "Yes",
+  "analyticsRequired": "Yes",
+  "paths": {
+    "docs": "docs/",
+    "agents": "agents/",
+    "skills": "skills/",
+    "assets": "assets/",
+    "assetIndexDoc": "docs/asset-inventory.md"
+  },
+  "uploadedAssets": "Yes — open files under `assets/` in the ZIP (see `docs/asset-inventory.md`)."
+}
