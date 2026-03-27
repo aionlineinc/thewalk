@@ -1,0 +1,23 @@
+# Durable Project Rules: theWalk Redesign
+
+## Core Technical & Stack
+- **Stack:** Next.js (App Router), PostgreSQL, Prisma, Tailwind, Redis, Strapi.
+- **Integrations:** Stripe (payments/donations), Google Analytics.
+- **Compliance:** Strict GDPR adherence (consent, PII minimization).
+
+## Development Guidelines
+- **Output Target:** `docs_scaffold_shell` (Focus on layout, structure, and API stubs).
+- **Architecture Limits:** No complex enterprise CRM systems. Basic Auth only for Phase 1.
+- **A11y:** Ensure WCAG 2.1 AA compliance (semantics, ARIA, contrast).
+
+## Design & Aesthetics
+- **Style Family:** Minimal / Clean.
+- **Core Tenets:** 
+  1. Superpower-level whitespace / spacing.
+  2. Clear typography hierarchy.
+  3. Smooth, restrained CSS transitions.
+- **Visuals:** Use earth tones and calming blues. Avoid visual noise, generic church layouts, and explicit visual clutter.
+
+## Workflows & Messaging
+- **Pathways:** Enforce the 3 core journeys: Cross Over (Entry), Cross Roads (Growth), Cross Connect (Impact).
+- **Copy Focus:** Minimal wording, high meaning. Direct and transformational. Avoid traditional church clichés.
