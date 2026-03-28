@@ -16,8 +16,12 @@ export function Header() {
       >
         {/* The Main Hover Pill */}
         <div className="bg-[#2a2a2a]/95 backdrop-blur-md rounded-full shadow-2xl border border-white/10 px-6 py-3 flex items-center justify-between relative z-20">
-          <Link href="/" className="flex items-center">
-            <Image src="/assets/logo/cmn8bhfz-logo-white.png" alt="theWalk Logo" width={100} height={32} className="object-contain" />
+          <Link
+            href="/"
+            className="flex min-h-8 items-center rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white/80"
+            aria-label="theWalk Ministries home"
+          >
+            <span className="text-lg font-medium tracking-tight text-white md:text-xl">theWalk</span>
           </Link>
           <nav className="hidden md:flex gap-8">
             <Link href="/about" className="text-sm font-medium text-white/80 hover:text-white transition-colors tracking-wide">About</Link>
