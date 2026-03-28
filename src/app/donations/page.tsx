@@ -21,7 +21,7 @@ export default function DonationsPage() {
           </p>
           <Link
             href="/contact"
-            className="mt-10 inline-flex rounded-full bg-[#fb5e32] px-8 py-3.5 text-sm font-medium text-white shadow-lg shadow-orange-500/20 transition-colors hover:bg-[#fb5e32]/90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#fb5e32]"
+            className="mt-10 inline-flex rounded-full bg-red-soft px-8 py-3.5 text-sm font-medium text-white shadow-lg shadow-black/20 transition-colors hover:bg-red-soft-hover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
           >
             Contact us about giving
           </Link>

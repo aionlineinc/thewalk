@@ -10,7 +10,7 @@ export function Button({ variant = 'primary', href, className, children, ...prop
   const baseStyles = "inline-flex items-center justify-center px-6 py-3 text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2";
   const variants = {
     primary: "bg-earth-900 text-white hover:bg-earth-500 cursor-pointer",
-    secondary: "bg-blue-500 text-white hover:bg-blue-900 cursor-pointer",
+    secondary: "bg-red-soft text-white hover:bg-red-soft-hover cursor-pointer",
     outline: "border border-earth-900 text-earth-900 hover:bg-earth-100 cursor-pointer"
   };
   

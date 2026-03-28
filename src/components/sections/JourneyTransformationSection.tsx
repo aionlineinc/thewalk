@@ -220,7 +220,7 @@ export function JourneyTransformationSection() {
               aria-hidden
             >
               <div
-                className="h-full w-full origin-left rounded-full bg-[#fb5e32] will-change-transform"
+                className="h-full w-full origin-left rounded-full bg-red-soft will-change-transform"
                 style={{
                   transform: `translate3d(0, 0, 0) scale3d(${lineScale}, 1, 1)`,
                 }}
@@ -233,7 +233,7 @@ export function JourneyTransformationSection() {
                 <Link
                   key={step.href}
                   href={step.href}
-                  className="group relative flex min-w-0 flex-col text-left outline-none transition-shadow focus-visible:rounded-2xl focus-visible:ring-2 focus-visible:ring-[#fb5e32] focus-visible:ring-offset-2"
+                  className="group relative flex min-w-0 flex-col text-left outline-none transition-shadow focus-visible:rounded-2xl focus-visible:ring-2 focus-visible:ring-red-900 focus-visible:ring-offset-2"
                 >
                   <div className="min-w-0" style={imageMotion(index)}>
                     <div className="relative h-52 shrink-0 overflow-hidden rounded-2xl bg-neutral-100 ring-1 ring-black/[0.06]">
@@ -250,7 +250,7 @@ export function JourneyTransformationSection() {
 
                   <div className="relative mt-11 flex h-12 items-center justify-center">
                     <div
-                      className="absolute left-1/2 top-1/2 z-20 flex h-9 w-9 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-md bg-[#fb5e32] font-mono text-sm font-semibold text-white shadow-md ring-[3px] ring-white"
+                      className="absolute left-1/2 top-1/2 z-20 flex h-9 w-9 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-md bg-red-soft font-mono text-sm font-semibold text-white shadow-md ring-[3px] ring-white"
                       aria-hidden
                     >
                       {step.num}
@@ -258,7 +258,7 @@ export function JourneyTransformationSection() {
                   </div>
 
                   <div className="min-w-0 pt-2" style={textMotion(index)}>
-                    <h3 className="text-lg font-medium tracking-tight text-neutral-950 transition-colors group-hover:text-[#fb5e32] lg:text-xl">
+                    <h3 className="text-lg font-medium tracking-tight text-neutral-950 transition-colors group-hover:text-red-900 lg:text-xl">
                       {step.title}
                     </h3>
                     <p className="mt-2 text-[15px] font-light leading-relaxed text-neutral-500 lg:text-base">
@@ -276,7 +276,7 @@ export function JourneyTransformationSection() {
               <Link
                 key={step.href}
                 href={step.href}
-                className="flex flex-col outline-none focus-visible:ring-2 focus-visible:ring-[#fb5e32] focus-visible:ring-offset-2"
+                className="flex flex-col outline-none focus-visible:ring-2 focus-visible:ring-red-900 focus-visible:ring-offset-2"
               >
                 <div className="mb-4 min-w-0" style={imageMotion(index)}>
                   <div className="relative h-44 overflow-hidden rounded-2xl ring-1 ring-black/[0.06]">
@@ -292,14 +292,14 @@ export function JourneyTransformationSection() {
                 </div>
                 <div className="flex items-center gap-3">
                   <div
-                    className="relative z-10 flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-[#fb5e32] font-mono text-sm font-semibold text-white shadow-md ring-[3px] ring-white"
+                    className="relative z-10 flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-red-soft font-mono text-sm font-semibold text-white shadow-md ring-[3px] ring-white"
                     aria-hidden
                   >
                     {step.num}
                   </div>
                   <div className="h-0.5 flex-1 rounded-full bg-neutral-200">
                     <div
-                      className="h-full origin-left rounded-full bg-[#fb5e32]"
+                      className="h-full origin-left rounded-full bg-red-soft"
                       style={{
                         transform: `scaleX(${lineScale})`,
                       }}

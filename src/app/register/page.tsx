@@ -22,13 +22,13 @@ export default function RegisterPage() {
           <div className="mt-10 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
             <Link
               href="/sign-in"
-              className="inline-flex rounded-full bg-[#fb5e32] px-8 py-3.5 text-sm font-medium text-white shadow-lg shadow-orange-500/20 transition-colors hover:bg-[#fb5e32]/90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#fb5e32]"
+              className="inline-flex rounded-full bg-red-soft px-8 py-3.5 text-sm font-medium text-white shadow-lg shadow-black/20 transition-colors hover:bg-red-soft-hover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
             >
               Go to sign in
             </Link>
             <Link
               href="/contact"
-              className="text-sm font-medium text-gray-600 underline-offset-4 transition-colors hover:text-[#fb5e32] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#fb5e32]"
+              className="text-sm font-medium text-gray-600 underline-offset-4 transition-colors hover:text-red-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-900"
             >
               Contact support
             </Link>

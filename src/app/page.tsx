@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { JourneyTransformationSection } from "@/components/sections/JourneyTransformationSection";
 import { MinistryGroupsSection } from "@/components/sections/MinistryGroupsSection";
@@ -9,18 +10,18 @@ export default function Home() {
       {/* Hero Section */}
       <section className="relative w-full h-[95vh] min-h-[600px] p-2 md:p-4 flex flex-col justify-center items-center font-sans tracking-tight">
         <div className="absolute inset-2 md:inset-4 rounded-[2rem] overflow-hidden bg-black shadow-2xl">
-          <video
-            autoPlay
-            loop
-            muted
-            playsInline
-            className="absolute inset-0 w-full h-full object-cover opacity-70 mix-blend-screen mix-blend-lighten"
-            poster="https://images.unsplash.com/photo-1490730141103-6cac27aaab94?q=80&w=2070&auto=format&fit=crop"
-          >
-            <source src="https://player.vimeo.com/external/494252666.sd.mp4?s=25e3783a54d5d3ba0b240b9ea5167f9227f2c68f&profile_id=164&oauth2_token_id=57447761" type="video/mp4" />
-          </video>
-          <div className="absolute inset-0 bg-gradient-to-t from-[#111111] via-black/40 to-black/10" />
-          <div className="absolute inset-0 bg-[#fb5e32]/10 mix-blend-overlay" />
+          <div className="absolute inset-0">
+            <Image
+              src="/assets/hero/hero-bokeh-forest.png"
+              alt=""
+              fill
+              priority
+              className="object-cover"
+              sizes="(max-width: 768px) 100vw, min(100vw, 1280px)"
+            />
+          </div>
+          <div className="absolute inset-0 bg-gradient-to-t from-[#111111] via-black/45 to-black/20" />
+          <div className="absolute bottom-0 right-0 h-full w-full bg-red-soft/20 mix-blend-overlay" />
         </div>
 
         <div className="relative z-10 text-center flex flex-col items-center mt-12 px-4 max-w-4xl mx-auto">
@@ -32,7 +33,7 @@ export default function Home() {
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 items-center justify-center">
-            <Link href="/journey" className="bg-[#fb5e32] hover:bg-[#fb5e32]/90 text-white rounded-full px-8 py-3.5 text-lg font-medium transition-all shadow-lg shadow-orange-500/20 flex items-center justify-center gap-2">
+            <Link href="/journey" className="bg-red-soft hover:bg-red-soft-hover text-white rounded-full px-8 py-3.5 text-lg font-medium transition-all shadow-lg shadow-black/25 flex items-center justify-center gap-2 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white">
               Explore the Journey
               <svg className="w-5 h-5 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
             </Link>
@@ -99,7 +100,7 @@ export default function Home() {
           <h2 className="text-3xl md:text-5xl font-medium text-gray-900 mb-6 tracking-tight">Start Your Journey Today</h2>
           <p className="text-xl md:text-2xl text-gray-500 font-light mb-10">Take the next step into growth, healing, truth, and connection.</p>
           <div className="flex justify-center">
-            <Link href="/journey" className="bg-[#fb5e32] text-white hover:bg-[#fb5e32]/90 rounded-full px-10 py-4 text-lg font-medium shadow-lg shadow-orange-500/20 transition-all">
+            <Link href="/journey" className="bg-red-soft text-white hover:bg-red-soft-hover rounded-full px-10 py-4 text-lg font-medium shadow-lg shadow-black/20 transition-all focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-900">
               Explore the Journey
             </Link>
           </div>

@@ -23,7 +23,7 @@ export default function Shop() {
                 <div className="w-full aspect-[2/3] bg-muted mb-6 flex items-center justify-center border border-earth-100 group-hover:border-earth-500 transition-colors cursor-pointer">
                   <span className="text-muted-foreground opacity-50">Book Cover</span>
                 </div>
-                <h3 className="font-bold text-earth-900 mb-2 cursor-pointer group-hover:text-blue-500 transition-colors">Book Title {i}</h3>
+                <h3 className="font-bold text-earth-900 mb-2 cursor-pointer group-hover:text-red-500 transition-colors">Book Title {i}</h3>
                 <p className="text-sm text-muted-foreground flex-1 mb-4">Short reflection description that fits here.</p>
                 <div className="font-bold text-lg text-earth-900 mb-4">$19.99</div>
                 <button className="w-full border border-earth-900 text-earth-900 py-2 rounded hover:bg-earth-100 transition-colors cursor-pointer">View Details</button>

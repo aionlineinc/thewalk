@@ -33,15 +33,15 @@ export default function Contact() {
             <form className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-earth-900 mb-1">Name</label>
-                <input type="text" className="w-full px-4 py-2 border border-earth-100 rounded focus:ring-2 focus:ring-blue-500 outline-none" placeholder="Your Name" />
+                <input type="text" className="w-full px-4 py-2 border border-earth-100 rounded focus:ring-2 focus:ring-red-500 outline-none" placeholder="Your Name" />
               </div>
               <div>
                 <label className="block text-sm font-medium text-earth-900 mb-1">Email</label>
-                <input type="email" className="w-full px-4 py-2 border border-earth-100 rounded focus:ring-2 focus:ring-blue-500 outline-none" placeholder="you@example.com" />
+                <input type="email" className="w-full px-4 py-2 border border-earth-100 rounded focus:ring-2 focus:ring-red-500 outline-none" placeholder="you@example.com" />
               </div>
               <div>
                 <label className="block text-sm font-medium text-earth-900 mb-1">Subject</label>
-                <select className="w-full px-4 py-2 border border-earth-100 rounded focus:ring-2 focus:ring-blue-500 outline-none">
+                <select className="w-full px-4 py-2 border border-earth-100 rounded focus:ring-2 focus:ring-red-500 outline-none">
                   <option>General Inquiry</option>
                   <option>Serve / Volunteer</option>
                   <option>Partnership</option>
@@ -50,7 +50,7 @@ export default function Contact() {
               </div>
               <div>
                 <label className="block text-sm font-medium text-earth-900 mb-1">Message</label>
-                <textarea rows={4} className="w-full px-4 py-2 border border-earth-100 rounded focus:ring-2 focus:ring-blue-500 outline-none" placeholder="How can we help?"></textarea>
+                <textarea rows={4} className="w-full px-4 py-2 border border-earth-100 rounded focus:ring-2 focus:ring-red-500 outline-none" placeholder="How can we help?"></textarea>
               </div>
               <button type="button" className="w-full bg-earth-900 text-white font-medium py-3 rounded hover:bg-earth-500 transition-colors cursor-pointer">
                 Send Message

@@ -18,10 +18,17 @@ export function Header() {
         <div className="bg-[#2a2a2a]/95 backdrop-blur-md rounded-full shadow-2xl border border-white/10 px-6 py-3 flex items-center justify-between relative z-20">
           <Link
             href="/"
-            className="flex min-h-8 items-center rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white/80"
+            className="relative flex min-h-8 items-center rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white/80"
             aria-label="theWalk Ministries home"
           >
-            <span className="text-lg font-medium tracking-tight text-white md:text-xl">theWalk</span>
+            <Image
+              src="/assets/logo/cmn8bhfz-logo-white.png"
+              alt=""
+              width={160}
+              height={40}
+              className="h-7 w-auto md:h-8"
+              priority
+            />
           </Link>
           <nav className="hidden md:flex gap-8">
             <Link href="/about" className="text-sm font-medium text-white/80 hover:text-white transition-colors tracking-wide">About</Link>
@@ -38,7 +45,7 @@ export function Header() {
           </nav>
           <div className="flex items-center gap-4">
             <Link href="/sign-in" className="text-sm font-medium text-white/80 hover:text-white hidden md:block">Login</Link>
-            <Link href="/get-involved" className="bg-[#fb5e32] hover:bg-[#fb5e32]/90 text-white text-sm font-medium px-5 py-2.5 rounded-full transition-colors shadow-lg shadow-orange-500/20">
+            <Link href="/get-involved" className="bg-red-soft hover:bg-red-soft-hover text-white text-sm font-medium px-5 py-2.5 rounded-full transition-colors shadow-lg shadow-black/25 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white">
               Join theWalk
             </Link>
           </div>
@@ -72,31 +79,31 @@ export function Header() {
               <div className="flex flex-col gap-6">
                 <Link href="/journey/cross-over" className="flex items-start gap-4 group">
                   <div className="w-12 h-12 rounded-xl border border-gray-100 bg-gray-50 flex items-center justify-center shrink-0 overflow-hidden relative">
-                    <div className="absolute inset-0 bg-gradient-to-br from-[#fb5e32]/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                    <span className="text-gray-400 font-bold text-lg group-hover:text-[#fb5e32] transition-colors relative z-10">1</span>
+                    <div className="absolute inset-0 bg-gradient-to-br from-red-soft/35 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                    <span className="text-gray-400 font-bold text-lg group-hover:text-red-900 transition-colors relative z-10">1</span>
                   </div>
                   <div>
-                    <h5 className="text-gray-900 font-medium group-hover:text-[#fb5e32] transition-colors">Cross Over</h5>
+                    <h5 className="text-gray-900 font-medium group-hover:text-red-900 transition-colors">Cross Over</h5>
                     <p className="text-sm text-gray-500 mt-1 leading-snug">Enter a place of restoration, support, and profound transformation.</p>
                   </div>
                 </Link>
                 <Link href="/journey/cross-roads" className="flex items-start gap-4 group">
                   <div className="w-12 h-12 rounded-xl border border-gray-100 bg-gray-50 flex items-center justify-center shrink-0 overflow-hidden relative">
-                    <div className="absolute inset-0 bg-gradient-to-br from-[#fb5e32]/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                    <span className="text-gray-400 font-bold text-lg group-hover:text-[#fb5e32] transition-colors relative z-10">2</span>
+                    <div className="absolute inset-0 bg-gradient-to-br from-red-soft/35 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                    <span className="text-gray-400 font-bold text-lg group-hover:text-red-900 transition-colors relative z-10">2</span>
                   </div>
                   <div>
-                    <h5 className="text-gray-900 font-medium group-hover:text-[#fb5e32] transition-colors">Cross Roads</h5>
+                    <h5 className="text-gray-900 font-medium group-hover:text-red-900 transition-colors">Cross Roads</h5>
                     <p className="text-sm text-gray-500 mt-1 leading-snug">Grow deeply in your identity, absolute truth, and spiritual direction.</p>
                   </div>
                 </Link>
                 <Link href="/journey/cross-connect" className="flex items-start gap-4 group">
                   <div className="w-12 h-12 rounded-xl border border-gray-100 bg-gray-50 flex items-center justify-center shrink-0 overflow-hidden relative">
-                    <div className="absolute inset-0 bg-gradient-to-br from-[#fb5e32]/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                    <span className="text-gray-400 font-bold text-lg group-hover:text-[#fb5e32] transition-colors relative z-10">3</span>
+                    <div className="absolute inset-0 bg-gradient-to-br from-red-soft/35 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                    <span className="text-gray-400 font-bold text-lg group-hover:text-red-900 transition-colors relative z-10">3</span>
                   </div>
                   <div>
-                    <h5 className="text-gray-900 font-medium group-hover:text-[#fb5e32] transition-colors">Cross Connect</h5>
+                    <h5 className="text-gray-900 font-medium group-hover:text-red-900 transition-colors">Cross Connect</h5>
                     <p className="text-sm text-gray-500 mt-1 leading-snug">Build enduring community, fellowship, and expand into Kingdom impact.</p>
                   </div>
                 </Link>
@@ -108,10 +115,10 @@ export function Header() {
                <div>
                   <h4 className="text-[10px] font-bold text-gray-400 tracking-widest uppercase mb-6">Learn More</h4>
                   <div className="flex flex-col gap-4">
-                    <Link href="/teachings" className="text-sm font-medium text-gray-900 hover:text-[#fb5e32] transition-colors">Teachings & Media</Link>
-                    <Link href="/about" className="text-sm font-medium text-gray-900 hover:text-[#fb5e32] transition-colors">Our Why</Link>
-                    <Link href="/donations" className="text-sm font-medium text-gray-900 hover:text-[#fb5e32] transition-colors flex items-center gap-2">
-                      Give <span className="text-[10px] text-[#fb5e32] uppercase tracking-wider font-bold">[Impact]</span>
+                    <Link href="/teachings" className="text-sm font-medium text-gray-900 hover:text-red-900 transition-colors">Teachings & Media</Link>
+                    <Link href="/about" className="text-sm font-medium text-gray-900 hover:text-red-900 transition-colors">Our Why</Link>
+                    <Link href="/donations" className="text-sm font-medium text-gray-900 hover:text-red-900 transition-colors flex items-center gap-2">
+                      Give <span className="text-[10px] text-red-500 uppercase tracking-wider font-bold">[Impact]</span>
                     </Link>
                   </div>
                </div>
@@ -119,8 +126,8 @@ export function Header() {
                <div>
                   <h4 className="text-[10px] font-bold text-gray-400 tracking-widest uppercase mb-6">Other</h4>
                   <div className="flex flex-col gap-4">
-                    <Link href="/shop" className="text-sm font-medium text-gray-900 hover:text-[#fb5e32] transition-colors">Shop Resources</Link>
-                    <Link href="/contact" className="text-sm font-medium text-gray-900 hover:text-[#fb5e32] transition-colors">Contact Us</Link>
+                    <Link href="/shop" className="text-sm font-medium text-gray-900 hover:text-red-900 transition-colors">Shop Resources</Link>
+                    <Link href="/contact" className="text-sm font-medium text-gray-900 hover:text-red-900 transition-colors">Contact Us</Link>
                   </div>
                </div>
             </div>

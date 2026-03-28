@@ -15,7 +15,7 @@ export default function Teachings() {
               <span className="text-earth-100 opacity-50">Video Placeholder</span>
             </div>
             <div className="p-10 md:w-1/2 flex flex-col justify-center">
-              <span className="text-sm font-bold uppercase tracking-widest text-blue-100 mb-2">Featured Series</span>
+              <span className="text-sm font-bold uppercase tracking-widest text-red-100 mb-2">Featured Series</span>
               <h2 className="text-3xl font-bold mb-4">The Book of Exodus</h2>
               <p className="text-earth-100 opacity-80 mb-8">Highlight a message, study, or series that reflects theWalk’s core themes of discipleship, truth, and spiritual growth.</p>
               <div>
@@ -46,7 +46,7 @@ export default function Teachings() {
                 <div className="aspect-video bg-muted border border-earth-100 rounded-lg mb-4 flex items-center justify-center group-hover:border-earth-500 transition-colors">
                   <span className="text-muted-foreground opacity-50">Thumbnail {i}</span>
                 </div>
-                <h3 className="font-bold text-earth-900 mb-1 group-hover:text-blue-500 transition-colors">Teaching Title {i}</h3>
+                <h3 className="font-bold text-earth-900 mb-1 group-hover:text-red-500 transition-colors">Teaching Title {i}</h3>
                 <p className="text-sm text-muted-foreground">Speaker Name &middot; Date</p>
               </div>
             ))}

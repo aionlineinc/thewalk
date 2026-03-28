@@ -40,11 +40,11 @@ export default function JourneyPage() {
               <li key={p.slug}>
                 <Link
                   href={`/journey/${p.slug}`}
-                  className="flex h-full flex-col rounded-xl border border-earth-100 bg-white p-8 shadow-sm transition-colors hover:border-[#fb5e32]/40 hover:shadow-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#fb5e32]"
+                  className="group flex h-full flex-col rounded-xl border border-earth-100 bg-white p-8 shadow-sm transition-colors hover:border-red-soft/60 hover:shadow-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-900"
                 >
                   <h2 className="text-xl font-medium tracking-tight text-gray-900">{p.title}</h2>
                   <p className="mt-3 flex-1 text-sm font-light leading-relaxed text-gray-500">{p.blurb}</p>
-                  <span className="mt-6 text-sm font-medium text-[#fb5e32]">Learn more →</span>
+                  <span className="mt-6 text-sm font-medium text-red-500 group-hover:text-red-900">Learn more →</span>
                 </Link>
               </li>
             ))}

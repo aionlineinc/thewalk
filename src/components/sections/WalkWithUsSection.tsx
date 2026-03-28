@@ -31,7 +31,7 @@ export function WalkWithUsSection() {
         <p className="mt-14 text-center md:mt-16">
           <Link
             href="/get-involved"
-            className="inline-flex items-center gap-1 text-sm font-medium text-[#fb5e32] transition-colors hover:text-[#e04d28] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#fb5e32]"
+            className="inline-flex items-center gap-1 text-sm font-medium text-red-500 transition-colors hover:text-red-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-900"
           >
             How to get involved
             <span aria-hidden> →</span>
