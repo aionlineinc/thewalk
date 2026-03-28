@@ -79,9 +79,8 @@ const STEPS = [
   },
 ] as const;
 
-/** Rail through badge center: md–lg extra top padding (scroll row) + image + mt-11 + half badge row */
-const RAIL_TOP_CLASSES =
-  "top-[calc(5.5rem+13rem+2.75rem+1.5rem)] lg:top-[calc(13rem+2.75rem+1.5rem)]";
+/** Rail through badge center: image h-52 (13rem) + mt-11 (2.75rem) + half badge row (h-12/2) */
+const RAIL_TOP_CLASSES = "top-[calc(13rem+2.75rem+1.5rem)]";
 
 export function JourneyTransformationSection() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -210,7 +209,7 @@ export function JourneyTransformationSection() {
             </p>
           </header>
 
-          {/* md–lg: horizontal snap strip; lg+: three-column grid (Superpower-style) */}
+          {/* md+: three-column grid — horizontal snap strip was easy to clip on tablets */}
           <div className="relative isolate hidden md:block">
             <div
               className={`pointer-events-none absolute left-0 right-0 z-0 h-[2px] -translate-y-1/2 rounded-full bg-neutral-200/90 ${RAIL_TOP_CLASSES}`}
@@ -228,17 +227,13 @@ export function JourneyTransformationSection() {
               />
             </div>
 
-            {/*
-              overflow-x-auto implies overflow-y: auto in CSS, which clips translateY on images.
-              Extra vertical padding keeps motion inside the paint area on md–lg; lg uses grid + overflow visible.
-            */}
-            <div className="relative z-10 -mx-2 px-2 pb-4 lg:mx-0 lg:px-0 lg:pb-0">
-              <div className="flex snap-x snap-mandatory gap-6 overflow-x-auto py-6 md:gap-8 md:py-[5.5rem] lg:grid lg:snap-none lg:grid-cols-3 lg:gap-x-10 lg:overflow-visible lg:py-0">
+            <div className="relative z-10 pb-4 md:pb-0">
+              <div className="grid grid-cols-3 gap-4 py-6 md:gap-6 md:py-6 lg:gap-x-10 lg:py-0">
               {STEPS.map((step, index) => (
                 <Link
                   key={step.href}
                   href={step.href}
-                  className="group relative flex w-[min(100%,min(420px,calc(100vw-3rem)))] shrink-0 snap-center flex-col text-left outline-none transition-shadow focus-visible:rounded-2xl focus-visible:ring-2 focus-visible:ring-[#fb5e32] focus-visible:ring-offset-2 md:w-[72vw] lg:w-auto lg:min-w-0"
+                  className="group relative flex min-w-0 flex-col text-left outline-none transition-shadow focus-visible:rounded-2xl focus-visible:ring-2 focus-visible:ring-[#fb5e32] focus-visible:ring-offset-2"
                 >
                   <div className="min-w-0" style={imageMotion(index)}>
                     <div className="relative h-52 shrink-0 overflow-hidden rounded-2xl bg-neutral-100 ring-1 ring-black/[0.06]">
@@ -248,7 +243,7 @@ export function JourneyTransformationSection() {
                         fill
                         priority
                         className="object-cover transition-transform duration-500 ease-out group-hover:scale-[1.02]"
-                        sizes="(min-width: 1024px) 340px, 72vw"
+                        sizes="(min-width: 1024px) 340px, (min-width: 768px) 28vw, 100vw"
                       />
                     </div>
                   </div>
