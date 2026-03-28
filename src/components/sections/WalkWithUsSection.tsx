@@ -17,7 +17,7 @@ const pillars = [
 
 export function WalkWithUsSection() {
   return (
-    <section className="border-b border-gray-100 bg-white py-20 md:py-[115px]" aria-label="Walk With Us">
+    <section className="border-b border-gray-100 bg-white py-[115px]" aria-label="Walk With Us">
       <div className="container mx-auto max-w-[850px] px-4">
         <p className="mx-auto mb-14 max-w-2xl text-center text-base font-light leading-relaxed text-gray-500 md:mb-16 md:text-lg">
           Whether you feel called to serve, support, or partner, there is a place for you in this work.
