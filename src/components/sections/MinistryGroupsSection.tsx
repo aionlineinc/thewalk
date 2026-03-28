@@ -109,7 +109,7 @@ export function MinistryGroupsSection() {
           </ul>
         </div>
 
-        <p className="mx-auto mt-12 max-w-2xl px-4 text-center text-base font-light leading-relaxed text-white/80 [text-shadow:0_1px_20px_rgba(0,0,0,0.4)] md:mt-14 md:text-lg">
+        <p className="mx-auto mt-12 max-w-2xl px-4 text-center text-base font-normal leading-relaxed text-white/80 [text-shadow:0_1px_20px_rgba(0,0,0,0.4)] md:mt-14">
           From restoration and discipleship to fellowship and ministry support, each expression of theWalk exists to
           strengthen believers and equip the Body of Christ.
         </p>

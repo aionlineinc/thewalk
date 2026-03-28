@@ -17,14 +17,8 @@ const pillars = [
 
 export function WalkWithUsSection() {
   return (
-    <section className="border-b border-gray-100 bg-white py-20 md:py-24" aria-labelledby="walk-with-us-heading">
+    <section className="border-b border-gray-100 bg-white py-20 md:py-[115px]" aria-label="Walk With Us">
       <div className="container mx-auto max-w-[850px] px-4">
-        <h2
-          id="walk-with-us-heading"
-          className="mb-3 text-center text-3xl font-medium tracking-tight text-gray-900 md:text-4xl"
-        >
-          Walk With Us
-        </h2>
         <p className="mx-auto mb-14 max-w-2xl text-center text-base font-light leading-relaxed text-gray-500 md:mb-16 md:text-lg">
           Whether you feel called to serve, support, or partner, there is a place for you in this work.
         </p>
@@ -33,7 +27,7 @@ export function WalkWithUsSection() {
           {pillars.map(({ title, body }) => (
             <div key={title} className="flex flex-col items-center text-center">
               <h3 className="mb-2 text-base font-medium tracking-tight text-gray-900 md:text-[17px]">{title}</h3>
-              <p className="max-w-[220px] text-[11px] font-light leading-snug text-gray-500 md:max-w-none">{body}</p>
+              <p className="max-w-[220px] text-[14px] font-light leading-snug text-gray-500 md:max-w-none">{body}</p>
             </div>
           ))}
         </div>
