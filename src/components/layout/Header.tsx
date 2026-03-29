@@ -22,11 +22,11 @@ export function Header() {
             aria-label="theWalk Ministries home"
           >
             <Image
-              src="/assets/logo/cmn8bhfz-logo-white.png"
-              alt=""
-              width={160}
-              height={40}
-              className="h-7 w-auto md:h-8"
+              src="/assets/logo/white-logo.png"
+              alt="theWalk ministries"
+              width={220}
+              height={72}
+              className="h-7 w-auto max-w-[9.5rem] object-contain object-left md:h-8 md:max-w-[11rem]"
               priority
             />
           </Link>

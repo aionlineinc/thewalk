@@ -118,9 +118,9 @@ export function Footer() {
               serve, grow, or connect, there is a place for you here.
             </p>
           </div>
-          <div className="flex shrink-0 items-center gap-2.5 rounded-2xl border border-red-100 bg-red-100/40 px-4 py-3 text-red-900">
+          <div className="flex shrink-0 items-center gap-2.5 rounded-2xl border border-[rgb(217,217,217)] bg-[rgba(237,233,233,0.4)] px-4 py-3 text-foreground">
             <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-red-900/10" aria-hidden>
-              <svg width="14" height="14" viewBox="0 0 12 12" fill="none" className="text-red-900" aria-hidden>
+              <svg width="14" height="14" viewBox="0 0 12 12" fill="none" className="text-foreground" aria-hidden>
                 <path
                   d="M2 6l3 3 5-5"
                   stroke="currentColor"
@@ -130,7 +130,7 @@ export function Footer() {
                 />
               </svg>
             </span>
-            <span className="text-xs font-medium uppercase tracking-wide text-red-900/90">Faith · Growth · Purpose</span>
+            <span className="text-xs font-medium uppercase tracking-wide text-[rgba(55,52,52,0.9)]">Faith · Growth · Purpose</span>
           </div>
         </div>
 
