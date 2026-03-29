@@ -1,14 +1,11 @@
-import { Hero } from "@/components/ui/Hero";
+import { AboutPremiumHero } from "@/components/sections/AboutPremiumHero";
 import { EditorialSplitBlock } from "@/components/ui/EditorialSplitBlock";
 import Image from "next/image";
 
 export default function About() {
   return (
     <>
-      <Hero 
-        headline="About theWalk" 
-        subtext="A ministry committed to spiritual growth, discipleship, fellowship, and transformation."
-      />
+      <AboutPremiumHero />
 
       <EditorialSplitBlock 
         headline="Who We Are" 

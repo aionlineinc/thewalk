@@ -66,7 +66,7 @@ export function Footer() {
             </li>
           </FooterColumn>
 
-          <FooterColumn title="Pathways">
+          <FooterColumn title="Journey">
             <li>
               <FooterLink href="/journey/cross-over">Cross Over</FooterLink>
             </li>
