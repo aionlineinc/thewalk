@@ -9,7 +9,7 @@ export default function Home() {
     <>
       {/* Hero Section */}
       <section className="relative w-full h-[95vh] min-h-[600px] p-2 md:p-4 flex flex-col justify-center items-center font-sans tracking-tight">
-        <div className="absolute inset-2 md:inset-4 rounded-[2rem] overflow-hidden bg-black shadow-2xl">
+        <div className="absolute inset-2 md:inset-4 rounded-[20px] overflow-hidden bg-black shadow-2xl">
           <div className="absolute inset-0">
             <Image
               src="/assets/hero/hero-bokeh-forest.png"
@@ -25,7 +25,7 @@ export default function Home() {
         </div>
 
         <div className="relative z-10 text-center flex flex-col items-center mt-12 px-4 max-w-4xl mx-auto">
-          <h1 className="text-5xl md:text-[70px] lg:text-[5rem] font-normal leading-[1.1] tracking-tight text-white mb-6 drop-shadow-md">
+          <h1 className="text-5xl md:text-[70px] font-normal leading-[1.1] tracking-tight text-white mb-6 drop-shadow-md">
             Walk in Faith.<br />Grow in Purpose.
           </h1>
           <p className="text-lg text-white/90 mb-10 max-w-2xl mx-auto font-light leading-relaxed">
