@@ -9,7 +9,7 @@ export default function Home() {
     <>
       {/* Hero Section */}
       <section className="relative w-full h-[95vh] min-h-[600px] p-2 md:p-4 flex flex-col justify-center items-center font-sans tracking-tight">
-        <div className="absolute inset-2 md:inset-4 rounded-[20px] overflow-hidden bg-black shadow-2xl">
+        <div className="absolute inset-2 md:inset-4 rounded-[20px] overflow-hidden">
           <div className="absolute inset-0">
             <Image
               src="/assets/hero/hero-bokeh-forest.png"
@@ -45,7 +45,7 @@ export default function Home() {
       </section>
 
       {/* What is theWalk */}
-      <section className="w-full bg-white pt-24 md:pt-32 pb-12 text-center">
+      <section className="w-full bg-white pt-24 md:pt-[100px] pb-20 text-center">
         <div className="container mx-auto px-4 max-w-4xl">
           <h2 className="text-3xl md:text-5xl font-medium tracking-tight text-gray-900 mb-6">What is theWalk?</h2>
           <p className="text-lg text-gray-500 font-light leading-relaxed max-w-[650px] mx-auto">
@@ -55,30 +55,19 @@ export default function Home() {
       </section>
 
       {/* Vision & Mission (Minimalist) */}
-      <section className="w-full bg-white pb-24 md:pb-32 border-b border-gray-50 pt-20">
+      <section className="w-full bg-gray-50 pb-24 md:pb-32 border-b border-gray-100 pt-20">
         <div className="mx-auto w-3/4 max-w-full px-4 sm:px-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-16 md:gap-24">
 
             <div className="flex flex-col items-center md:items-start text-center md:text-left">
-              <div className="flex items-center gap-3 mb-4 text-black">
-                <svg className="w-6 h-6 opacity-80" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                </svg>
-                <h3 className="font-medium text-2xl tracking-tight text-gray-900">Vision</h3>
-              </div>
+              <h3 className="mb-4 font-medium text-2xl tracking-tight text-gray-900">Vision</h3>
               <p className="text-[15px] text-gray-500 font-light leading-relaxed max-w-md">
                 A strengthened and cohesive Body of Christ interconnected across families, congregations, denominations, nations and cultures.
               </p>
             </div>
 
             <div className="flex flex-col items-center md:items-start text-center md:text-left">
-              <div className="flex items-center gap-3 mb-4 text-black">
-                <svg className="w-6 h-6 opacity-80" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                <h3 className="font-medium text-2xl tracking-tight text-gray-900">Mission</h3>
-              </div>
+              <h3 className="mb-4 font-medium text-2xl tracking-tight text-gray-900">Mission</h3>
               <p className="text-[15px] text-gray-500 font-light leading-relaxed max-w-md">
                 Create a kingdom-focused culture through discipleship and fellowship, which facilitates the manifestation of God’s purposes in all spheres.
               </p>

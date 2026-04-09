@@ -9,10 +9,8 @@ type NavMenu = "about" | "journey" | "teachings" | "shop";
 export function Header() {
   const [activeMenu, setActiveMenu] = useState<NavMenu | null>(null);
 
-  const navLinkClass = (key: NavMenu) =>
-    `text-sm font-medium tracking-wide transition-colors ${
-      activeMenu === key ? "text-white" : "text-white/80 hover:text-white"
-    }`;
+  const navLinkClass =
+    "text-sm font-medium tracking-wide text-white transition-colors hover:text-white";
 
   return (
     <header className="fixed top-[35px] inset-x-0 z-50 flex w-full flex-col items-center px-4 md:px-8">
@@ -43,14 +41,14 @@ export function Header() {
             <nav className="flex items-center gap-8" aria-label="Primary">
               <Link
                 href="/about"
-                className={navLinkClass("about")}
+                className={navLinkClass}
                 onMouseEnter={() => setActiveMenu("about")}
               >
                 About
               </Link>
               <button
                 type="button"
-                className={`flex cursor-default items-center border-0 bg-transparent p-0 py-1 ${navLinkClass("journey")}`}
+                className={`flex cursor-default items-center border-0 bg-transparent p-0 py-1 ${navLinkClass}`}
                 aria-expanded={activeMenu === "journey"}
                 aria-haspopup="true"
                 onMouseEnter={() => setActiveMenu("journey")}
@@ -59,14 +57,14 @@ export function Header() {
               </button>
               <Link
                 href="/teachings"
-                className={navLinkClass("teachings")}
+                className={navLinkClass}
                 onMouseEnter={() => setActiveMenu("teachings")}
               >
                 Teachings
               </Link>
               <Link
                 href="/shop"
-                className={navLinkClass("shop")}
+                className={navLinkClass}
                 onMouseEnter={() => setActiveMenu("shop")}
               >
                 Shop
@@ -348,7 +346,7 @@ export function Header() {
           <div className="flex min-w-0 flex-1 items-center justify-end gap-4">
             <Link
               href="/sign-in"
-              className="hidden text-sm font-medium text-white/80 transition-colors hover:text-white md:block"
+              className="hidden text-sm font-medium text-white transition-colors hover:text-white md:block"
             >
               Login
             </Link>

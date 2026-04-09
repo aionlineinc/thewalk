@@ -1,59 +1,57 @@
 import Image from "next/image";
-
-/** Left-edge of portrait column — backgrounds stop here so mask feather shows page, not a fake plate. */
-const PORTRAIT_EDGE =
-  "right-[34%] sm:right-[38%] md:right-[42%] lg:right-[46%]";
+import Link from "next/link";
 
 /**
- * Framed hero with earth-tone field and a right-edge portrait that fades into the background
- * (left-edge mask + no extra scrim on the photo so it blends, not a boxed cutout).
+ * About hero: full-bleed card width matching home hero gutters (px-2/md:px-4); 600px tall; copy left, graphic right.
  */
 export function AboutPremiumHero() {
   return (
-    <section className="relative flex h-[min(72vh,640px)] min-h-[480px] w-full flex-col items-start justify-center bg-background p-2 font-sans tracking-tight md:h-[min(74vh,680px)] md:min-h-[520px] md:p-4">
-      <div className="absolute inset-2 flex flex-col overflow-hidden rounded-[15px] bg-transparent shadow-2xl md:inset-4">
-        <div
-          className={`absolute inset-y-0 left-0 z-0 bg-gradient-to-br from-earth-900 via-[#3d3a35] to-[#252320] ${PORTRAIT_EDGE}`}
-          aria-hidden
-        />
+    <section className="relative w-full px-2 pb-8 pt-1 font-sans tracking-tight md:px-4 md:pb-12 md:pt-2">
+      {/* Same horizontal inset as home hero (`p-2 md:p-4`); full width, no max-w cap */}
+      <div className="relative w-full overflow-hidden rounded-[20px] bg-gradient-to-br from-[#081a2d] via-[#0b2a46] to-[#04080f] shadow-xl">
+        <div className="relative h-[600px] min-h-[600px]">
+          <div
+            className="absolute bottom-0 right-0 top-[75px] z-[1] w-[36%] min-w-[10rem] bg-transparent sm:w-[38%] md:w-[42%] lg:w-[44%] [mask-image:linear-gradient(to_right,transparent_0%,rgba(0,0,0,0.2)_10%,rgba(0,0,0,0.78)_26%,black_40%)] [-webkit-mask-image:linear-gradient(to_right,transparent_0%,rgba(0,0,0,0.2)_10%,rgba(0,0,0,0.78)_26%,black_40%)]"
+          >
+            <Image
+              src="/assets/617fac9d-80f5-40be-b010-93207da51565-2026-03-29.png"
+              alt="Servant leadership structure: pathways from Christ through vision, mission, and public ministry"
+              fill
+              priority
+              sizes="(max-width: 768px) 42vw, 38vw"
+              className="origin-right scale-[0.88] object-contain object-right object-center bg-transparent p-4 md:p-6"
+            />
+          </div>
 
-        {/* Atmosphere on copy side only — right column stays clear for transparent mask feather */}
-        <div
-          className={`pointer-events-none absolute inset-y-0 left-0 z-[1] bg-gradient-to-t from-black/35 via-transparent to-black/20 ${PORTRAIT_EDGE}`}
-          aria-hidden
-        />
-        <div
-          className={`pointer-events-none absolute inset-y-0 left-0 z-[1] bg-gradient-to-r from-black/32 via-black/8 to-transparent ${PORTRAIT_EDGE}`}
-          aria-hidden
-        />
-        <div
-          className={`pointer-events-none absolute inset-y-0 left-0 z-[2] bg-red-soft/12 mix-blend-overlay ${PORTRAIT_EDGE}`}
-          aria-hidden
-        />
-
-        {/* Portrait: soft fade on the left into the gradient — no overlay on the photo itself */}
-        <div
-          className="absolute inset-y-0 right-0 z-10 w-[34%] min-w-[9.5rem] bg-transparent sm:w-[38%] md:w-[42%] lg:w-[46%] [mask-image:linear-gradient(to_right,transparent_0%,rgba(0,0,0,0.35)_10%,rgba(0,0,0,0.85)_22%,black_34%)] [-webkit-mask-image:linear-gradient(to_right,transparent_0%,rgba(0,0,0,0.35)_10%,rgba(0,0,0,0.85)_22%,black_34%)]"
-        >
-          <Image
-            src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=1200&auto=format&fit=crop"
-            alt="Person in quiet reflection, representing the spiritual journey"
-            fill
-            className="object-cover object-[56%_10%] bg-transparent"
-            sizes="(max-width: 768px) 40vw, 46vw"
-            priority
-          />
+          <div className="relative z-[2] flex h-full min-h-[600px] flex-col justify-center px-6 py-8 md:px-10 md:py-10 lg:px-12">
+            <div className="relative z-[3] w-full max-w-[min(36rem,calc(100%-max(10.5rem,38%)))] sm:max-w-[min(38rem,calc(100%-max(11rem,40%)))] md:max-w-[min(40rem,calc(100%-max(12rem,44%)))] lg:max-w-[min(42rem,calc(100%-max(13rem,46%)))]">
+              <h1 className="mb-6 text-4xl font-normal leading-[1.1] tracking-tight text-white drop-shadow-sm md:text-5xl lg:text-[70px]">
+                About theWalk
+              </h1>
+              <p className="mb-8 max-w-xl text-lg font-light leading-relaxed text-white/90">
+                A ministry committed to spiritual growth, discipleship, fellowship, and transformation—meeting you where
+                you are and walking with you toward Christ-centered purpose.
+              </p>
+              <div className="flex flex-col gap-4 sm:flex-row sm:flex-wrap">
+                <Link
+                  href="/journey"
+                  className="inline-flex items-center justify-center gap-2 rounded-full bg-red-soft px-8 py-3.5 text-lg font-medium text-white shadow-lg shadow-black/25 transition-all hover:bg-red-soft-hover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+                >
+                  Explore the Journey
+                  <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden>
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </Link>
+                <Link
+                  href="/get-involved"
+                  className="inline-flex items-center justify-center rounded-full border border-white/30 bg-transparent px-8 py-3.5 text-lg font-medium text-white transition-all hover:bg-white/10"
+                >
+                  Get Involved
+                </Link>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
-
-      <div className="relative z-10 mt-10 flex w-full max-w-[min(36rem,calc(100%-max(10.5rem,38%)))] flex-col items-start justify-center pl-4 pr-4 text-left sm:max-w-[min(38rem,calc(100%-max(11rem,42%)))] sm:pl-6 md:mt-12 md:max-w-[min(40rem,calc(100%-max(12rem,46%)))] md:pl-8 lg:max-w-[min(42rem,calc(100%-max(13rem,50%)))] lg:pl-10">
-        <h1 className="mb-6 text-5xl font-normal leading-[1.1] tracking-tight text-white drop-shadow-md md:text-[70px]">
-          About theWalk
-        </h1>
-        <p className="mb-6 max-w-none text-lg font-light leading-relaxed text-white/90">
-          A ministry committed to spiritual growth, discipleship, fellowship, and transformation—meeting you where
-          you are and walking with you toward Christ-centered purpose.
-        </p>
       </div>
     </section>
   );
