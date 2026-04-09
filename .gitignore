@@ -26,6 +26,7 @@
 theWalk-Redesign-outputs.zip
 .mcp-push-*.json
 .mcp-merged-*.json
+Users/
 
 # debug
 npm-debug.log*
