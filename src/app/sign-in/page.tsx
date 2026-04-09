@@ -38,7 +38,10 @@ export default function SignIn() {
             </form>
 
             <div className="mt-8 text-center text-sm text-muted-foreground pt-6 border-t border-earth-100">
-              Don't have an account? <Link href="/register" className="text-red-500 hover:text-red-800 font-medium transition-colors">Create an account</Link>
+              Don&apos;t have an account?{" "}
+              <Link href="/register" className="text-red-500 hover:text-red-800 font-medium transition-colors">
+                Create an account
+              </Link>
             </div>
           </div>
         </div>
