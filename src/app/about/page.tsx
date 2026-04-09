@@ -13,7 +13,7 @@ export default function About() {
       />
 
       <section className="py-24 bg-muted">
-        <div className="container mx-auto px-4 grid grid-cols-1 md:grid-cols-2 gap-12">
+        <div className="container mx-auto max-w-[800px] px-4 grid grid-cols-1 md:grid-cols-2 gap-12">
           <div className="rounded-2xl p-12 bg-white border border-earth-100 shadow-sm">
             <h3 className="text-2xl font-medium text-earth-900 mb-4">Our Vision</h3>
             <p className="text-[15px] font-light text-muted-foreground leading-relaxed">
