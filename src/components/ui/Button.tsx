@@ -17,7 +17,11 @@ export function Button({ variant = 'primary', href, className, children, ...prop
   const classes = `${baseStyles} ${variants[variant]} ${className || ''}`;
 
   if (href) {
-    return <Link href={href} className={classes}>{children}</Link>;
+    return (
+      <Link href={href} className={classes} data-button-link>
+        {children}
+      </Link>
+    );
   }
 
   return <button className={classes} {...props}>{children}</button>;

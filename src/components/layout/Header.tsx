@@ -13,12 +13,16 @@ export function Header() {
     "text-sm font-medium tracking-wide text-white transition-colors hover:text-white";
 
   return (
-    <header className="fixed top-[35px] inset-x-0 z-50 flex w-full flex-col items-center px-4 md:px-8">
+    <header id="site-header" className="fixed top-[35px] inset-x-0 z-50 flex w-full flex-col items-center px-4 md:px-8">
       <div className="relative w-full max-w-6xl">
-        <div className="relative z-20 flex items-center gap-3 rounded-full border border-white/10 bg-[#2a2a2a]/95 px-6 py-3 shadow-2xl backdrop-blur-md md:gap-4">
+        <div
+          id="site-header-bar"
+          className="relative z-20 flex items-center gap-3 rounded-full border border-white/10 bg-[#1a1a1a]/95 px-6 py-3 text-black shadow-[0px_25px_50px_-5px_rgba(0,0,0,0.25)] backdrop-blur-md md:gap-4"
+        >
           <div className="flex min-w-0 flex-1 items-center justify-start">
             <Link
               href="/"
+              data-button-link
               className="relative flex min-h-8 items-center rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white/80"
               aria-label="theWalk Ministries home"
             >
@@ -38,7 +42,7 @@ export function Header() {
             className="relative hidden shrink-0 md:block"
             onMouseLeave={() => setActiveMenu(null)}
           >
-            <nav className="flex items-center gap-8" aria-label="Primary">
+            <nav id="site-header-primary-nav" className="flex items-center gap-8" aria-label="Primary">
               <Link
                 href="/about"
                 className={navLinkClass}
@@ -72,6 +76,7 @@ export function Header() {
             </nav>
 
             <div
+              id="site-header-mega-menu"
               className={`absolute left-1/2 top-full z-30 w-[min(72rem,calc(100vw-2rem))] -translate-x-1/2 pt-3 transition-all duration-300 origin-top ${
                 activeMenu
                   ? "visible translate-y-0 opacity-100 pointer-events-auto"
@@ -241,6 +246,18 @@ export function Header() {
                             Our story &amp; mission
                           </Link>
                           <Link
+                            href="/about/beliefs"
+                            className="text-sm font-medium text-gray-900 transition-colors hover:text-red-900"
+                          >
+                            Our Beliefs
+                          </Link>
+                          <Link
+                            href="/about/ministry-structure"
+                            className="text-sm font-medium text-gray-900 transition-colors hover:text-red-900"
+                          >
+                            Ministry structure
+                          </Link>
+                          <Link
                             href="/contact"
                             className="text-sm font-medium text-gray-900 transition-colors hover:text-red-900"
                           >
@@ -343,7 +360,7 @@ export function Header() {
             </div>
           </div>
 
-          <div className="flex min-w-0 flex-1 items-center justify-end gap-4">
+          <div id="site-header-actions" className="flex min-w-0 flex-1 items-center justify-end gap-4">
             <Link
               href="/sign-in"
               className="hidden text-sm font-medium text-white transition-colors hover:text-white md:block"
@@ -352,6 +369,7 @@ export function Header() {
             </Link>
             <Link
               href="/get-involved"
+              data-button-link
               className="rounded-full bg-red-soft px-5 py-2.5 text-sm font-medium text-white shadow-lg shadow-black/25 transition-colors hover:bg-red-soft-hover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
             >
               Join theWalk

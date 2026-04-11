@@ -11,17 +11,25 @@ export default function RegisterPage() {
   return (
     <>
       <Hero
+        sectionId="register-hero"
+        titleId="register-hero-title"
+        subtextId="register-hero-description"
         headline="Join theWalk online"
         subtext="Account creation is handled through our secure sign-in flow. Use the link below to get started."
       />
-      <section className="border-b border-gray-100 bg-muted py-16 md:py-24">
+      <section
+        id="register-content"
+        className="border-b border-gray-100 bg-muted py-16 md:py-24"
+        aria-label="Account access"
+      >
         <div className="container mx-auto max-w-[650px] px-4 text-center">
-          <p className="text-base font-light leading-relaxed text-gray-600">
+          <p id="register-body" className="text-base font-light leading-relaxed text-gray-600">
             If you already have credentials, sign in. Need help? Contact us and we will assist.
           </p>
-          <div className="mt-10 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
+          <div id="register-actions" className="mt-10 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
             <Link
               href="/sign-in"
+              data-button-link
               className="inline-flex rounded-full bg-red-soft px-8 py-3.5 text-sm font-medium text-white shadow-lg shadow-black/20 transition-colors hover:bg-red-soft-hover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
             >
               Go to sign in

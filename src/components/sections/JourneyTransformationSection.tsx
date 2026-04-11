@@ -190,20 +190,27 @@ export function JourneyTransformationSection() {
 
   return (
     <section
+      id="home-journey-transformation"
       ref={sectionRef}
       className="relative w-full min-h-[380vh] bg-white border-b border-neutral-100"
       aria-labelledby="journey-transformation-heading"
     >
-      <div className="sticky top-0 flex min-h-screen flex-col justify-start pt-10 pb-16 md:justify-center md:py-20 lg:py-24">
+      <div className="sticky top-0 flex min-h-screen flex-col justify-start pt-10 pb-16 md:justify-center md:py-20 lg:py-[70px]">
         <div className="container mx-auto max-w-6xl px-4 md:px-8">
-          <header className="mx-auto mb-12 max-w-3xl text-center md:mb-20 lg:mb-24">
+          <header
+            id="home-journey-transformation-intro"
+            className="mx-auto mb-12 max-w-3xl text-center md:mb-20 lg:mb-24"
+          >
             <h2
               id="journey-transformation-heading"
-              className="text-3xl font-medium tracking-tight text-neutral-950 md:text-4xl lg:text-[2.75rem] lg:leading-[1.1]"
+              className="text-3xl font-medium tracking-tight text-neutral-950 md:text-4xl lg:text-[35px] lg:leading-[1.1]"
             >
               A Journey of Transformation
             </h2>
-            <p className="mx-auto mt-5 max-w-2xl text-[15px] font-light leading-relaxed text-neutral-500 md:text-lg md:leading-relaxed">
+            <p
+              id="home-journey-transformation-lede"
+              className="mx-auto mt-5 max-w-2xl text-[15px] font-light leading-relaxed text-neutral-500 md:text-lg md:leading-relaxed"
+            >
               theWalk is structured as a clear spiritual journey designed to support believers through
               different stages of growth, healing, identity, and community.
             </p>
@@ -232,7 +239,9 @@ export function JourneyTransformationSection() {
               {STEPS.map((step, index) => (
                 <Link
                   key={step.href}
+                  id={`home-journey-step-${step.href.replace("/journey/", "")}`}
                   href={step.href}
+                  data-button-link
                   className="group relative flex min-w-0 flex-col text-left outline-none transition-shadow focus-visible:rounded-2xl focus-visible:ring-2 focus-visible:ring-red-900 focus-visible:ring-offset-2"
                 >
                   <div className="min-w-0" style={imageMotion(index)}>
@@ -275,7 +284,9 @@ export function JourneyTransformationSection() {
             {STEPS.map((step, index) => (
               <Link
                 key={step.href}
+                id={`home-journey-step-mobile-${step.href.replace("/journey/", "")}`}
                 href={step.href}
+                data-button-link
                 className="flex flex-col outline-none focus-visible:ring-2 focus-visible:ring-red-900 focus-visible:ring-offset-2"
               >
                 <div className="mb-4 min-w-0" style={imageMotion(index)}>

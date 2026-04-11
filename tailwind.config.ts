@@ -14,6 +14,7 @@ const config: Config = {
         muted: "#f5f5f5",
         "muted-foreground": "#737373",
         "earth-100": "#F4F1ED",
+        "earth-200": "#E0D9D0",
         "earth-500": "#8C7B6D",
         "earth-900": "#3E362F",
         "red-100": "#FCE8E8",
@@ -21,6 +22,12 @@ const config: Config = {
         "red-soft": "#AA0303",
         "red-soft-hover": "#8A0202",
         "red-900": "#3A0202",
+      },
+      maxWidth: {
+        /** Primary reading column (hero, editorial, journey index) */
+        content: "850px",
+        /** Wider diagrams / about leadership */
+        "content-wide": "1049px",
       },
       spacing: {
         18: "4.5rem",

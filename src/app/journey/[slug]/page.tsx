@@ -54,11 +54,29 @@ export default function JourneyPathPage({ params }: Props) {
 
   return (
     <>
-      <Hero headline={p.title} subtext={p.subtext} />
-      <section className="border-b border-gray-100 bg-muted py-16 md:py-24">
+      <Hero
+        sectionId={`journey-${params.slug}-hero`}
+        titleId={`journey-${params.slug}-hero-title`}
+        subtextId={`journey-${params.slug}-hero-description`}
+        headline={p.title}
+        subtext={p.subtext}
+      />
+      <section
+        id={`journey-${params.slug}-content`}
+        className="border-b border-gray-100 bg-muted py-16 md:py-24"
+        aria-label={`${p.title} overview`}
+      >
         <div className="container mx-auto max-w-[650px] px-4">
-          <p className="text-center text-base font-light leading-relaxed text-gray-600">{p.body}</p>
-          <div className="mt-12 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
+          <p
+            id={`journey-${params.slug}-body`}
+            className="text-center text-base font-light leading-relaxed text-gray-600"
+          >
+            {p.body}
+          </p>
+          <div
+            id={`journey-${params.slug}-actions`}
+            className="mt-12 flex flex-col items-center gap-4 sm:flex-row sm:justify-center"
+          >
             <Link
               href="/journey"
               className="text-sm font-medium text-gray-600 underline-offset-4 transition-colors hover:text-red-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-900"
@@ -67,6 +85,7 @@ export default function JourneyPathPage({ params }: Props) {
             </Link>
             <Link
               href="/get-involved"
+              data-button-link
               className="rounded-full bg-red-soft px-6 py-3 text-sm font-medium text-white shadow-lg shadow-black/20 transition-colors hover:bg-red-soft-hover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
             >
               Get involved

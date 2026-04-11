@@ -1,20 +1,31 @@
+import { AppHeadingHero, AppLead } from "@/components/ui/Typography";
+
 type HeroProps = {
   headline: string;
   subtext?: string;
+  sectionId?: string;
+  titleId?: string;
+  subtextId?: string;
 };
 
-export function Hero({ headline, subtext }: HeroProps) {
+export function Hero({
+  headline,
+  subtext,
+  sectionId,
+  titleId,
+  subtextId,
+}: HeroProps) {
   return (
-    <section className="border-b border-gray-100 bg-white py-20 md:py-24">
-      <div className="container mx-auto max-w-[850px] px-4 text-center">
-        <h1 className="mb-4 text-4xl font-medium tracking-tight text-gray-900 md:text-5xl">
+    <section
+      id={sectionId}
+      className="border-b border-gray-100 bg-white pb-20 pt-32 md:pb-24 md:pt-40"
+      aria-labelledby={titleId}
+    >
+      <div className="container mx-auto max-w-content px-4 text-center">
+        <AppHeadingHero id={titleId} className="mb-4">
           {headline}
-        </h1>
-        {subtext ? (
-          <p className="mx-auto max-w-2xl text-base font-light leading-relaxed text-gray-500 md:text-lg">
-            {subtext}
-          </p>
-        ) : null}
+        </AppHeadingHero>
+        {subtext ? <AppLead id={subtextId}>{subtext}</AppLead> : null}
       </div>
     </section>
   );

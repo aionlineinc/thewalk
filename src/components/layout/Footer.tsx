@@ -16,13 +16,15 @@ function FooterLink({ href, children }: { href: string; children: React.ReactNod
 
 function FooterColumn({
   title,
+  id,
   children,
 }: {
   title: string;
+  id?: string;
   children: React.ReactNode;
 }) {
   return (
-    <div className="min-w-0">
+    <div className="min-w-0" id={id}>
       <h3 className="mb-5 text-[10px] font-bold uppercase tracking-widest text-gray-400">{title}</h3>
       <ul className="flex flex-col gap-3.5">{children}</ul>
     </div>
@@ -33,10 +35,12 @@ export function Footer() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="rounded-t-[40px] border-t border-gray-100 bg-white">
+    <footer id="site-footer" className="rounded-t-[40px] border-t border-gray-100 bg-white">
       <div className="container mx-auto max-w-6xl px-4 pb-10 pt-14 md:pb-12 md:pt-16 lg:pt-20">
         <Link
+          id="site-footer-brand"
           href="/"
+          data-button-link
           className="block rounded-lg outline-none transition-opacity hover:opacity-90 focus-visible:ring-2 focus-visible:ring-red-900 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
           aria-label="theWalk Ministries home"
         >
@@ -46,10 +50,11 @@ export function Footer() {
         </Link>
 
         <nav
+          id="site-footer-nav"
           className="mt-14 grid grid-cols-2 gap-x-8 gap-y-10 sm:grid-cols-2 md:mt-16 md:grid-cols-4 md:gap-y-12"
           aria-label="Footer"
         >
-          <FooterColumn title="Explore">
+          <FooterColumn id="footer-column-explore" title="Explore">
             <li>
               <FooterLink href="/about">About</FooterLink>
             </li>
@@ -66,7 +71,7 @@ export function Footer() {
             </li>
           </FooterColumn>
 
-          <FooterColumn title="Journey">
+          <FooterColumn id="footer-column-journey" title="Journey">
             <li>
               <FooterLink href="/journey/cross-over">Cross Over</FooterLink>
             </li>
@@ -81,7 +86,7 @@ export function Footer() {
             </li>
           </FooterColumn>
 
-          <FooterColumn title="Community">
+          <FooterColumn id="footer-column-community" title="Community">
             <li>
               <FooterLink href="/get-involved">
                 Get involved{" "}
@@ -96,7 +101,7 @@ export function Footer() {
             </li>
           </FooterColumn>
 
-          <FooterColumn title="Account">
+          <FooterColumn id="footer-column-account" title="Account">
             <li>
               <FooterLink href="/sign-in">Login</FooterLink>
             </li>
@@ -106,7 +111,10 @@ export function Footer() {
           </FooterColumn>
         </nav>
 
-        <div className="mt-14 flex flex-col gap-8 border-t border-gray-100 pt-10 md:mt-16 md:flex-row md:items-center md:justify-between md:pt-12">
+        <div
+          id="site-footer-tagline"
+          className="mt-14 flex flex-col gap-8 border-t border-gray-100 pt-10 md:mt-16 md:flex-row md:items-center md:justify-between md:pt-12"
+        >
           <div className="flex max-w-xl flex-col gap-4 sm:flex-row sm:items-start sm:gap-5">
             <span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center text-red-500" aria-hidden>
               <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" className="opacity-90">
@@ -134,7 +142,10 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="mt-10 flex flex-col gap-4 border-t border-gray-100 pt-8 text-[11px] font-medium uppercase tracking-wider text-gray-400 md:mt-12 md:flex-row md:items-center md:justify-between md:pt-10">
+        <div
+          id="site-footer-legal"
+          className="mt-10 flex flex-col gap-4 border-t border-gray-100 pt-8 text-[11px] font-medium uppercase tracking-wider text-gray-400 md:mt-12 md:flex-row md:items-center md:justify-between md:pt-10"
+        >
           <p className="text-center md:text-left">
             © {year} theWalk Ministries. All rights reserved.
           </p>

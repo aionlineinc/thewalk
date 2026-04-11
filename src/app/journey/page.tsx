@@ -30,16 +30,24 @@ export default function JourneyPage() {
   return (
     <>
       <Hero
+        sectionId="journey-hero"
+        titleId="journey-hero-title"
+        subtextId="journey-hero-description"
         headline="The Journey"
         subtext="Three connected pathways meet you where you are and equip you for what is next."
       />
-      <section className="border-b border-gray-100 bg-muted py-16 md:py-24">
+      <section
+        id="journey-pathways"
+        className="border-b border-gray-100 bg-muted py-16 md:py-24"
+        aria-label="Journey pathways"
+      >
         <div className="container mx-auto max-w-[850px] px-4">
           <ul className="grid list-none gap-6 p-0 m-0 md:grid-cols-3">
             {pathways.map((p) => (
-              <li key={p.slug}>
+              <li key={p.slug} id={`journey-path-card-${p.slug}`}>
                 <Link
                   href={`/journey/${p.slug}`}
+                  data-button-link
                   className="group flex h-full flex-col rounded-xl border border-earth-100 bg-white p-8 shadow-sm transition-colors hover:border-red-soft/60 hover:shadow-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-900"
                 >
                   <h2 className="text-xl font-medium tracking-tight text-gray-900">{p.title}</h2>

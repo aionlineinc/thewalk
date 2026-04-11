@@ -53,6 +53,7 @@ function PathwayIcon({ slug }: { slug: (typeof pathwayGroups)[number]["slug"] })
 export function MinistryGroupsSection() {
   return (
     <section
+      id="home-ministry-groups"
       className="relative isolate w-full py-20 md:py-24 border-b border-white/10 overflow-hidden"
       aria-labelledby="ministries-heading"
     >
@@ -80,12 +81,13 @@ export function MinistryGroupsSection() {
         <div className="container mx-auto px-4 max-w-[850px] space-y-8 md:space-y-10">
           <ul className="space-y-8 md:space-y-10 list-none p-0 m-0">
             {pathwayGroups.map((group) => (
-              <li key={group.slug}>
+              <li key={group.slug} id={`home-ministry-path-${group.slug}`}>
                 <div
                   className="flex flex-col overflow-hidden rounded-[50px] border border-white/[0.22] bg-white/[0.06] shadow-[0_8px_32px_rgba(0,0,0,0.14)] backdrop-blur-md backdrop-saturate-150 md:min-h-[5.5rem] md:flex-row md:items-stretch transition-[box-shadow,background-color] duration-300 hover:border-white/30 hover:bg-white/[0.09]"
                 >
                   <Link
                     href={`/journey/${group.slug}`}
+                    data-button-link
                     className="flex flex-row items-center justify-center gap-3 px-5 py-4 text-center text-white md:w-[11.5rem] md:shrink-0 md:flex-col md:gap-2 md:py-5 bg-black/50 backdrop-blur-sm border-b border-white/[0.12] md:border-b-0 md:border-r md:border-white/[0.12] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
                   >
                     <PathwayIcon slug={group.slug} />
@@ -97,6 +99,7 @@ export function MinistryGroupsSection() {
                       <Link
                         key={name}
                         href={`/journey/${group.slug}`}
+                        data-button-link
                         className="flex items-center justify-center px-4 py-5 text-center text-sm font-medium tracking-wide text-white/95 backdrop-blur-[1px] transition-colors hover:bg-white/[0.07] sm:py-4 sm:text-base focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-white/80"
                       >
                         {name}
@@ -109,7 +112,10 @@ export function MinistryGroupsSection() {
           </ul>
         </div>
 
-        <p className="mx-auto mt-12 max-w-2xl px-4 text-center text-base font-normal leading-relaxed text-white/80 [text-shadow:0_1px_20px_rgba(0,0,0,0.4)] md:mt-14">
+        <p
+          id="home-ministry-groups-footer"
+          className="mx-auto mt-12 max-w-2xl px-4 text-center text-base font-normal leading-relaxed text-white/80 [text-shadow:0_1px_20px_rgba(0,0,0,0.4)] md:mt-14"
+        >
           From restoration and discipleship to fellowship and ministry support, each expression of theWalk exists to
           strengthen believers and equip the Body of Christ.
         </p>

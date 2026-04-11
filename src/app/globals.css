@@ -14,3 +14,113 @@ body {
   margin: 0;
   padding: 0;
 }
+
+@layer base {
+  /*
+   * Default text links: brand red (#AA0303).
+   * :where() keeps specificity at 0 so utilities (text-white, text-gray-900, …) win — e.g. navbar.
+   * data-button-link: skip entirely for pill / logo / card links.
+   */
+  :where(a:not([data-button-link])) {
+    @apply text-red-500 transition-colors hover:text-red-soft-hover;
+  }
+  :where(a:not([data-button-link]):focus-visible) {
+    @apply rounded-sm outline outline-2 outline-offset-2 outline-earth-900;
+  }
+}
+
+/*
+ * Application design system — mirrors home/about heroes, EditorialSplitBlock, Beliefs, sign-in.
+ * Use `className="app-heading-page"` etc., or the thin wrappers in `@/components/ui/Typography`.
+ */
+@layer components {
+  /* Headings */
+  .app-heading-hero {
+    @apply text-4xl font-medium tracking-tight text-gray-900 md:text-5xl;
+  }
+  /* Dark full-bleed heroes — two scales: home (centered) vs about (left, stepped) */
+  .app-heading-display-home {
+    @apply text-5xl font-normal leading-[1.1] tracking-tight text-white drop-shadow-md md:text-[70px];
+  }
+  .app-heading-display-about {
+    @apply text-4xl font-normal leading-[1.1] tracking-tight text-white drop-shadow-sm md:text-5xl lg:text-[70px];
+  }
+  .app-heading-section {
+    @apply text-3xl font-medium tracking-tight text-gray-900 md:text-5xl;
+  }
+  .app-heading-page {
+    @apply text-3xl font-normal tracking-tight text-earth-900 md:text-4xl;
+  }
+  .app-heading-block {
+    @apply text-2xl font-medium text-earth-900;
+  }
+  /* Gray band final CTA (home) */
+  .app-heading-promo {
+    @apply text-3xl font-medium tracking-tight text-gray-900 md:text-[35px];
+  }
+  .app-heading-sub {
+    @apply text-lg font-medium text-earth-900;
+  }
+  .app-heading-uppercase-tracked {
+    @apply text-lg font-medium uppercase tracking-wide text-earth-900;
+  }
+  .app-eyebrow {
+    @apply text-sm font-medium uppercase tracking-widest text-earth-500;
+  }
+
+  /* Body */
+  .app-body {
+    @apply text-[15px] font-light leading-relaxed text-muted-foreground;
+  }
+  .app-body-muted {
+    @apply text-[15px] font-light leading-relaxed text-gray-500;
+  }
+  .app-lead {
+    @apply mx-auto max-w-2xl text-base font-light leading-relaxed text-gray-500 md:text-lg;
+  }
+  .app-lead-on-dark {
+    @apply text-lg font-light leading-relaxed text-white/90;
+  }
+  .app-caption {
+    @apply text-sm font-medium tracking-wide text-earth-500;
+  }
+
+  /* Explicit link (matches global <a>; use when you need the same look with higher specificity) */
+  .app-link {
+    @apply text-red-500 transition-colors hover:text-red-soft-hover;
+  }
+  .app-link:focus-visible {
+    @apply rounded-sm outline outline-2 outline-offset-2 outline-earth-900;
+  }
+
+  /* Forms (sign-in / register pattern) */
+  .app-label {
+    @apply mb-1 block text-sm font-medium text-earth-900;
+  }
+  .app-input {
+    @apply w-full rounded border border-earth-100 px-4 py-3 text-foreground outline-none transition-shadow placeholder:text-muted-foreground focus:ring-2 focus:ring-red-500;
+  }
+  .app-check {
+    @apply mr-2 rounded border-earth-100 text-red-500 focus:ring-red-500;
+  }
+  .app-btn-submit {
+    @apply w-full cursor-pointer rounded bg-earth-900 py-3 font-semibold text-white transition-colors hover:bg-earth-500;
+  }
+  .app-btn-submit-brand {
+    @apply w-full cursor-pointer rounded-full bg-red-soft py-3.5 font-semibold text-white shadow-md shadow-black/15 transition-all hover:bg-red-soft-hover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-900;
+  }
+
+  /* Pill CTAs (marketing) — use with data-button-link on <AppPillLink /> */
+  .app-pill-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-full bg-red-soft px-8 py-3.5 text-lg font-medium text-white shadow-lg shadow-black/25 transition-all hover:bg-red-soft-hover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white;
+  }
+  .app-pill-primary-lg {
+    @apply inline-flex items-center justify-center rounded-full bg-red-soft px-10 py-4 text-lg font-medium text-white shadow-lg shadow-black/20 transition-all hover:bg-red-soft-hover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-900;
+  }
+  .app-pill-ghost-dark {
+    @apply inline-flex items-center justify-center rounded-full border border-white/30 bg-transparent px-8 py-3.5 text-lg font-medium text-white transition-all hover:bg-white/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white;
+  }
+  .app-pill-outline-earth {
+    @apply inline-flex items-center justify-center rounded-full border border-earth-200 bg-white px-8 py-3 text-sm font-medium tracking-wide text-earth-900 shadow-sm transition-colors hover:border-earth-500 hover:bg-earth-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-earth-900;
+  }
+}

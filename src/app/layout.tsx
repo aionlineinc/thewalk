@@ -32,7 +32,7 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col bg-background text-foreground">
         <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID || ""} />
         <Header />
-        <main className="flex flex-1 flex-col">
+        <main id="site-main" className="flex flex-1 flex-col">
           {children}
         </main>
         <Footer />

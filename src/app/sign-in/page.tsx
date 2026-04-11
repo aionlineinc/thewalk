@@ -1,45 +1,78 @@
-import { Hero } from "@/components/ui/Hero";
 import Link from "next/link";
+import { AppCheckbox, AppInput, AppLabel, AppSubmitButton } from "@/components/ui/FormField";
+import { Hero } from "@/components/ui/Hero";
 
 export default function SignIn() {
   return (
     <>
-      <Hero 
-        headline="Welcome Back" 
+      <Hero
+        sectionId="sign-in-hero"
+        titleId="sign-in-hero-title"
+        subtextId="sign-in-hero-description"
+        headline="Welcome Back"
         subtext="Sign in to your account to manage your journey, access MyWalk, and track support."
       />
 
-      <section className="py-section bg-muted min-h-[50vh] flex items-center justify-center">
-        <div className="container mx-auto px-4 max-w-md">
-          <div className="bg-white p-8 border border-earth-100 rounded-xl shadow-lg">
-            <h2 className="text-2xl font-bold text-earth-900 mb-6 text-center">Sign In</h2>
-            
-            <form className="space-y-4">
+      <section
+        id="sign-in-main"
+        className="flex min-h-[50vh] items-center justify-center bg-muted py-section"
+        aria-labelledby="sign-in-form-heading"
+      >
+        <div className="container mx-auto max-w-md px-4">
+          <div
+            id="sign-in-card"
+            className="rounded-xl border border-earth-100 bg-white p-8 shadow-lg"
+          >
+            <h2
+              id="sign-in-form-heading"
+              className="app-heading-block mb-6 text-center font-bold"
+            >
+              Sign In
+            </h2>
+
+            <form id="sign-in-form" className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-earth-900 mb-1">Email Address</label>
-                <input type="email" className="w-full px-4 py-3 border border-earth-100 rounded focus:ring-2 focus:ring-red-500 outline-none transition-shadow" placeholder="you@example.com" />
+                <AppLabel htmlFor="sign-in-email">Email Address</AppLabel>
+                <AppInput
+                  id="sign-in-email"
+                  type="email"
+                  name="email"
+                  autoComplete="email"
+                  placeholder="you@example.com"
+                />
               </div>
               <div>
-                <label className="block text-sm font-medium text-earth-900 mb-1">Password</label>
-                <input type="password" className="w-full px-4 py-3 border border-earth-100 rounded focus:ring-2 focus:ring-red-500 outline-none transition-shadow" placeholder="••••••••" />
+                <AppLabel htmlFor="sign-in-password">Password</AppLabel>
+                <AppInput
+                  id="sign-in-password"
+                  type="password"
+                  name="password"
+                  autoComplete="current-password"
+                  placeholder="••••••••"
+                />
               </div>
-              
-              <div className="flex items-center justify-between text-sm mt-2">
-                <label className="flex items-center text-muted-foreground cursor-pointer">
-                  <input type="checkbox" className="mr-2 rounded text-red-500" />
+
+              <div className="mt-2 flex items-center justify-between text-sm">
+                <label className="flex cursor-pointer items-center text-muted-foreground">
+                  <AppCheckbox />
                   Remember me
                 </label>
-                <Link href="#" className="flex text-red-500 hover:text-red-800 transition-colors">Forgot password?</Link>
+                <Link href="#" className="app-link">
+                  Forgot password?
+                </Link>
               </div>
 
-              <button type="button" className="w-full bg-earth-900 text-white font-semibold py-3 rounded mt-6 hover:bg-earth-500 transition-colors cursor-pointer">
+              <AppSubmitButton type="button" className="mt-6">
                 Sign In
-              </button>
+              </AppSubmitButton>
             </form>
 
-            <div className="mt-8 text-center text-sm text-muted-foreground pt-6 border-t border-earth-100">
+            <div
+              id="sign-in-register-prompt"
+              className="mt-8 border-t border-earth-100 pt-6 text-center text-sm text-muted-foreground"
+            >
               Don&apos;t have an account?{" "}
-              <Link href="/register" className="text-red-500 hover:text-red-800 font-medium transition-colors">
+              <Link href="/register" className="app-link font-medium">
                 Create an account
               </Link>
             </div>
