@@ -39,6 +39,32 @@ const config: Config = {
         sans: ["var(--font-outfit)", "ui-sans-serif", "system-ui", "sans-serif"],
         mono: ["var(--font-roboto-mono)", "ui-monospace", "monospace"],
       },
+      keyframes: {
+        floatDriftA: {
+          "0%, 100%": { transform: "translate3d(0, 0, 0)" },
+          "33%": { transform: "translate3d(4px, -5px, 0)" },
+          "66%": { transform: "translate3d(-3px, 3px, 0)" },
+        },
+        floatDriftB: {
+          "0%, 100%": { transform: "translate3d(0, 0, 0)" },
+          "50%": { transform: "translate3d(-5px, -6px, 0)" },
+        },
+        floatDriftC: {
+          "0%, 100%": { transform: "translate3d(0, 0, 0)" },
+          "40%": { transform: "translate3d(5px, 4px, 0)" },
+          "80%": { transform: "translate3d(-2px, -5px, 0)" },
+        },
+        fadeInUp: {
+          "0%": { opacity: "0", transform: "translateY(20px)" },
+          "100%": { opacity: "1", transform: "translateY(0)" },
+        },
+      },
+      animation: {
+        "float-a": "floatDriftA 22s ease-in-out infinite",
+        "float-b": "floatDriftB 28s ease-in-out infinite",
+        "float-c": "floatDriftC 19s ease-in-out infinite",
+        "fade-in-up": "fadeInUp 0.85s ease-out forwards",
+      },
     },
   },
   plugins: [],
