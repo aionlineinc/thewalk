@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import { Suspense } from "react";
 import { CrossConnectMinistryTabs } from "./_components/CrossConnectMinistryTabs";
 import { GetInvolvedStoriesCarousel } from "@/components/get-involved/GetInvolvedStoriesCarousel";
 
@@ -149,7 +150,9 @@ export default function CrossConnectPage() {
         </div>
       </section>
 
-      <CrossConnectMinistryTabs />
+      <Suspense fallback={null}>
+        <CrossConnectMinistryTabs />
+      </Suspense>
 
       <GetInvolvedStoriesCarousel />
     </>

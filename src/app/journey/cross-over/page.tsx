@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import { Suspense } from "react";
 import { CrossOverMinistryTabs } from "./_components/CrossOverMinistryTabs";
 import { GetInvolvedStoriesCarousel } from "@/components/get-involved/GetInvolvedStoriesCarousel";
 
@@ -162,7 +163,9 @@ export default function CrossOverPage() {
         </div>
       </section>
 
-      <CrossOverMinistryTabs />
+      <Suspense fallback={null}>
+        <CrossOverMinistryTabs />
+      </Suspense>
 
       <GetInvolvedStoriesCarousel />
     </>

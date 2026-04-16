@@ -1,16 +1,74 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 
 type NavMenu = "about" | "journey" | "teachings" | "shop";
 
+function DotsMenuIcon({ className }: { className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 276.167 276.167"
+      aria-hidden="true"
+      className={className}
+      fill="currentColor"
+    >
+      <path d="M33.144,2.471C15.336,2.471,0.85,16.958,0.85,34.765s14.48,32.293,32.294,32.293s32.294-14.486,32.294-32.293S50.951,2.471,33.144,2.471z" />
+      <path d="M137.663,2.471c-17.807,0-32.294,14.487-32.294,32.294s14.487,32.293,32.294,32.293c17.808,0,32.297-14.486,32.297-32.293S155.477,2.471,137.663,2.471z" />
+      <path d="M243.873,67.059c17.804,0,32.294-14.486,32.294-32.293S261.689,2.471,243.873,2.471s-32.294,14.487-32.294,32.294S226.068,67.059,243.873,67.059z" />
+      <path d="M32.3,170.539c17.807,0,32.297-14.483,32.297-32.293c0-17.811-14.49-32.297-32.297-32.297S0,120.436,0,138.246C0,156.056,14.493,170.539,32.3,170.539z" />
+      <path d="M136.819,170.539c17.804,0,32.294-14.483,32.294-32.293c0-17.811-14.478-32.297-32.294-32.297c-17.813,0-32.294,14.486-32.294,32.297C104.525,156.056,119.012,170.539,136.819,170.539z" />
+      <path d="M243.038,170.539c17.811,0,32.294-14.483,32.294-32.293c0-17.811-14.483-32.297-32.294-32.297s-32.306,14.486-32.306,32.297C210.732,156.056,225.222,170.539,243.038,170.539z" />
+      <path d="M33.039,209.108c-17.807,0-32.3,14.483-32.3,32.294c0,17.804,14.493,32.293,32.3,32.293s32.293-14.482,32.293-32.293S50.846,209.108,33.039,209.108z" />
+      <path d="M137.564,209.108c-17.808,0-32.3,14.483-32.3,32.294c0,17.804,14.487,32.293,32.3,32.293c17.804,0,32.293-14.482,32.293-32.293S155.368,209.108,137.564,209.108z" />
+      <path d="M243.771,209.108c-17.804,0-32.294,14.483-32.294,32.294c0,17.804,14.49,32.293,32.294,32.293c17.811,0,32.294-14.482,32.294-32.293S261.575,209.108,243.771,209.108z" />
+    </svg>
+  );
+}
+
+function CloseIcon({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true" className={className} fill="none">
+      <path
+        d="M6 6l12 12M18 6L6 18"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}
+
 export function Header() {
   const [activeMenu, setActiveMenu] = useState<NavMenu | null>(null);
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [mobileExpanded, setMobileExpanded] = useState<NavMenu | null>("journey");
 
   const navLinkClass =
     "text-sm font-medium tracking-wide text-white transition-colors hover:text-white";
+
+  useEffect(() => {
+    if (!mobileOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setMobileOpen(false);
+    };
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [mobileOpen]);
+
+  useEffect(() => {
+    if (typeof document === "undefined") return;
+    if (!mobileOpen) {
+      document.body.style.overflow = "";
+      return;
+    }
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = prev;
+    };
+  }, [mobileOpen]);
 
   return (
     <header id="site-header" className="fixed top-[35px] inset-x-0 z-50 flex w-full flex-col items-center px-4 md:px-8">
@@ -379,16 +437,176 @@ export function Header() {
             >
               Login
             </Link>
+            <button
+              type="button"
+              className="inline-flex items-center justify-center p-2 text-white transition-colors hover:text-white/90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white md:hidden"
+              aria-label={mobileOpen ? "Close menu" : "Open menu"}
+              aria-expanded={mobileOpen}
+              onClick={() => setMobileOpen((v) => !v)}
+            >
+              {mobileOpen ? <CloseIcon className="h-5 w-5" /> : <DotsMenuIcon className="h-5 w-5" />}
+            </button>
             <Link
               href="/get-involved"
               data-button-link
-              className="rounded-full bg-red-soft px-5 py-2.5 text-sm font-medium text-white shadow-lg shadow-black/25 transition-colors hover:bg-red-soft-hover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+              className="hidden md:inline-flex rounded-full bg-red-soft px-5 py-2.5 text-sm font-medium text-white shadow-lg shadow-black/25 transition-colors hover:bg-red-soft-hover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
             >
               Join theWalk
             </Link>
           </div>
         </div>
       </div>
+
+      {/* Mobile menu panel */}
+      {mobileOpen ? (
+        <div className="fixed inset-0 z-[60] md:hidden" role="dialog" aria-modal="true" aria-label="Site menu">
+          <div className="absolute inset-0 bg-[#101010]/95 backdrop-blur-md">
+            <div className="flex items-center justify-between gap-4 border-b border-white/10 px-5 py-5">
+              <p className="text-sm font-semibold tracking-wide text-white">Menu</p>
+              <button
+                type="button"
+                className="rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-white/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+                onClick={() => setMobileOpen(false)}
+              >
+                Close
+              </button>
+            </div>
+
+            <div className="h-[calc(100dvh-74px)] overflow-y-auto px-5 py-6">
+              <div className="space-y-4">
+                <Link
+                  href="/about"
+                  className="block rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-medium text-white"
+                  onClick={() => setMobileOpen(false)}
+                >
+                  About
+                </Link>
+
+                <div className="overflow-hidden rounded-2xl border border-white/10 bg-white/5">
+                  <button
+                    type="button"
+                    className="flex w-full items-center justify-between gap-3 px-4 py-3 text-left text-sm font-medium text-white"
+                    aria-expanded={mobileExpanded === "journey"}
+                    onClick={() =>
+                      setMobileExpanded((s) => (s === "journey" ? null : "journey"))
+                    }
+                  >
+                    Journey
+                    <span className="text-white/70">{mobileExpanded === "journey" ? "−" : "+"}</span>
+                  </button>
+                  {mobileExpanded === "journey" ? (
+                    <div className="border-t border-white/10 px-4 py-4">
+                      <div className="space-y-5">
+                        <div>
+                          <Link
+                            href="/journey/cross-over"
+                            className="text-sm font-semibold text-white"
+                            onClick={() => setMobileOpen(false)}
+                          >
+                            Cross Over
+                          </Link>
+                          <div className="mt-2 flex flex-wrap gap-2">
+                            {["Rugged", "Covered", "Exodus"].map((m) => (
+                              <span
+                                key={m}
+                                className="inline-flex items-center rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[11px] font-medium text-white/85"
+                              >
+                                {m}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                        <div>
+                          <Link
+                            href="/journey/cross-roads"
+                            className="text-sm font-semibold text-white"
+                            onClick={() => setMobileOpen(false)}
+                          >
+                            Cross Roads
+                          </Link>
+                          <div className="mt-2 flex flex-wrap gap-2">
+                            {["Bible Study", "Series", "MyWalk"].map((m) => (
+                              <span
+                                key={m}
+                                className="inline-flex items-center rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[11px] font-medium text-white/85"
+                              >
+                                {m}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                        <div>
+                          <Link
+                            href="/journey/cross-connect"
+                            className="text-sm font-semibold text-white"
+                            onClick={() => setMobileOpen(false)}
+                          >
+                            Cross Connect
+                          </Link>
+                          <div className="mt-2 flex flex-wrap gap-2">
+                            {["Small Groups", "Prayer", "Ministry Development"].map((m) => (
+                              <span
+                                key={m}
+                                className="inline-flex items-center rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[11px] font-medium text-white/85"
+                              >
+                                {m}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                        <Link
+                          href="/journey"
+                          className="inline-flex w-fit items-center rounded-full bg-white px-4 py-2 text-sm font-semibold text-earth-900"
+                          onClick={() => setMobileOpen(false)}
+                        >
+                          View Journey →
+                        </Link>
+                      </div>
+                    </div>
+                  ) : null}
+                </div>
+
+                <Link
+                  href="/teachings"
+                  className="block rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-medium text-white"
+                  onClick={() => setMobileOpen(false)}
+                >
+                  Teachings
+                </Link>
+                <Link
+                  href="/shop"
+                  className="block rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-medium text-white"
+                  onClick={() => setMobileOpen(false)}
+                >
+                  Shop
+                </Link>
+                <Link
+                  href="/contact"
+                  className="block rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-medium text-white"
+                  onClick={() => setMobileOpen(false)}
+                >
+                  Contact
+                </Link>
+                <Link
+                  href="/sign-in"
+                  className="block rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-medium text-white"
+                  onClick={() => setMobileOpen(false)}
+                >
+                  Login
+                </Link>
+                <Link
+                  href="/get-involved"
+                  data-button-link
+                  className="mt-2 inline-flex w-full items-center justify-center rounded-full bg-red-soft px-5 py-3 text-sm font-medium text-white shadow-lg shadow-black/25 transition-colors hover:bg-red-soft-hover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+                  onClick={() => setMobileOpen(false)}
+                >
+                  Join theWalk
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+      ) : null}
     </header>
   );
 }
