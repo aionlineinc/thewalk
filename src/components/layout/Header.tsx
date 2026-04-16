@@ -50,15 +50,15 @@ export function Header() {
               >
                 About
               </Link>
-              <button
-                type="button"
-                className={`flex cursor-default items-center border-0 bg-transparent p-0 py-1 ${navLinkClass}`}
+              <Link
+                href="/journey"
+                className={navLinkClass}
                 aria-expanded={activeMenu === "journey"}
                 aria-haspopup="true"
                 onMouseEnter={() => setActiveMenu("journey")}
               >
                 Journey
-              </button>
+              </Link>
               <Link
                 href="/teachings"
                 className={navLinkClass}
@@ -114,13 +114,7 @@ export function Header() {
                         Journey
                       </h4>
                       <div className="flex flex-col gap-6">
-                        <Link href="/journey/cross-over" className="group flex items-start gap-4">
-                          <div className="relative flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-gray-100 bg-gray-50">
-                            <div className="absolute inset-0 bg-gradient-to-br from-red-soft/35 to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
-                            <span className="relative z-10 text-lg font-bold text-gray-400 transition-colors group-hover:text-red-900">
-                              1
-                            </span>
-                          </div>
+                        <Link href="/journey/cross-over" className="group flex items-start">
                           <div>
                             <h5 className="font-medium text-gray-900 transition-colors group-hover:text-red-900">
                               Cross Over
@@ -128,15 +122,19 @@ export function Header() {
                             <p className="mt-1 text-sm leading-snug text-gray-500">
                               Enter a place of restoration, support, and profound transformation.
                             </p>
+                            <div className="mt-3 flex flex-wrap gap-2">
+                              {["Rugged", "Covered", "Exodus"].map((m) => (
+                                <span
+                                  key={m}
+                                  className="inline-flex items-center rounded-full border border-gray-200 bg-white px-3 py-1 text-[11px] font-medium tracking-wide text-gray-700"
+                                >
+                                  {m}
+                                </span>
+                              ))}
+                            </div>
                           </div>
                         </Link>
-                        <Link href="/journey/cross-roads" className="group flex items-start gap-4">
-                          <div className="relative flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-gray-100 bg-gray-50">
-                            <div className="absolute inset-0 bg-gradient-to-br from-red-soft/35 to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
-                            <span className="relative z-10 text-lg font-bold text-gray-400 transition-colors group-hover:text-red-900">
-                              2
-                            </span>
-                          </div>
+                        <Link href="/journey/cross-roads" className="group flex items-start">
                           <div>
                             <h5 className="font-medium text-gray-900 transition-colors group-hover:text-red-900">
                               Cross Roads
@@ -144,15 +142,19 @@ export function Header() {
                             <p className="mt-1 text-sm leading-snug text-gray-500">
                               Grow deeply in your identity, absolute truth, and spiritual direction.
                             </p>
+                            <div className="mt-3 flex flex-wrap gap-2">
+                              {["Bible Study", "Series", "MyWalk"].map((m) => (
+                                <span
+                                  key={m}
+                                  className="inline-flex items-center rounded-full border border-gray-200 bg-white px-3 py-1 text-[11px] font-medium tracking-wide text-gray-700"
+                                >
+                                  {m}
+                                </span>
+                              ))}
+                            </div>
                           </div>
                         </Link>
-                        <Link href="/journey/cross-connect" className="group flex items-start gap-4">
-                          <div className="relative flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-gray-100 bg-gray-50">
-                            <div className="absolute inset-0 bg-gradient-to-br from-red-soft/35 to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
-                            <span className="relative z-10 text-lg font-bold text-gray-400 transition-colors group-hover:text-red-900">
-                              3
-                            </span>
-                          </div>
+                        <Link href="/journey/cross-connect" className="group flex items-start">
                           <div>
                             <h5 className="font-medium text-gray-900 transition-colors group-hover:text-red-900">
                               Cross Connect
@@ -160,6 +162,16 @@ export function Header() {
                             <p className="mt-1 text-sm leading-snug text-gray-500">
                               Build enduring community, fellowship, and expand into Kingdom impact.
                             </p>
+                            <div className="mt-3 flex flex-wrap gap-2">
+                              {["Small Groups", "Prayer", "Ministry Development"].map((m) => (
+                                <span
+                                  key={m}
+                                  className="inline-flex items-center rounded-full border border-gray-200 bg-white px-3 py-1 text-[11px] font-medium tracking-wide text-gray-700"
+                                >
+                                  {m}
+                                </span>
+                              ))}
+                            </div>
                           </div>
                         </Link>
                       </div>

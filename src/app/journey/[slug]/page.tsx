@@ -9,6 +9,7 @@ const PATHWAYS: Record<
     title: string;
     subtext: string;
     body: string;
+    ministries: { name: string; blurb: string; href: string }[];
   }
 > = {
   "cross-over": {
@@ -16,18 +17,69 @@ const PATHWAYS: Record<
     subtext: "Enter a place of restoration, support, and profound transformation.",
     body:
       "Cross Over is where healing and new beginnings take shape — through ministries like Rugged, Covered, and Exodus, designed to meet people in hardship and hope.",
+    ministries: [
+      {
+        name: "Rugged",
+        blurb: "A place to rebuild strength, integrity, and spiritual resilience.",
+        href: "/contact?type=serve&ministry=Rugged",
+      },
+      {
+        name: "Covered",
+        blurb: "Care, accountability, and support under trusted community.",
+        href: "/contact?type=serve&ministry=Covered",
+      },
+      {
+        name: "Exodus",
+        blurb: "Freedom and new beginnings—leaving bondage for restored life.",
+        href: "/contact?type=serve&ministry=Exodus",
+      },
+    ],
   },
   "cross-roads": {
     title: "Cross Roads",
     subtext: "Grow deeply in your identity, absolute truth, and spiritual direction.",
     body:
       "Cross Roads deepens discipleship through Bible study, teaching series, and MyWalk — so faith is grounded in Scripture and lived with clarity.",
+    ministries: [
+      {
+        name: "Bible Study",
+        blurb: "Go line-by-line through Scripture with clarity and conviction.",
+        href: "/teachings",
+      },
+      {
+        name: "Series",
+        blurb: "Teaching journeys that anchor identity in truth.",
+        href: "/teachings",
+      },
+      {
+        name: "MyWalk",
+        blurb: "Personal formation—habits, healing, and spiritual direction.",
+        href: "/contact?type=journey&ministry=MyWalk",
+      },
+    ],
   },
   "cross-connect": {
     title: "Cross Connect",
     subtext: "Build enduring community, fellowship, and expand into Kingdom impact.",
     body:
       "Cross Connect gathers the Body through small groups, prayer, and ministry development — strengthening believers to serve and multiply impact together.",
+    ministries: [
+      {
+        name: "Small Groups",
+        blurb: "Belong, be known, and grow with others.",
+        href: "/contact?type=connect&ministry=Small%20Groups",
+      },
+      {
+        name: "Prayer",
+        blurb: "Intercession and spiritual covering for people and mission.",
+        href: "/contact?type=connect&ministry=Prayer",
+      },
+      {
+        name: "Ministry Development",
+        blurb: "Equip leaders and build sustainable Kingdom work.",
+        href: "/get-involved",
+      },
+    ],
   },
 };
 
@@ -73,6 +125,32 @@ export default function JourneyPathPage({ params }: Props) {
           >
             {p.body}
           </p>
+
+          <div id="ministries" className="mt-12">
+            <h2 className="text-center text-xs font-bold uppercase tracking-[0.22em] text-gray-500">
+              Ministries in this pathway
+            </h2>
+            <ul className="mt-6 grid list-none gap-4 p-0 sm:grid-cols-3">
+              {p.ministries.map((m) => (
+                <li key={m.name}>
+                  <Link
+                    href={m.href}
+                    data-button-link
+                    className="group flex h-full flex-col rounded-2xl border border-earth-100 bg-white p-6 shadow-sm transition-colors hover:border-red-soft/60 hover:shadow-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-900"
+                  >
+                    <h3 className="text-base font-medium tracking-tight text-gray-900 group-hover:text-red-900">
+                      {m.name}
+                    </h3>
+                    <p className="mt-2 text-sm font-light leading-relaxed text-gray-500">{m.blurb}</p>
+                    <span className="mt-5 text-sm font-medium text-red-500 group-hover:text-red-900">
+                      Learn more →
+                    </span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
           <div
             id={`journey-${params.slug}-actions`}
             className="mt-12 flex flex-col items-center gap-4 sm:flex-row sm:justify-center"
