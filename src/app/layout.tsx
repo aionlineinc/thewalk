@@ -8,6 +8,10 @@ import { GoogleAnalytics } from "@/components/analytics/GoogleAnalytics";
 export const metadata: Metadata = {
   title: "theWalk Ministries | A Journey of Transformation",
   description: "A Christ-centered journey of transformation, discipleship, and community.",
+  icons: {
+    icon: "/assets/logo/Email-Social-Logo.png",
+    apple: "/assets/logo/Email-Social-Logo.png",
+  },
 };
 
 export default function RootLayout({
