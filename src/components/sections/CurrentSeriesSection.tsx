@@ -13,7 +13,7 @@ const DEFAULT_ARTICLES: SeriesArticle[] = [
   {
     title: "Components of Walking",
     description: "What components influence your journey through life?",
-    href: "/teachings",
+    href: "/growth/articles",
     image:
       "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=900&auto=format&fit=crop",
     alt: "Wide landscape — components of a journey",
@@ -21,7 +21,7 @@ const DEFAULT_ARTICLES: SeriesArticle[] = [
   {
     title: "A Desire to Move",
     description: "It begins with love",
-    href: "/teachings",
+    href: "/growth/articles",
     image:
       "https://images.unsplash.com/photo-1518199266791-5375a83190b7?q=80&w=900&auto=format&fit=crop",
     alt: "Warm sunrise — desire and beginnings",
@@ -29,7 +29,7 @@ const DEFAULT_ARTICLES: SeriesArticle[] = [
   {
     title: "A Path Chosen",
     description: "Directed by glory",
-    href: "/teachings",
+    href: "/growth/articles",
     image:
       "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?q=80&w=900&auto=format&fit=crop",
     alt: "Forest path — a chosen way",
@@ -37,7 +37,7 @@ const DEFAULT_ARTICLES: SeriesArticle[] = [
   {
     title: "Movement",
     description: "Powered by Faith",
-    href: "/teachings",
+    href: "/growth/articles",
     image:
       "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=900&auto=format&fit=crop",
     alt: "Mountain vista — forward movement",
@@ -45,7 +45,7 @@ const DEFAULT_ARTICLES: SeriesArticle[] = [
   {
     title: "Staying the Course",
     description: "Seasons and Cycles",
-    href: "/teachings",
+    href: "/growth/articles",
     image:
       "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?q=80&w=900&auto=format&fit=crop",
     alt: "Misty hills — seasons and endurance",
@@ -53,7 +53,7 @@ const DEFAULT_ARTICLES: SeriesArticle[] = [
   {
     title: "Destinations",
     description: "Where are we going, and how will we get there?",
-    href: "/teachings",
+    href: "/growth/articles",
     image:
       "https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&w=900&auto=format&fit=crop",
     alt: "Lake and mountains — destination ahead",

@@ -1,0 +1,218 @@
+export type ArticleCategory =
+  | "articles"
+  | "exodus"
+  | "bible-study"
+  | "series"
+  | "prayer"
+  | "ministry-development";
+
+export type GrowthArticle = {
+  slug: string;
+  title: string;
+  excerpt: string;
+  category: ArticleCategory;
+  author: string;
+  date: string;
+  image: string;
+  imageAlt: string;
+  featured?: boolean;
+};
+
+export const ARTICLE_CATEGORY_LABEL: Record<ArticleCategory, string> = {
+  articles: "Articles",
+  exodus: "Exodus",
+  "bible-study": "Bible Study",
+  series: "Series",
+  prayer: "Prayer",
+  "ministry-development": "Ministry Development",
+};
+
+/** Scaffold content — replace with CMS or API when ready */
+export const GROWTH_ARTICLES: GrowthArticle[] = [
+  {
+    slug: "faith-that-moves",
+    title: "Faith That Moves",
+    excerpt: "How obedience reshapes the everyday when truth is lived, not only believed.",
+    category: "articles",
+    author: "Pastor Team",
+    date: "Mar 12, 2026",
+    image:
+      "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=1200&auto=format&fit=crop",
+    imageAlt: "Open landscape at dawn",
+    featured: true,
+  },
+  {
+    slug: "exodus-wilderness",
+    title: "Wilderness as Classroom",
+    excerpt: "What Israel’s journey reveals about waiting, provision, and God’s presence.",
+    category: "exodus",
+    author: "Teaching Team",
+    date: "Mar 8, 2026",
+    image:
+      "https://images.unsplash.com/photo-1469474968028-56623f02e42e?q=80&w=1200&auto=format&fit=crop",
+    imageAlt: "Mountain ridge at sunset",
+  },
+  {
+    slug: "line-by-line-romans",
+    title: "Line by Line: Romans",
+    excerpt: "A slower read of Paul’s letter — justice, grace, and new life in Christ.",
+    category: "bible-study",
+    author: "Study Leaders",
+    date: "Mar 5, 2026",
+    image:
+      "https://images.unsplash.com/photo-1481627834876-b7833e8f5570?q=80&w=1200&auto=format&fit=crop",
+    imageAlt: "Open Bible on wood table",
+  },
+  {
+    slug: "series-identity",
+    title: "Series: Who You Are in Christ",
+    excerpt: "Six weeks grounding identity in Scripture instead of circumstance.",
+    category: "series",
+    author: "theWalk",
+    date: "Feb 28, 2026",
+    image:
+      "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?q=80&w=1200&auto=format&fit=crop",
+    imageAlt: "People in community outdoors",
+  },
+  {
+    slug: "prayer-covering",
+    title: "Prayer Covering for the Week",
+    excerpt: "A rhythm of intercession for families, leaders, and our city.",
+    category: "prayer",
+    author: "Prayer Team",
+    date: "Feb 22, 2026",
+    image:
+      "https://images.unsplash.com/photo-1438232992991-995b7058bbb3?q=80&w=1200&auto=format&fit=crop",
+    imageAlt: "Hands folded in prayer",
+  },
+  {
+    slug: "developing-leaders",
+    title: "Developing Leaders Who Serve",
+    excerpt: "Frameworks for raising faithful servants, not performers.",
+    category: "ministry-development",
+    author: "Ministry Team",
+    date: "Feb 18, 2026",
+    image:
+      "https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=1200&auto=format&fit=crop",
+    imageAlt: "Small group discussion",
+  },
+  {
+    slug: "rest-and-rhythm",
+    title: "Rest and Rhythm",
+    excerpt: "Sabbath as gift — boundaries that protect devotion and joy.",
+    category: "articles",
+    author: "Pastor Team",
+    date: "Feb 10, 2026",
+    image:
+      "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?q=80&w=1200&auto=format&fit=crop",
+    imageAlt: "Forest path",
+  },
+  {
+    slug: "passover-pattern",
+    title: "The Passover Pattern",
+    excerpt: "Lamb, blood, and deliverance — shadows fulfilled in Christ.",
+    category: "exodus",
+    author: "Teaching Team",
+    date: "Feb 4, 2026",
+    image:
+      "https://images.unsplash.com/photo-1519681393784-d120267933ba?q=80&w=1200&auto=format&fit=crop",
+    imageAlt: "Stars over mountains",
+  },
+  {
+    slug: "psalms-prayer",
+    title: "Praying the Psalms",
+    excerpt: "Using ancient songs to give language to grief, hope, and praise.",
+    category: "prayer",
+    author: "Prayer Team",
+    date: "Jan 30, 2026",
+    image:
+      "https://images.unsplash.com/photo-1519681393784-d120267933ba?q=80&w=1200&auto=format&fit=crop",
+    imageAlt: "Quiet reading nook",
+  },
+  {
+    slug: "gospel-series-continued",
+    title: "The Gospel, Clearly",
+    excerpt: "Part four: resurrection hope and the mission of the church.",
+    category: "series",
+    author: "theWalk",
+    date: "Jan 22, 2026",
+    image:
+      "https://images.unsplash.com/photo-1438232992991-995b7058bbb3?q=80&w=1200&auto=format&fit=crop",
+    imageAlt: "Church interior light",
+  },
+  {
+    slug: "acts-study",
+    title: "Acts: The Spirit Sends",
+    excerpt: "Tracing the spread of the gospel from Jerusalem to the ends of the earth.",
+    category: "bible-study",
+    author: "Study Leaders",
+    date: "Jan 15, 2026",
+    image:
+      "https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?q=80&w=1200&auto=format&fit=crop",
+    imageAlt: "Ancient map texture",
+  },
+  {
+    slug: "team-health",
+    title: "Healthy Teams, Healthy Ministry",
+    excerpt: "Communication, care, and clarity for volunteer leaders.",
+    category: "ministry-development",
+    author: "Ministry Team",
+    date: "Jan 8, 2026",
+    image:
+      "https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=1200&auto=format&fit=crop",
+    imageAlt: "Team collaboration",
+  },
+];
+
+export type GrowthCourse = {
+  slug: string;
+  title: string;
+  description: string;
+  duration: string;
+  format: string;
+  image: string;
+  imageAlt: string;
+};
+
+export const GROWTH_COURSES: GrowthCourse[] = [
+  {
+    slug: "foundations",
+    title: "Foundations of Faith",
+    description: "Core truths for new believers and anyone resetting their walk.",
+    duration: "6 weeks",
+    format: "In person & online",
+    image:
+      "https://images.unsplash.com/photo-1499951360447-b19be8fe80f5?q=80&w=1200&auto=format&fit=crop",
+    imageAlt: "Notebook and coffee",
+  },
+  {
+    slug: "scripture-tools",
+    title: "Scripture Tools",
+    description: "How to read context, genre, and gospel threads with confidence.",
+    duration: "4 weeks",
+    format: "Online",
+    image:
+      "https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?q=80&w=1200&auto=format&fit=crop",
+    imageAlt: "Studying with highlighter",
+  },
+  {
+    slug: "spiritual-disciplines",
+    title: "Spiritual Disciplines",
+    description: "Prayer, fasting, and community rhythms that sustain long obedience.",
+    duration: "5 weeks",
+    format: "In person",
+    image:
+      "https://images.unsplash.com/photo-1499951360447-b19be8fe80f5?q=80&w=1200&auto=format&fit=crop",
+    imageAlt: "Journal and pen",
+  },
+  {
+    slug: "leading-small-groups",
+    title: "Leading Small Groups",
+    description: "Facilitation, care, and Scripture-first discussion for hosts.",
+    duration: "3 weeks",
+    format: "Hybrid",
+    image:
+      "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?q=80&w=1200&auto=format&fit=crop",
+    imageAlt: "Circle of people",
+  },
+];

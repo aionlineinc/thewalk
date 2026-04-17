@@ -44,12 +44,12 @@ const PATHWAYS: Record<
       {
         name: "Bible Study",
         blurb: "Go line-by-line through Scripture with clarity and conviction.",
-        href: "/teachings",
+        href: "/growth/articles",
       },
       {
         name: "Series",
         blurb: "Teaching journeys that anchor identity in truth.",
-        href: "/teachings",
+        href: "/growth/articles",
       },
       {
         name: "MyWalk",

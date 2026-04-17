@@ -59,7 +59,7 @@ export function Footer() {
               <FooterLink href="/about">About</FooterLink>
             </li>
             <li>
-              <FooterLink href="/teachings">Teachings</FooterLink>
+              <FooterLink href="/growth">Growth</FooterLink>
             </li>
             <li>
               <FooterLink href="/shop">Shop</FooterLink>

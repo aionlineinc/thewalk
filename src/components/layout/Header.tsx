@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 
-type NavMenu = "about" | "journey" | "teachings" | "shop";
+type NavMenu = "about" | "journey" | "growth" | "shop";
 
 function DotsMenuIcon({ className }: { className?: string }) {
   return (
@@ -43,7 +43,7 @@ function CloseIcon({ className }: { className?: string }) {
 export function Header() {
   const [activeMenu, setActiveMenu] = useState<NavMenu | null>(null);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [mobileExpanded, setMobileExpanded] = useState<NavMenu | null>("journey");
+  const [mobileExpanded, setMobileExpanded] = useState<"journey" | "growth" | null>("journey");
 
   const navLinkClass =
     "text-sm font-medium tracking-wide text-white transition-colors hover:text-white";
@@ -118,11 +118,13 @@ export function Header() {
                 Journey
               </Link>
               <Link
-                href="/teachings"
+                href="/growth"
                 className={navLinkClass}
-                onMouseEnter={() => setActiveMenu("teachings")}
+                aria-expanded={activeMenu === "growth"}
+                aria-haspopup="true"
+                onMouseEnter={() => setActiveMenu("growth")}
               >
-                Teachings
+                Growth
               </Link>
               <Link
                 href="/shop"
@@ -242,10 +244,10 @@ export function Header() {
                         </h4>
                         <div className="flex flex-col gap-4">
                           <Link
-                            href="/teachings"
+                            href="/growth/articles"
                             className="text-sm font-medium text-gray-900 transition-colors hover:text-red-900"
                           >
-                            Teachings &amp; Media
+                            Articles
                           </Link>
                           <Link
                             href="/about"
@@ -349,7 +351,7 @@ export function Header() {
                 </div>
               )}
 
-              {activeMenu === "teachings" && (
+              {activeMenu === "growth" && (
                 <div className="overflow-hidden rounded-3xl border border-gray-100 bg-white shadow-2xl">
                   <div className="flex flex-col gap-8 px-6 py-6 md:flex-row md:gap-10">
                     <div className="relative flex min-h-[220px] w-full flex-col justify-end overflow-hidden rounded-2xl bg-earth-900 p-8 text-white md:min-h-[300px] md:w-[42%]">
@@ -363,21 +365,41 @@ export function Header() {
                       />
                       <div className="relative z-20">
                         <p className="mb-2 text-[10px] font-medium uppercase tracking-widest text-white/80">
-                          Feed your faith
+                          Cross Roads
                         </p>
-                        <h3 className="text-2xl font-medium leading-tight">Teaching that equips you for real life.</h3>
+                        <h3 className="text-2xl font-medium leading-tight">Grow in truth, identity, and direction.</h3>
                       </div>
                     </div>
                     <div className="flex flex-1 flex-col justify-center gap-6 py-2">
-                      <h4 className="text-[10px] font-bold uppercase tracking-widest text-gray-400">Teachings</h4>
-                      <Link
-                        href="/teachings"
-                        className="text-base font-medium text-gray-900 transition-colors hover:text-red-900"
-                      >
-                        Browse teachings &amp; media →
-                      </Link>
+                      <h4 className="text-[10px] font-bold uppercase tracking-widest text-gray-400">Growth</h4>
+                      <nav className="flex flex-col gap-4" aria-label="Growth">
+                        <Link
+                          href="/growth/articles"
+                          className="text-sm font-medium text-gray-900 transition-colors hover:text-red-900"
+                        >
+                          Articles
+                        </Link>
+                        <Link
+                          href="/growth/courses"
+                          className="text-sm font-medium text-gray-900 transition-colors hover:text-red-900"
+                        >
+                          Courses
+                        </Link>
+                        <Link
+                          href="/growth/resources"
+                          className="text-sm font-medium text-gray-900 transition-colors hover:text-red-900"
+                        >
+                          Resources
+                        </Link>
+                        <Link
+                          href="/growth/services"
+                          className="text-sm font-medium text-gray-900 transition-colors hover:text-red-900"
+                        >
+                          Services
+                        </Link>
+                      </nav>
                       <p className="text-sm leading-relaxed text-gray-500">
-                        Messages, series, and resources to strengthen your walk with God and your community.
+                        Articles, courses, resources, and services for spiritual formation.
                       </p>
                     </div>
                   </div>
@@ -566,13 +588,58 @@ export function Header() {
                   ) : null}
                 </div>
 
-                <Link
-                  href="/teachings"
-                  className="block rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-medium text-white"
-                  onClick={() => setMobileOpen(false)}
-                >
-                  Teachings
-                </Link>
+                <div className="overflow-hidden rounded-2xl border border-white/10 bg-white/5">
+                  <button
+                    type="button"
+                    className="flex w-full items-center justify-between gap-3 px-4 py-3 text-left text-sm font-medium text-white"
+                    aria-expanded={mobileExpanded === "growth"}
+                    onClick={() => setMobileExpanded((s) => (s === "growth" ? null : "growth"))}
+                  >
+                    Growth
+                    <span className="text-white/70">{mobileExpanded === "growth" ? "−" : "+"}</span>
+                  </button>
+                  {mobileExpanded === "growth" ? (
+                    <div className="border-t border-white/10 px-4 py-4">
+                      <div className="space-y-3">
+                        <Link
+                          href="/growth/articles"
+                          className="block text-sm font-semibold text-white"
+                          onClick={() => setMobileOpen(false)}
+                        >
+                          Articles
+                        </Link>
+                        <Link
+                          href="/growth/courses"
+                          className="block text-sm font-semibold text-white"
+                          onClick={() => setMobileOpen(false)}
+                        >
+                          Courses
+                        </Link>
+                        <Link
+                          href="/growth/resources"
+                          className="block text-sm font-semibold text-white"
+                          onClick={() => setMobileOpen(false)}
+                        >
+                          Resources
+                        </Link>
+                        <Link
+                          href="/growth/services"
+                          className="block text-sm font-semibold text-white"
+                          onClick={() => setMobileOpen(false)}
+                        >
+                          Services
+                        </Link>
+                        <Link
+                          href="/growth"
+                          className="inline-flex w-fit items-center rounded-full bg-white px-4 py-2 text-sm font-semibold text-earth-900"
+                          onClick={() => setMobileOpen(false)}
+                        >
+                          Growth overview
+                        </Link>
+                      </div>
+                    </div>
+                  ) : null}
+                </div>
                 <Link
                   href="/shop"
                   className="block rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-medium text-white"
