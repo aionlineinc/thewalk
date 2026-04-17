@@ -1,84 +1,34 @@
-import Link from "next/link";
-import { AppCheckbox, AppInput, AppLabel, AppSubmitButton } from "@/components/ui/FormField";
-import { Hero } from "@/components/ui/Hero";
+import { Suspense } from "react";
+import { SignInClient } from "./SignInClient";
 
 export default function SignIn() {
   return (
-    <>
-      <Hero
-        sectionId="sign-in-hero"
-        titleId="sign-in-hero-title"
-        subtextId="sign-in-hero-description"
-        headline="Welcome Back"
-        subtext="Sign in to your account to manage your journey, access MyWalk, and track support."
+    <main
+      id="sign-in-main"
+      className="relative min-h-[calc(100dvh-35px)] pt-[35px]"
+      aria-labelledby="sign-in-form-heading"
+    >
+      <div
+        aria-hidden
+        className="absolute inset-0 -z-10 bg-[url('https://images.unsplash.com/photo-1523437237164-d442d57cc3c9?q=80&w=2400&auto=format&fit=crop')] bg-cover bg-center"
       />
+      <div aria-hidden className="absolute inset-0 -z-10 bg-black/15 backdrop-blur-[2px]" />
 
-      <section
-        id="sign-in-main"
-        className="flex min-h-[50vh] items-center justify-center bg-muted py-section"
-        aria-labelledby="sign-in-form-heading"
-      >
-        <div className="container mx-auto max-w-md px-4">
-          <div
-            id="sign-in-card"
-            className="rounded-xl border border-earth-100 bg-white p-8 shadow-lg"
-          >
-            <h2
-              id="sign-in-form-heading"
-              className="app-heading-block mb-6 text-center font-bold"
-            >
-              Sign In
-            </h2>
-
-            <form id="sign-in-form" className="space-y-4">
-              <div>
-                <AppLabel htmlFor="sign-in-email">Email Address</AppLabel>
-                <AppInput
-                  id="sign-in-email"
-                  type="email"
-                  name="email"
-                  autoComplete="email"
-                  placeholder="you@example.com"
-                />
-              </div>
-              <div>
-                <AppLabel htmlFor="sign-in-password">Password</AppLabel>
-                <AppInput
-                  id="sign-in-password"
-                  type="password"
-                  name="password"
-                  autoComplete="current-password"
-                  placeholder="••••••••"
-                />
-              </div>
-
-              <div className="mt-2 flex items-center justify-between text-sm">
-                <label className="flex cursor-pointer items-center text-muted-foreground">
-                  <AppCheckbox />
-                  Remember me
-                </label>
-                <Link href="#" className="app-link">
-                  Forgot password?
-                </Link>
-              </div>
-
-              <AppSubmitButton type="button" className="mt-6">
-                Sign In
-              </AppSubmitButton>
-            </form>
-
-            <div
-              id="sign-in-register-prompt"
-              className="mt-8 border-t border-earth-100 pt-6 text-center text-sm text-muted-foreground"
-            >
-              Don&apos;t have an account?{" "}
-              <Link href="/register" className="app-link font-medium">
-                Create an account
-              </Link>
+      <div className="mx-auto flex min-h-[calc(100dvh-35px)] w-full max-w-6xl items-center justify-center px-4 py-10">
+        <Suspense
+          fallback={
+            <div className="w-full max-w-[520px] rounded-2xl bg-white px-10 py-10 shadow-[0_40px_90px_-40px_rgba(0,0,0,0.55)]">
+              <p className="text-sm font-semibold tracking-tight text-earth-900">theWalk</p>
+              <h1 id="sign-in-form-heading" className="mt-8 text-4xl font-semibold tracking-tight text-earth-900">
+                Welcome back
+              </h1>
+              <p className="mt-4 text-sm text-muted-foreground">Loading…</p>
             </div>
-          </div>
-        </div>
-      </section>
-    </>
+          }
+        >
+          <SignInClient />
+        </Suspense>
+      </div>
+    </main>
   );
 }

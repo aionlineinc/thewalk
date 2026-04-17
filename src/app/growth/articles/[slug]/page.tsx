@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { ARTICLE_CATEGORY_LABEL, GROWTH_ARTICLES } from "@/lib/growth-content";
+import { ARTICLE_CATEGORY_LABEL, GROWTH_ARTICLES, getGrowthArticleBySlug } from "@/lib/growth-content";
 
 type Props = { params: { slug: string } };
 
@@ -12,7 +12,7 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = params;
-  const article = GROWTH_ARTICLES.find((a) => a.slug === slug);
+  const article = (await getGrowthArticleBySlug(slug)) ?? GROWTH_ARTICLES.find((a) => a.slug === slug);
   if (!article) return { title: "Article | theWalk Ministries" };
   return {
     title: `${article.title} | theWalk Ministries`,
@@ -22,7 +22,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function GrowthArticleDetailPage({ params }: Props) {
   const { slug } = params;
-  const article = GROWTH_ARTICLES.find((a) => a.slug === slug);
+  const article = (await getGrowthArticleBySlug(slug)) ?? GROWTH_ARTICLES.find((a) => a.slug === slug);
   if (!article) notFound();
 
   return (

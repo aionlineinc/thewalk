@@ -1,0 +1,51 @@
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: thewalk
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - thewalk_db:/var/lib/postgresql/data
+
+  cms:
+    image: directus/directus:latest
+    environment:
+      KEY: "replace-with-32+chars"
+      SECRET: "replace-with-strong-secret"
+      DB_CLIENT: "pg"
+      DB_HOST: "db"
+      DB_PORT: "5432"
+      DB_DATABASE: "thewalk"
+      DB_USER: "postgres"
+      DB_PASSWORD: "postgres"
+      ADMIN_EMAIL: "admin@thewalk.local"
+      ADMIN_PASSWORD: "replace-with-strong-password"
+      WEBSOCKETS_ENABLED: "true"
+      PUBLIC_URL: "http://localhost:8055"
+    ports:
+      - "8055:8055"
+    depends_on:
+      - db
+
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      NODE_ENV: production
+      AUTH_SECRET: "replace-with-strong-secret"
+      DATABASE_URL: "postgresql://postgres:postgres@db:5432/thewalk?schema=public"
+      DIRECTUS_URL: "http://cms:8055"
+      NEXT_PUBLIC_APP_URL: "http://localhost:3000"
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+      - cms
+
+volumes:
+  thewalk_db:
+

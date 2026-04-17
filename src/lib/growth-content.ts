@@ -216,3 +216,59 @@ export const GROWTH_COURSES: GrowthCourse[] = [
     imageAlt: "Circle of people",
   },
 ];
+
+type DirectusListResponse<T> = { data: T[] };
+
+type DirectusArticle = {
+  slug: string;
+  title: string;
+  excerpt: string;
+  category: ArticleCategory;
+  author: string;
+  date: string;
+  image: string;
+  imageAlt: string;
+  featured?: boolean | null;
+};
+
+async function tryFetchDirectusArticles(): Promise<GrowthArticle[] | null> {
+  const { directusFetch } = await import("@/lib/directus");
+
+  try {
+    const res = await directusFetch<DirectusListResponse<DirectusArticle>>(
+      "/items/articles",
+      {
+        fields: "slug,title,excerpt,category,author,date,image,imageAlt,featured",
+        limit: 200,
+        sort: "-date",
+      },
+      { next: { revalidate: 60 } }
+    );
+
+    if (!res?.data?.length) return [];
+    return res.data.map((a) => ({
+      slug: a.slug,
+      title: a.title,
+      excerpt: a.excerpt,
+      category: a.category,
+      author: a.author,
+      date: a.date,
+      image: a.image,
+      imageAlt: a.imageAlt,
+      featured: !!a.featured,
+    }));
+  } catch {
+    return null;
+  }
+}
+
+export async function getGrowthArticles(): Promise<GrowthArticle[]> {
+  if (!process.env.DIRECTUS_URL) return GROWTH_ARTICLES;
+  const fromCms = await tryFetchDirectusArticles();
+  return fromCms ?? GROWTH_ARTICLES;
+}
+
+export async function getGrowthArticleBySlug(slug: string): Promise<GrowthArticle | null> {
+  const articles = await getGrowthArticles();
+  return articles.find((a) => a.slug === slug) ?? null;
+}
