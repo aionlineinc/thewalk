@@ -5,10 +5,19 @@ import { prisma } from "@/lib/prisma";
 import { AdminNav } from "../_components/AdminNav";
 import { createOrganization } from "./actions";
 
+type OrgRow = {
+  id: string;
+  name: string;
+  slug: string;
+  kind: string;
+  createdAt: Date;
+  _count: { memberships: number };
+};
+
 export default async function AdminOrganizationsPage() {
   const session = await getServerSession(authOptions);
 
-  const orgs = await prisma.organization.findMany({
+  const orgs: OrgRow[] = await prisma.organization.findMany({
     orderBy: { createdAt: "desc" },
     select: {
       id: true,
