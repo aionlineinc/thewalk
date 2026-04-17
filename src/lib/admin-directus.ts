@@ -1,10 +1,17 @@
 import { directusFetch } from "@/lib/directus";
 
+/**
+ * Fetch items from a Directus collection. Works both with an admin
+ * `DIRECTUS_TOKEN` (sees drafts + archived) and unauthenticated (sees whatever
+ * the public policy allows — currently `status == "published"`).
+ *
+ * Returns `null` only when the request fails (network, 4xx/5xx), so the caller
+ * can fall back to the in-app scaffold content.
+ */
 export async function fetchDirectusItems<T>(
   collection: string,
   query: Record<string, string | number | boolean | undefined> = {}
 ): Promise<T[] | null> {
-  if (!process.env.DIRECTUS_TOKEN) return null;
   try {
     const res = await directusFetch<{ data: T[] }>(`/items/${collection}`, {
       limit: 200,

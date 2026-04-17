@@ -219,17 +219,29 @@ export const GROWTH_COURSES: GrowthCourse[] = [
 
 type DirectusListResponse<T> = { data: T[] };
 
+/**
+ * Directus "articles" collection schema (as authored in cms.thewalk.org):
+ *   slug, title, excerpt, category, author, date_published, image_url,
+ *   image_alt, featured, status, body
+ */
 type DirectusArticle = {
   slug: string;
   title: string;
   excerpt: string;
   category: ArticleCategory;
   author: string;
-  date: string;
-  image: string;
-  imageAlt: string;
+  date_published: string | null;
+  image_url: string | null;
+  image_alt: string | null;
   featured?: boolean | null;
 };
+
+function formatDate(iso: string | null): string {
+  if (!iso) return "";
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return iso;
+  return d.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+}
 
 async function tryFetchDirectusArticles(): Promise<GrowthArticle[] | null> {
   const { directusFetch } = await import("@/lib/directus");
@@ -238,9 +250,10 @@ async function tryFetchDirectusArticles(): Promise<GrowthArticle[] | null> {
     const res = await directusFetch<DirectusListResponse<DirectusArticle>>(
       "/items/articles",
       {
-        fields: "slug,title,excerpt,category,author,date,image,imageAlt,featured",
+        fields: "slug,title,excerpt,category,author,date_published,image_url,image_alt,featured",
+        filter: JSON.stringify({ status: { _eq: "published" } }),
         limit: 200,
-        sort: "-date",
+        sort: "-date_published",
       },
       { next: { revalidate: 60 } }
     );
@@ -251,10 +264,10 @@ async function tryFetchDirectusArticles(): Promise<GrowthArticle[] | null> {
       title: a.title,
       excerpt: a.excerpt,
       category: a.category,
-      author: a.author,
-      date: a.date,
-      image: a.image,
-      imageAlt: a.imageAlt,
+      author: a.author ?? "",
+      date: formatDate(a.date_published),
+      image: a.image_url ?? "",
+      imageAlt: a.image_alt ?? "",
       featured: !!a.featured,
     }));
   } catch {
@@ -263,9 +276,11 @@ async function tryFetchDirectusArticles(): Promise<GrowthArticle[] | null> {
 }
 
 export async function getGrowthArticles(): Promise<GrowthArticle[]> {
-  if (!process.env.DIRECTUS_URL) return GROWTH_ARTICLES;
+  // Try the CMS whenever a URL is configured or the canonical host default
+  // applies (handled in src/lib/directus.ts).
   const fromCms = await tryFetchDirectusArticles();
-  return fromCms ?? GROWTH_ARTICLES;
+  if (fromCms && fromCms.length > 0) return fromCms;
+  return GROWTH_ARTICLES;
 }
 
 export async function getGrowthArticleBySlug(slug: string): Promise<GrowthArticle | null> {

@@ -54,21 +54,17 @@ export default async function AdminArticlesPage() {
     <section className="w-full">
       <h1 className="admin-page-title">Articles</h1>
       <p className="admin-page-lead">
-        Growth library content by area. When{" "}
-        <code className="rounded bg-black/[0.05] px-1.5 py-0.5 font-mono text-xs text-admin-ink">DIRECTUS_TOKEN</code> is set,
-        entries are read from the Directus collection{" "}
-        <span className="font-mono text-admin-ink">{CMS_COLLECTION}</span>. Otherwise the in-app scaffold list is shown for
-        reference.
+        Growth library content by area, sourced from the Directus{" "}
+        <span className="font-mono text-admin-ink">{CMS_COLLECTION}</span> collection. Falls back to the in-app scaffold
+        list if the CMS is unreachable.
       </p>
 
-      {directusUrl ? (
-        <p className="mt-4 text-sm text-admin-muted">
-          <a href={directusUrl} className="admin-link" target="_blank" rel="noreferrer">
-            Open Directus admin
-          </a>{" "}
-          to edit collections, permissions, and assets.
-        </p>
-      ) : null}
+      <p className="mt-4 text-sm text-admin-muted">
+        <a href={directusUrl} className="admin-link" target="_blank" rel="noreferrer">
+          Open Directus ({new URL(directusUrl).host})
+        </a>{" "}
+        to edit collections, permissions, and assets.
+      </p>
 
       <div className="mt-10 space-y-12">
         {categories.map((cat) => {
