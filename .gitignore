@@ -26,7 +26,9 @@
 theWalk-Redesign-outputs.zip
 .mcp-push-*.json
 .mcp-merged-*.json
-Users/
+# Accidental repo-root Users/ (stray Next.js cache output); anchored so
+# it does not shadow in-repo paths like src/app/admin/users/
+/Users/
 
 # debug
 npm-debug.log*
