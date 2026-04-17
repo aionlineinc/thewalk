@@ -597,13 +597,15 @@ export function Header() {
             >
               {mobileOpen ? <CloseIcon className="h-5 w-5" /> : <DotsMenuIcon className="h-5 w-5" />}
             </button>
-            <Link
-              href="/get-involved"
-              data-button-link
-              className="hidden md:inline-flex rounded-full bg-red-soft px-5 py-2.5 text-sm font-medium text-white shadow-lg shadow-black/25 transition-colors hover:bg-red-soft-hover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
-            >
-              Join theWalk
-            </Link>
+            {isAuthed ? null : (
+              <Link
+                href="/get-involved"
+                data-button-link
+                className="hidden md:inline-flex rounded-full bg-red-soft px-5 py-2.5 text-sm font-medium text-white shadow-lg shadow-black/25 transition-colors hover:bg-red-soft-hover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+              >
+                Join theWalk
+              </Link>
+            )}
           </div>
         </div>
       </div>
@@ -826,14 +828,16 @@ export function Header() {
                     Login
                   </Link>
                 )}
-                <Link
-                  href="/get-involved"
-                  data-button-link
-                  className="mt-2 inline-flex w-full items-center justify-center rounded-full bg-red-soft px-5 py-3 text-sm font-medium text-white shadow-lg shadow-black/25 transition-colors hover:bg-red-soft-hover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
-                  onClick={() => setMobileOpen(false)}
-                >
-                  Join theWalk
-                </Link>
+                {isAuthed ? null : (
+                  <Link
+                    href="/get-involved"
+                    data-button-link
+                    className="mt-2 inline-flex w-full items-center justify-center rounded-full bg-red-soft px-5 py-3 text-sm font-medium text-white shadow-lg shadow-black/25 transition-colors hover:bg-red-soft-hover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+                    onClick={() => setMobileOpen(false)}
+                  >
+                    Join theWalk
+                  </Link>
+                )}
               </div>
             </div>
           </div>
