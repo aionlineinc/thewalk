@@ -43,9 +43,9 @@ function ArticleMeta({ article }: { article: GrowthArticle }) {
 
 export function GrowthArticlesClient({ articles }: { articles: GrowthArticle[] }) {
   const router = useRouter();
-  const pathname = usePathname();
+  const pathname = usePathname() ?? "";
   const searchParams = useSearchParams();
-  const raw = searchParams.get("type");
+  const raw = searchParams?.get("type") ?? null;
   const activeFilter: FilterId = useMemo(() => {
     if (!raw || raw === FILTER_ALL) return FILTER_ALL;
     const ok = FILTERS.some((f) => f.id === raw);
@@ -54,7 +54,7 @@ export function GrowthArticlesClient({ articles }: { articles: GrowthArticle[] }
 
   const setFilter = useCallback(
     (id: FilterId) => {
-      const params = new URLSearchParams(searchParams.toString());
+      const params = new URLSearchParams(searchParams?.toString() ?? "");
       if (id === FILTER_ALL) params.delete("type");
       else params.set("type", id);
       const q = params.toString();

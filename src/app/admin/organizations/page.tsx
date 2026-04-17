@@ -1,8 +1,5 @@
-import { getServerSession } from "next-auth";
 import Link from "next/link";
-import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-import { AdminNav } from "../_components/AdminNav";
 import { createOrganization } from "./actions";
 
 type OrgRow = {
@@ -15,8 +12,6 @@ type OrgRow = {
 };
 
 export default async function AdminOrganizationsPage() {
-  const session = await getServerSession(authOptions);
-
   const orgs: OrgRow[] = await prisma.organization.findMany({
     orderBy: { createdAt: "desc" },
     select: {
@@ -30,15 +25,9 @@ export default async function AdminOrganizationsPage() {
   });
 
   return (
-    <section className="mx-auto w-full max-w-5xl px-4 py-16">
-      <h1 className="text-3xl font-semibold tracking-tight text-earth-900">Organizations</h1>
-      <p className="mt-3 text-sm text-muted-foreground">
-        Signed in as <span className="font-medium">{session?.user?.email}</span>
-      </p>
-
-      <div className="mt-6">
-        <AdminNav />
-      </div>
+    <section className="w-full max-w-5xl">
+      <h1 className="admin-page-title">Organizations</h1>
+      <p className="admin-page-lead">Create organizations and assign users from the Users page.</p>
 
       <div className="mt-8 grid gap-6 md:grid-cols-[minmax(0,2fr)_minmax(0,3fr)]">
         <form
@@ -46,70 +35,65 @@ export default async function AdminOrganizationsPage() {
             "use server";
             await createOrganization(formData);
           }}
-          className="rounded-2xl border border-earth-100 bg-white p-6 shadow-sm"
+          className="admin-card p-6 sm:p-7"
         >
-          <h2 className="text-lg font-semibold tracking-tight text-earth-900">Create organization</h2>
-          <p className="mt-2 text-sm text-muted-foreground">
-            Use for ministries, partner organizations, or internal groups.
-          </p>
+          <h2 className="text-lg font-semibold tracking-tight text-admin-ink">Create organization</h2>
+          <p className="mt-2 text-sm text-admin-muted">Use for ministries, partner organizations, or internal groups.</p>
 
           <div className="mt-5 space-y-3">
             <label className="block">
-              <span className="text-xs font-semibold uppercase tracking-widest text-earth-700">Name</span>
+              <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-admin-muted">Name</span>
               <input
                 name="name"
                 required
-                className="mt-2 w-full rounded-xl border border-earth-200 bg-white px-4 py-3 text-sm outline-none transition-colors focus:border-red-500/40"
+                className="mt-2 w-full rounded-xl border border-black/[0.08] bg-white px-4 py-3 text-sm text-admin-ink outline-none transition-colors focus:border-admin-accent/50 focus:ring-2 focus:ring-admin-accent/15"
                 placeholder="Example Ministry"
               />
             </label>
             <label className="block">
-              <span className="text-xs font-semibold uppercase tracking-widest text-earth-700">Slug</span>
+              <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-admin-muted">Slug</span>
               <input
                 name="slug"
                 required
-                className="mt-2 w-full rounded-xl border border-earth-200 bg-white px-4 py-3 text-sm outline-none transition-colors focus:border-red-500/40"
+                className="mt-2 w-full rounded-xl border border-black/[0.08] bg-white px-4 py-3 text-sm text-admin-ink outline-none transition-colors focus:border-admin-accent/50 focus:ring-2 focus:ring-admin-accent/15"
                 placeholder="example-ministry"
               />
-              <span className="mt-1 block text-xs text-muted-foreground">Lowercase, numbers, dashes.</span>
+              <span className="mt-1 block text-xs text-admin-muted">Lowercase, numbers, dashes.</span>
             </label>
             <label className="block">
-              <span className="text-xs font-semibold uppercase tracking-widest text-earth-700">Kind</span>
+              <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-admin-muted">Kind</span>
               <input
                 name="kind"
                 defaultValue="organization"
-                className="mt-2 w-full rounded-xl border border-earth-200 bg-white px-4 py-3 text-sm outline-none transition-colors focus:border-red-500/40"
+                className="mt-2 w-full rounded-xl border border-black/[0.08] bg-white px-4 py-3 text-sm text-admin-ink outline-none transition-colors focus:border-admin-accent/50 focus:ring-2 focus:ring-admin-accent/15"
                 placeholder="ministry"
               />
             </label>
           </div>
 
-          <button
-            type="submit"
-            className="mt-5 inline-flex w-full items-center justify-center rounded-full bg-earth-900 px-6 py-3 text-sm font-medium text-white shadow-sm transition-colors hover:bg-earth-900/90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-900/40"
-          >
+          <button type="submit" className="admin-btn-primary mt-6 w-full rounded-full py-3.5">
             Create
           </button>
         </form>
 
-        <div className="overflow-hidden rounded-2xl border border-earth-100 bg-white shadow-sm">
-          <div className="grid grid-cols-[minmax(0,2fr)_minmax(0,1fr)_minmax(0,1fr)] gap-3 border-b border-earth-100 bg-muted px-6 py-3 text-xs font-semibold uppercase tracking-widest text-earth-700">
+        <div className="admin-card overflow-hidden">
+          <div className="grid grid-cols-[minmax(0,2fr)_minmax(0,1fr)_minmax(0,1fr)] gap-3 border-b border-black/[0.06] bg-black/[0.02] px-6 py-3 text-[10px] font-bold uppercase tracking-[0.18em] text-admin-muted">
             <span>Organization</span>
             <span>Members</span>
             <span>Created</span>
           </div>
-          <ul className="divide-y divide-earth-100">
+          <ul className="divide-y divide-black/[0.05]">
             {orgs.map((o) => (
-              <li key={o.id} className="px-6 py-4">
+              <li key={o.id} className="px-6 py-4 transition-colors hover:bg-black/[0.02]">
                 <div className="grid grid-cols-[minmax(0,2fr)_minmax(0,1fr)_minmax(0,1fr)] items-center gap-3">
                   <div className="min-w-0">
-                    <p className="truncate text-sm font-medium text-earth-900">{o.name}</p>
-                    <p className="mt-0.5 truncate text-xs text-muted-foreground">
-                      <span className="font-medium">{o.slug}</span> · {o.kind}
+                    <p className="truncate text-sm font-medium text-admin-ink">{o.name}</p>
+                    <p className="mt-0.5 truncate text-xs text-admin-muted">
+                      <span className="font-medium text-admin-ink/80">{o.slug}</span> · {o.kind}
                     </p>
                   </div>
-                  <p className="text-sm font-medium text-earth-800">{o._count.memberships}</p>
-                  <p className="text-sm text-muted-foreground">{o.createdAt.toISOString().slice(0, 10)}</p>
+                  <p className="text-sm font-medium text-admin-ink">{o._count.memberships}</p>
+                  <p className="text-sm text-admin-muted">{o.createdAt.toISOString().slice(0, 10)}</p>
                 </div>
               </li>
             ))}
@@ -117,10 +101,9 @@ export default async function AdminOrganizationsPage() {
         </div>
       </div>
 
-      <p className="mt-8 text-sm text-muted-foreground">
-        Back to <Link href="/admin" className="app-link">Admin overview</Link>.
+      <p className="mt-8 text-sm text-admin-muted">
+        Back to <Link href="/admin" className="admin-link">Admin overview</Link>.
       </p>
     </section>
   );
 }
-

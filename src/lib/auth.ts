@@ -3,14 +3,19 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
 import { z } from "zod";
 import { prisma } from "@/lib/prisma";
+import { getAuthSecret } from "@/lib/auth-secret";
+
+function normalizeEmail(email: string) {
+  return email.trim().toLowerCase();
+}
 
 const credentialsSchema = z.object({
-  email: z.string().email().max(320),
+  email: z.preprocess((v) => (typeof v === "string" ? normalizeEmail(v) : v), z.string().email().max(320)),
   password: z.string().min(8).max(200),
 });
 
 export const authOptions: NextAuthOptions = {
-  secret: process.env.AUTH_SECRET,
+  secret: getAuthSecret(),
   session: { strategy: "jwt" },
   providers: [
     CredentialsProvider({
@@ -24,7 +29,9 @@ export const authOptions: NextAuthOptions = {
         if (!parsed.success) return null;
 
         const { email, password } = parsed.data;
-        const user = await prisma.user.findUnique({ where: { email } });
+        const user = await prisma.user.findFirst({
+          where: { email: { equals: email, mode: "insensitive" } },
+        });
         if (!user) return null;
 
         const ok = await bcrypt.compare(password, user.passwordHash);

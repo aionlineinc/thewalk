@@ -10,6 +10,12 @@ type FetchOptions = RequestInit & {
   next?: { revalidate?: number };
 };
 
+export function directusAuthHeaders(): Record<string, string> {
+  const token = process.env.DIRECTUS_TOKEN;
+  if (!token) return {};
+  return { Authorization: `Bearer ${token}` };
+}
+
 export async function directusFetch<T>(
   path: string,
   urlParams: Record<string, string | number | boolean | undefined> = {},
@@ -23,7 +29,11 @@ export async function directusFetch<T>(
   const requestUrl = `${DIRECTUS_URL}${path}${qs.toString() ? `?${qs.toString()}` : ""}`;
 
   const res = await fetch(requestUrl, {
-    headers: { "Content-Type": "application/json", ...(options.headers || {}) },
+    headers: {
+      "Content-Type": "application/json",
+      ...directusAuthHeaders(),
+      ...(options.headers as Record<string, string> | undefined),
+    },
     ...options,
   });
 

@@ -113,6 +113,13 @@ export default function RegisterPage() {
               </Link>
             </p>
 
+            <p className="mt-4 text-center text-sm text-muted-foreground">
+              Registering a ministry or group?{" "}
+              <Link href="/register/group" className="app-link font-medium">
+                Group registration
+              </Link>
+            </p>
+
             <p className="mt-4 text-center text-xs text-muted-foreground">
               Need help?{" "}
               <Link href="/contact" className="app-link">

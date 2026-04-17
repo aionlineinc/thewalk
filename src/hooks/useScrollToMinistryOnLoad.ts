@@ -14,7 +14,7 @@ export function useScrollToMinistryOnLoad(sectionId: string, validTabKeys: reado
   useLayoutEffect(() => {
     if (didScroll.current) return;
 
-    const tab = searchParams.get("tab");
+    const tab = searchParams?.get("tab") ?? null;
     if (!tab || !validTabKeys.includes(tab)) return;
     if (typeof window === "undefined") return;
     if (window.location.hash !== `#${sectionId}`) return;

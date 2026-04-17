@@ -123,4 +123,30 @@ body {
   .app-pill-outline-earth {
     @apply inline-flex items-center justify-center rounded-full border border-earth-200 bg-white px-8 py-3 text-sm font-medium tracking-wide text-earth-900 shadow-sm transition-colors hover:border-earth-500 hover:bg-earth-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-earth-900;
   }
+
+  /* Admin dashboard — Superpower-inspired (cream canvas, orange accent, soft cards) */
+  .admin-card {
+    @apply rounded-[1.35rem] border border-black/[0.06] bg-admin-surface shadow-admin-card;
+  }
+  .admin-card-pad {
+    @apply admin-card p-6 sm:p-7;
+  }
+  .admin-page-title {
+    @apply text-3xl font-semibold tracking-tight text-admin-ink sm:text-4xl;
+  }
+  .admin-page-lead {
+    @apply mt-2 max-w-2xl text-sm leading-relaxed text-admin-muted;
+  }
+  .admin-link {
+    @apply font-medium text-admin-accent underline-offset-4 transition-colors hover:text-admin-accent-hover hover:underline;
+  }
+  .admin-link:focus-visible {
+    @apply rounded-sm outline outline-2 outline-offset-2 outline-admin-accent/40;
+  }
+  .admin-btn-primary {
+    @apply inline-flex items-center justify-center rounded-xl bg-admin-accent px-5 py-3 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-admin-accent-hover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-admin-accent/50 disabled:cursor-not-allowed disabled:opacity-60;
+  }
+  .admin-btn-ghost {
+    @apply inline-flex items-center justify-center rounded-xl border border-black/[0.08] bg-white px-5 py-3 text-sm font-semibold text-admin-ink transition-colors hover:bg-black/[0.03] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-admin-ink/20;
+  }
 }

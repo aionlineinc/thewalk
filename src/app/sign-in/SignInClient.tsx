@@ -24,7 +24,7 @@ function EyeIcon({ className }: { className?: string }) {
 
 export function SignInClient() {
   const searchParams = useSearchParams();
-  const callbackUrl = useMemo(() => searchParams.get("callbackUrl") ?? "/admin", [searchParams]);
+  const callbackUrl = useMemo(() => searchParams?.get("callbackUrl") ?? "/admin", [searchParams]);
   const [error, setError] = useState<string | null>(null);
   const [pending, setPending] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -43,6 +43,12 @@ export function SignInClient() {
         Don&apos;t have an account?{" "}
         <Link href="/register" className="font-medium text-earth-900 underline underline-offset-4">
           Create my account
+        </Link>
+      </p>
+      <p className="mt-2 text-sm text-muted-foreground">
+        Registering a ministry or group?{" "}
+        <Link href="/register/group" className="font-medium text-earth-900 underline underline-offset-4">
+          Group registration
         </Link>
       </p>
 

@@ -1,7 +1,9 @@
 "use server";
 
 import { z } from "zod";
+import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/prisma";
+import { requireStaffSession } from "../_lib/require-staff";
 
 const createOrgSchema = z.object({
   name: z.string().min(2).max(120),
@@ -14,6 +16,9 @@ const createOrgSchema = z.object({
 });
 
 export async function createOrganization(formData: FormData) {
+  const session = await requireStaffSession();
+  if (!session) return { ok: false as const, error: "Unauthorized" };
+
   const parsed = createOrgSchema.safeParse({
     name: String(formData.get("name") ?? ""),
     slug: String(formData.get("slug") ?? ""),
@@ -26,6 +31,8 @@ export async function createOrganization(formData: FormData) {
 
   try {
     await prisma.organization.create({ data: parsed.data });
+    revalidatePath("/admin/organizations");
+    revalidatePath("/admin");
     return { ok: true as const };
   } catch {
     return { ok: false as const, error: "Failed to create organization (slug must be unique)." };

@@ -22,6 +22,20 @@ const config: Config = {
         "red-soft": "#AA0303",
         "red-soft-hover": "#8A0202",
         "red-900": "#3A0202",
+        /** Admin / “Superpower-style” dashboard — warm canvas + orange accent */
+        "admin-canvas": "#F9F7F2",
+        "admin-surface": "#FFFFFF",
+        "admin-ink": "#0f0f10",
+        "admin-accent": "#FF5C00",
+        "admin-accent-hover": "#E65500",
+        "admin-muted": "#6b6b6b",
+        "admin-bar-green": "#4ADE80",
+        "admin-bar-amber": "#FB923C",
+        "admin-bar-violet": "#a78bfa",
+      },
+      boxShadow: {
+        "admin-card": "0 2px 40px -12px rgba(15, 15, 16, 0.1)",
+        "admin-sidebar": "0 8px 40px -16px rgba(15, 15, 16, 0.12)",
       },
       maxWidth: {
         /** Primary reading column (hero, editorial, journey index) */

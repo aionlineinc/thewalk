@@ -3,8 +3,12 @@ import bcrypt from "bcryptjs";
 import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 
+function normalizeEmail(email: string) {
+  return email.trim().toLowerCase();
+}
+
 const signupSchema = z.object({
-  email: z.string().email().max(320),
+  email: z.preprocess((v) => (typeof v === "string" ? normalizeEmail(v) : v), z.string().email().max(320)),
   password: z.string().min(8).max(200),
   name: z.string().max(120).optional(),
 });
@@ -17,7 +21,9 @@ export async function POST(req: Request) {
   }
 
   const { email, password, name } = parsed.data;
-  const existing = await prisma.user.findUnique({ where: { email } });
+  const existing = await prisma.user.findFirst({
+    where: { email: { equals: email, mode: "insensitive" } },
+  });
   if (existing) {
     return NextResponse.json({ error: "Email already in use" }, { status: 409 });
   }

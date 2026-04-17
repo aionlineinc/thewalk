@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { getToken } from "next-auth/jwt";
+import { getAuthSecret } from "@/lib/auth-secret";
 
 export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
@@ -10,7 +11,7 @@ export async function middleware(req: NextRequest) {
 
   if (!isAdminRoute && !isMemberRoute) return NextResponse.next();
 
-  const token = await getToken({ req, secret: process.env.AUTH_SECRET });
+  const token = await getToken({ req, secret: getAuthSecret() });
   if (!token) {
     const url = req.nextUrl.clone();
     url.pathname = "/sign-in";

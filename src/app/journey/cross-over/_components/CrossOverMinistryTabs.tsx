@@ -137,17 +137,17 @@ function isTabKey(value: string | null): value is TabKey {
 export function CrossOverMinistryTabs() {
   const tabsId = useId();
   const router = useRouter();
-  const pathname = usePathname();
+  const pathname = usePathname() ?? "";
   const searchParams = useSearchParams();
 
   useScrollToMinistryOnLoad("cross-over-ministries", TAB_KEYS);
 
-  const activeFromUrl = searchParams.get("tab");
+  const activeFromUrl = searchParams?.get("tab") ?? null;
   const initial = isTabKey(activeFromUrl) ? activeFromUrl : "rugged";
   const [active, setActive] = useState<TabKey>(initial);
 
   useEffect(() => {
-    const urlTab = searchParams.get("tab");
+    const urlTab = searchParams?.get("tab") ?? null;
     if (!isTabKey(urlTab)) return;
     setActive(urlTab);
   }, [searchParams]);
@@ -156,7 +156,7 @@ export function CrossOverMinistryTabs() {
 
   const setTab = (next: TabKey) => {
     setActive(next);
-    const params = new URLSearchParams(searchParams.toString());
+    const params = new URLSearchParams(searchParams?.toString() ?? "");
     params.set("tab", next);
     const qs = params.toString();
     router.replace(`${pathname}?${qs}`, { scroll: false });

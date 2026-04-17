@@ -1,9 +1,22 @@
 import type { Metadata } from "next";
+import { Outfit, Roboto_Mono } from "next/font/google";
 import "./globals.css";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { CookieConsent } from "@/components/layout/CookieConsent";
 import { GoogleAnalytics } from "@/components/analytics/GoogleAnalytics";
+
+const outfit = Outfit({
+  subsets: ["latin"],
+  variable: "--font-outfit",
+  display: "swap",
+});
+
+const robotoMono = Roboto_Mono({
+  subsets: ["latin"],
+  variable: "--font-roboto-mono",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: "theWalk Ministries | A Journey of Transformation",
@@ -20,20 +33,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="h-full antialiased">
+    <html lang="en" className={`${outfit.variable} ${robotoMono.variable} h-full antialiased`}>
       <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link
-          rel="preconnect"
-          href="https://fonts.gstatic.com"
-          crossOrigin="anonymous"
-        />
         <link rel="icon" href="/assets/logo/Email-Social-Logo.png" type="image/png" />
         <link rel="apple-touch-icon" href="/assets/logo/Email-Social-Logo.png" />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&family=Roboto+Mono:wght@400;700&display=swap"
-          rel="stylesheet"
-        />
       </head>
       <body className="min-h-full flex flex-col bg-background text-foreground">
         <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID || ""} />
