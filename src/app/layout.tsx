@@ -28,6 +28,8 @@ export default function RootLayout({
           href="https://fonts.gstatic.com"
           crossOrigin="anonymous"
         />
+        <link rel="icon" href="/assets/logo/Email-Social-Logo.png" type="image/png" />
+        <link rel="apple-touch-icon" href="/assets/logo/Email-Social-Logo.png" />
         <link
           href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&family=Roboto+Mono:wght@400;700&display=swap"
           rel="stylesheet"
