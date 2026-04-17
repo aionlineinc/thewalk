@@ -22,12 +22,13 @@ const config: Config = {
         "red-soft": "#AA0303",
         "red-soft-hover": "#8A0202",
         "red-900": "#3A0202",
-        /** Admin / “Superpower-style” dashboard — warm canvas + orange accent */
+        /** Admin / “Superpower-style” dashboard — warm canvas + red accent
+         *  (brand-aligned: matches red-soft / red-soft-hover used site-wide). */
         "admin-canvas": "#F9F7F2",
         "admin-surface": "#FFFFFF",
         "admin-ink": "#0f0f10",
-        "admin-accent": "#FF5C00",
-        "admin-accent-hover": "#E65500",
+        "admin-accent": "#AA0303",
+        "admin-accent-hover": "#8A0202",
         "admin-muted": "#6b6b6b",
         "admin-bar-green": "#4ADE80",
         "admin-bar-amber": "#FB923C",
