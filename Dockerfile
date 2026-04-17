@@ -41,4 +41,4 @@ USER nextjs
 EXPOSE 3000
 
 # Apply DB migrations on boot, then start Next.js
-CMD ["sh", "-c", "node ./node_modules/.bin/prisma migrate deploy && node ./node_modules/next/dist/bin/next start -p ${PORT}"]
+CMD ["sh", "-c", "if [ -n \"${DATABASE_URL}\" ]; then node ./node_modules/.bin/prisma migrate deploy || echo \"[warn] prisma migrate deploy failed\"; else echo \"[warn] DATABASE_URL not set; skipping prisma migrate deploy\"; fi; node ./node_modules/next/dist/bin/next start -p ${PORT}"]
