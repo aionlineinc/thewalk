@@ -5,6 +5,7 @@ import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { CookieConsent } from "@/components/layout/CookieConsent";
 import { GoogleAnalytics } from "@/components/analytics/GoogleAnalytics";
+import { Providers } from "./providers";
 
 const outfit = Outfit({
   subsets: ["latin"],
@@ -39,13 +40,15 @@ export default function RootLayout({
         <link rel="apple-touch-icon" href="/assets/logo/Email-Social-Logo.png" />
       </head>
       <body className="min-h-full flex flex-col bg-background text-foreground">
-        <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID || ""} />
-        <Header />
-        <main id="site-main" className="flex flex-1 flex-col">
-          {children}
-        </main>
-        <Footer />
-        <CookieConsent />
+        <Providers>
+          <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID || ""} />
+          <Header />
+          <main id="site-main" className="flex flex-1 flex-col">
+            {children}
+          </main>
+          <Footer />
+          <CookieConsent />
+        </Providers>
       </body>
     </html>
   );

@@ -26,7 +26,7 @@ export function AdminSidebar({ email, name }: { email?: string | null; name?: st
   const display = name?.trim() || email?.split("@")[0] || "—";
 
   return (
-    <aside className="w-full shrink-0 md:w-56 lg:w-64">
+    <aside className="w-full shrink-0 md:sticky md:top-[calc(35px+64px+1.5rem)] md:w-60 lg:w-64 xl:w-72">
       <div className="admin-card shadow-admin-sidebar p-4 sm:p-5">
         <p className="px-1 text-[10px] font-bold uppercase tracking-[0.2em] text-admin-muted">Menu</p>
         <p className="mt-3 truncate px-1 text-base font-semibold tracking-tight text-admin-ink">{display}</p>

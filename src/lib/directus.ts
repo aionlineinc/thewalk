@@ -4,7 +4,10 @@
  * Uses Directus REST API. Keep server-side calls pointing at internal URL when available.
  */
 
-const DIRECTUS_URL = process.env.DIRECTUS_URL || "http://127.0.0.1:8055";
+const DIRECTUS_URL =
+  process.env.DIRECTUS_URL ||
+  process.env.NEXT_PUBLIC_DIRECTUS_URL ||
+  "https://cms.thewalk.org";
 
 type FetchOptions = RequestInit & {
   next?: { revalidate?: number };

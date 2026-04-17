@@ -7,9 +7,9 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   const session = await getServerSession(authOptions);
 
   return (
-    <div className="min-h-[calc(100dvh-35px)] bg-admin-canvas pt-[35px]">
-      <header className="border-b border-black/[0.05] bg-admin-canvas/90 backdrop-blur-md">
-        <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3.5 md:px-8">
+    <div className="min-h-[calc(100dvh-35px)] w-full bg-admin-canvas pt-[35px]">
+      <header className="sticky top-[35px] z-40 border-b border-black/[0.05] bg-admin-canvas/90 backdrop-blur-md">
+        <div className="flex w-full items-center justify-between gap-4 px-4 py-3.5 md:px-8">
           <div className="flex min-w-0 flex-wrap items-center gap-2 sm:gap-3">
             <Link
               href="/"
@@ -28,7 +28,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
         </div>
       </header>
 
-      <div className="mx-auto flex w-full max-w-6xl flex-col gap-8 px-4 py-8 md:flex-row md:items-start md:gap-10 md:px-8 md:py-10">
+      <div className="flex w-full flex-col gap-6 px-4 py-6 md:flex-row md:items-start md:gap-8 md:px-8 md:py-8 xl:gap-10">
         <AdminSidebar email={session?.user?.email} name={session?.user?.name} />
         <div className="min-w-0 flex-1">{children}</div>
       </div>

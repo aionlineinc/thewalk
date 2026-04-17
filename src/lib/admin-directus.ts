@@ -17,8 +17,10 @@ export async function fetchDirectusItems<T>(
   }
 }
 
-export function directusAdminUiUrl(): string | null {
-  const u = process.env.NEXT_PUBLIC_DIRECTUS_URL || process.env.DIRECTUS_URL;
-  if (!u) return null;
+export function directusAdminUiUrl(): string {
+  // Prefer an explicitly public URL; fall back to the canonical CMS host so the
+  // link always points at the browser-reachable Directus UI, not the internal
+  // server URL (which may be a container/DNS name).
+  const u = process.env.NEXT_PUBLIC_DIRECTUS_URL || "https://cms.thewalk.org";
   return `${u.replace(/\/$/, "")}/admin`;
 }

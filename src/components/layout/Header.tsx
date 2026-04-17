@@ -1,8 +1,11 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { signOut, useSession } from "next-auth/react";
+
+const STAFF_ROLES = new Set(["SUPER_ADMIN", "ORG_ADMIN", "ORG_MANAGER"]);
 
 type NavMenu = "about" | "journey" | "growth" | "shop";
 
@@ -68,6 +71,14 @@ export function Header() {
   const [activeMenu, setActiveMenu] = useState<NavMenu | null>(null);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [mobileExpanded, setMobileExpanded] = useState<"journey" | "growth" | null>("journey");
+  const [accountOpen, setAccountOpen] = useState(false);
+  const accountRef = useRef<HTMLDivElement | null>(null);
+
+  const { data: session, status } = useSession();
+  const user = session?.user as { name?: string | null; email?: string | null; role?: string } | undefined;
+  const isAuthed = status === "authenticated" && !!user;
+  const isStaff = !!user?.role && STAFF_ROLES.has(user.role);
+  const accountLabel = (user?.name?.trim() || user?.email?.split("@")[0] || "Account").trim();
 
   const navLinkClass =
     "text-sm font-medium tracking-wide text-white transition-colors hover:text-white";
@@ -93,6 +104,23 @@ export function Header() {
       document.body.style.overflow = prev;
     };
   }, [mobileOpen]);
+
+  useEffect(() => {
+    if (!accountOpen) return;
+    const onClick = (e: MouseEvent) => {
+      if (!accountRef.current) return;
+      if (!accountRef.current.contains(e.target as Node)) setAccountOpen(false);
+    };
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setAccountOpen(false);
+    };
+    document.addEventListener("mousedown", onClick);
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("mousedown", onClick);
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [accountOpen]);
 
   return (
     <header id="site-header" className="fixed top-[35px] inset-x-0 z-50 flex w-full flex-col items-center px-4 md:px-8">
@@ -486,12 +514,80 @@ export function Header() {
           </div>
 
           <div id="site-header-actions" className="flex min-w-0 flex-1 items-center justify-end gap-4">
-            <Link
-              href="/sign-in"
-              className="hidden text-sm font-medium text-white transition-colors hover:text-white md:block"
-            >
-              Login
-            </Link>
+            {isAuthed ? (
+              <div ref={accountRef} className="relative hidden md:block">
+                <button
+                  type="button"
+                  aria-haspopup="menu"
+                  aria-expanded={accountOpen}
+                  onClick={() => setAccountOpen((v) => !v)}
+                  className="inline-flex max-w-[14rem] items-center gap-2 rounded-full border border-white/15 bg-white/5 px-3 py-1.5 text-sm font-medium text-white transition-colors hover:bg-white/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+                >
+                  <span
+                    aria-hidden
+                    className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-red-soft text-[11px] font-bold uppercase text-white"
+                  >
+                    {accountLabel.charAt(0) || "?"}
+                  </span>
+                  <span className="truncate">{accountLabel}</span>
+                  <svg
+                    viewBox="0 0 24 24"
+                    aria-hidden="true"
+                    className={`h-3.5 w-3.5 shrink-0 transition-transform ${accountOpen ? "rotate-180" : ""}`}
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <polyline points="6 9 12 15 18 9" />
+                  </svg>
+                </button>
+                {accountOpen ? (
+                  <div
+                    role="menu"
+                    className="absolute right-0 top-[calc(100%+0.5rem)] z-40 w-56 overflow-hidden rounded-2xl border border-gray-100 bg-white text-left text-gray-800 shadow-2xl"
+                  >
+                    <div className="border-b border-gray-100 px-4 py-3">
+                      <p className="truncate text-sm font-semibold text-gray-900">{accountLabel}</p>
+                      {user?.email ? (
+                        <p className="truncate text-xs text-gray-500">{user.email}</p>
+                      ) : null}
+                    </div>
+                    <div className="py-1">
+                      {isStaff ? (
+                        <Link
+                          href="/admin"
+                          role="menuitem"
+                          className="block px-4 py-2 text-sm text-gray-800 hover:bg-gray-50"
+                          onClick={() => setAccountOpen(false)}
+                        >
+                          Dashboard
+                        </Link>
+                      ) : null}
+                      <button
+                        type="button"
+                        role="menuitem"
+                        className="block w-full px-4 py-2 text-left text-sm text-gray-800 hover:bg-gray-50"
+                        onClick={() => {
+                          setAccountOpen(false);
+                          signOut({ callbackUrl: "/" });
+                        }}
+                      >
+                        Sign out
+                      </button>
+                    </div>
+                  </div>
+                ) : null}
+              </div>
+            ) : (
+              <Link
+                href="/sign-in"
+                className="hidden text-sm font-medium text-white transition-colors hover:text-white md:block"
+              >
+                Login
+              </Link>
+            )}
             <button
               type="button"
               className="inline-flex items-center justify-center p-2 text-white transition-colors hover:text-white/90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white md:hidden"
@@ -693,13 +789,43 @@ export function Header() {
                 >
                   Contact
                 </Link>
-                <Link
-                  href="/sign-in"
-                  className="block rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-medium text-white"
-                  onClick={() => setMobileOpen(false)}
-                >
-                  Login
-                </Link>
+                {isAuthed ? (
+                  <>
+                    <div className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white">
+                      <p className="truncate font-medium">{accountLabel}</p>
+                      {user?.email ? (
+                        <p className="mt-0.5 truncate text-xs text-white/70">{user.email}</p>
+                      ) : null}
+                    </div>
+                    {isStaff ? (
+                      <Link
+                        href="/admin"
+                        className="block rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-medium text-white"
+                        onClick={() => setMobileOpen(false)}
+                      >
+                        Dashboard
+                      </Link>
+                    ) : null}
+                    <button
+                      type="button"
+                      className="block w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-left text-sm font-medium text-white"
+                      onClick={() => {
+                        setMobileOpen(false);
+                        signOut({ callbackUrl: "/" });
+                      }}
+                    >
+                      Sign out
+                    </button>
+                  </>
+                ) : (
+                  <Link
+                    href="/sign-in"
+                    className="block rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-medium text-white"
+                    onClick={() => setMobileOpen(false)}
+                  >
+                    Login
+                  </Link>
+                )}
                 <Link
                   href="/get-involved"
                   data-button-link

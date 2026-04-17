@@ -3,6 +3,7 @@ import { getServerSession } from "next-auth";
 import { GroupRegistrationStatus } from "@prisma/client";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { directusAdminUiUrl } from "@/lib/admin-directus";
 import { AdminStatSegmentBar } from "./_components/AdminStatSegmentBar";
 
 export default async function AdminHome() {
@@ -30,7 +31,7 @@ export default async function AdminHome() {
   const totalNav = usersCount + orgsCount + pendingGroups + membershipsCount || 1;
 
   return (
-    <section className="w-full max-w-4xl">
+    <section className="w-full">
       <h1 className="admin-page-title">Welcome back, {firstName}</h1>
       <p className="admin-page-lead">
         Manage people, organizations, content, and ministry registrations from one place — the same calm, card-based layout
@@ -167,6 +168,10 @@ export default async function AdminHome() {
         <Link href="/register/group" className="admin-link">
           /register/group
         </Link>
+        {" · "}CMS:{" "}
+        <a href={directusAdminUiUrl()} target="_blank" rel="noreferrer" className="admin-link">
+          cms.thewalk.org
+        </a>
       </p>
     </section>
   );
