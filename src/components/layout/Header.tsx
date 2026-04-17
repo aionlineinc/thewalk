@@ -6,6 +6,30 @@ import Image from "next/image";
 
 type NavMenu = "about" | "journey" | "growth" | "shop";
 
+const JOURNEY_MINISTRY_PILLS = {
+  crossOver: [
+    { label: "Rugged", tab: "rugged" },
+    { label: "Covered", tab: "covered" },
+    { label: "Exodus", tab: "exodus" },
+  ],
+  crossRoads: [
+    { label: "Bible Study", tab: "bible-study" },
+    { label: "Series", tab: "series" },
+    { label: "MyWalk", tab: "mywalk" },
+  ],
+  crossConnect: [
+    { label: "Small Groups", tab: "small-groups" },
+    { label: "Prayer", tab: "prayer" },
+    { label: "Ministry Development", tab: "ministry-development" },
+  ],
+} as const;
+
+const journeyMegaPillClass =
+  "inline-flex items-center rounded-full border border-gray-200 bg-white px-3 py-1 text-[11px] font-medium tracking-wide text-gray-700 transition-colors hover:border-red-soft/40 hover:text-red-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-900/35";
+
+const journeyMobilePillClass =
+  "inline-flex items-center rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[11px] font-medium text-white/85 transition-colors hover:bg-white/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white/70";
+
 function DotsMenuIcon({ className }: { className?: string }) {
   return (
     <svg
@@ -174,66 +198,75 @@ export function Header() {
                         Journey
                       </h4>
                       <div className="flex flex-col gap-6">
-                        <Link href="/journey/cross-over" className="group flex items-start">
+                        <div className="flex items-start">
                           <div>
-                            <h5 className="font-medium text-gray-900 transition-colors group-hover:text-red-900">
-                              Cross Over
-                            </h5>
+                            <Link href="/journey/cross-over" className="block">
+                              <h5 className="font-medium text-gray-900 transition-colors hover:text-red-900">
+                                Cross Over
+                              </h5>
+                            </Link>
                             <p className="mt-1 text-sm leading-snug text-gray-500">
                               Enter a place of restoration, support, and profound transformation.
                             </p>
                             <div className="mt-3 flex flex-wrap gap-2">
-                              {["Rugged", "Covered", "Exodus"].map((m) => (
-                                <span
-                                  key={m}
-                                  className="inline-flex items-center rounded-full border border-gray-200 bg-white px-3 py-1 text-[11px] font-medium tracking-wide text-gray-700"
+                              {JOURNEY_MINISTRY_PILLS.crossOver.map(({ label, tab }) => (
+                                <Link
+                                  key={tab}
+                                  href={`/journey/cross-over?tab=${tab}#cross-over-ministries`}
+                                  className={journeyMegaPillClass}
                                 >
-                                  {m}
-                                </span>
+                                  {label}
+                                </Link>
                               ))}
                             </div>
                           </div>
-                        </Link>
-                        <Link href="/journey/cross-roads" className="group flex items-start">
+                        </div>
+                        <div className="flex items-start">
                           <div>
-                            <h5 className="font-medium text-gray-900 transition-colors group-hover:text-red-900">
-                              Cross Roads
-                            </h5>
+                            <Link href="/journey/cross-roads" className="block">
+                              <h5 className="font-medium text-gray-900 transition-colors hover:text-red-900">
+                                Cross Roads
+                              </h5>
+                            </Link>
                             <p className="mt-1 text-sm leading-snug text-gray-500">
                               Grow deeply in your identity, absolute truth, and spiritual direction.
                             </p>
                             <div className="mt-3 flex flex-wrap gap-2">
-                              {["Bible Study", "Series", "MyWalk"].map((m) => (
-                                <span
-                                  key={m}
-                                  className="inline-flex items-center rounded-full border border-gray-200 bg-white px-3 py-1 text-[11px] font-medium tracking-wide text-gray-700"
+                              {JOURNEY_MINISTRY_PILLS.crossRoads.map(({ label, tab }) => (
+                                <Link
+                                  key={tab}
+                                  href={`/journey/cross-roads?tab=${tab}#cross-roads-ministries`}
+                                  className={journeyMegaPillClass}
                                 >
-                                  {m}
-                                </span>
+                                  {label}
+                                </Link>
                               ))}
                             </div>
                           </div>
-                        </Link>
-                        <Link href="/journey/cross-connect" className="group flex items-start">
+                        </div>
+                        <div className="flex items-start">
                           <div>
-                            <h5 className="font-medium text-gray-900 transition-colors group-hover:text-red-900">
-                              Cross Connect
-                            </h5>
+                            <Link href="/journey/cross-connect" className="block">
+                              <h5 className="font-medium text-gray-900 transition-colors hover:text-red-900">
+                                Cross Connect
+                              </h5>
+                            </Link>
                             <p className="mt-1 text-sm leading-snug text-gray-500">
                               Build enduring community, fellowship, and expand into Kingdom impact.
                             </p>
                             <div className="mt-3 flex flex-wrap gap-2">
-                              {["Small Groups", "Prayer", "Ministry Development"].map((m) => (
-                                <span
-                                  key={m}
-                                  className="inline-flex items-center rounded-full border border-gray-200 bg-white px-3 py-1 text-[11px] font-medium tracking-wide text-gray-700"
+                              {JOURNEY_MINISTRY_PILLS.crossConnect.map(({ label, tab }) => (
+                                <Link
+                                  key={tab}
+                                  href={`/journey/cross-connect?tab=${tab}#cross-connect-ministries`}
+                                  className={journeyMegaPillClass}
                                 >
-                                  {m}
-                                </span>
+                                  {label}
+                                </Link>
                               ))}
                             </div>
                           </div>
-                        </Link>
+                        </div>
                       </div>
                     </div>
 
@@ -528,13 +561,15 @@ export function Header() {
                             Cross Over
                           </Link>
                           <div className="mt-2 flex flex-wrap gap-2">
-                            {["Rugged", "Covered", "Exodus"].map((m) => (
-                              <span
-                                key={m}
-                                className="inline-flex items-center rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[11px] font-medium text-white/85"
+                            {JOURNEY_MINISTRY_PILLS.crossOver.map(({ label, tab }) => (
+                              <Link
+                                key={tab}
+                                href={`/journey/cross-over?tab=${tab}#cross-over-ministries`}
+                                className={journeyMobilePillClass}
+                                onClick={() => setMobileOpen(false)}
                               >
-                                {m}
-                              </span>
+                                {label}
+                              </Link>
                             ))}
                           </div>
                         </div>
@@ -547,13 +582,15 @@ export function Header() {
                             Cross Roads
                           </Link>
                           <div className="mt-2 flex flex-wrap gap-2">
-                            {["Bible Study", "Series", "MyWalk"].map((m) => (
-                              <span
-                                key={m}
-                                className="inline-flex items-center rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[11px] font-medium text-white/85"
+                            {JOURNEY_MINISTRY_PILLS.crossRoads.map(({ label, tab }) => (
+                              <Link
+                                key={tab}
+                                href={`/journey/cross-roads?tab=${tab}#cross-roads-ministries`}
+                                className={journeyMobilePillClass}
+                                onClick={() => setMobileOpen(false)}
                               >
-                                {m}
-                              </span>
+                                {label}
+                              </Link>
                             ))}
                           </div>
                         </div>
@@ -566,13 +603,15 @@ export function Header() {
                             Cross Connect
                           </Link>
                           <div className="mt-2 flex flex-wrap gap-2">
-                            {["Small Groups", "Prayer", "Ministry Development"].map((m) => (
-                              <span
-                                key={m}
-                                className="inline-flex items-center rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[11px] font-medium text-white/85"
+                            {JOURNEY_MINISTRY_PILLS.crossConnect.map(({ label, tab }) => (
+                              <Link
+                                key={tab}
+                                href={`/journey/cross-connect?tab=${tab}#cross-connect-ministries`}
+                                className={journeyMobilePillClass}
+                                onClick={() => setMobileOpen(false)}
                               >
-                                {m}
-                              </span>
+                                {label}
+                              </Link>
                             ))}
                           </div>
                         </div>

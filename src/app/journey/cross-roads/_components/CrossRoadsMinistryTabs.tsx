@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useEffect, useId, useMemo, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { ScriptureReferenceMark } from "@/components/scripture/ScriptureReferenceMark";
+import { useScrollToMinistryOnLoad } from "@/hooks/useScrollToMinistryOnLoad";
 
 type TabKey = "bible-study" | "series" | "mywalk";
 
@@ -127,6 +128,8 @@ const TABS: readonly Tab[] = [
   },
 ] as const;
 
+const TAB_KEYS = TABS.map((t) => t.key);
+
 function isTabKey(value: string | null): value is TabKey {
   return value === "bible-study" || value === "series" || value === "mywalk";
 }
@@ -136,6 +139,8 @@ export function CrossRoadsMinistryTabs() {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
+
+  useScrollToMinistryOnLoad("cross-roads-ministries", TAB_KEYS);
 
   const activeFromUrl = searchParams.get("tab");
   const initial = isTabKey(activeFromUrl) ? activeFromUrl : "bible-study";
@@ -153,7 +158,13 @@ export function CrossRoadsMinistryTabs() {
     setActive(next);
     const params = new URLSearchParams(searchParams.toString());
     params.set("tab", next);
-    router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+    const qs = params.toString();
+    router.replace(`${pathname}?${qs}`, { scroll: false });
+    requestAnimationFrame(() => {
+      if (typeof window !== "undefined" && window.location.hash) {
+        window.history.replaceState(null, "", `${pathname}?${qs}`);
+      }
+    });
   };
 
   const onTabKeyDown = (e: React.KeyboardEvent<HTMLButtonElement>, key: TabKey) => {
@@ -187,7 +198,7 @@ export function CrossRoadsMinistryTabs() {
   return (
     <section
       id="cross-roads-ministries"
-      className="relative isolate w-full overflow-hidden border-t border-earth-100 py-16 md:py-24"
+      className="relative isolate w-full scroll-mt-[120px] overflow-hidden border-t border-earth-100 py-16 md:py-24"
       aria-labelledby="cross-roads-ministries-heading"
     >
       <Image

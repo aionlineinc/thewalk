@@ -21,17 +21,17 @@ const PATHWAYS: Record<
       {
         name: "Rugged",
         blurb: "A place to rebuild strength, integrity, and spiritual resilience.",
-        href: "/contact?type=serve&ministry=Rugged",
+        href: "/journey/cross-over?tab=rugged#cross-over-ministries",
       },
       {
         name: "Covered",
         blurb: "Care, accountability, and support under trusted community.",
-        href: "/contact?type=serve&ministry=Covered",
+        href: "/journey/cross-over?tab=covered#cross-over-ministries",
       },
       {
         name: "Exodus",
         blurb: "Freedom and new beginnings—leaving bondage for restored life.",
-        href: "/contact?type=serve&ministry=Exodus",
+        href: "/journey/cross-over?tab=exodus#cross-over-ministries",
       },
     ],
   },
@@ -44,17 +44,17 @@ const PATHWAYS: Record<
       {
         name: "Bible Study",
         blurb: "Go line-by-line through Scripture with clarity and conviction.",
-        href: "/growth/articles",
+        href: "/journey/cross-roads?tab=bible-study#cross-roads-ministries",
       },
       {
         name: "Series",
         blurb: "Teaching journeys that anchor identity in truth.",
-        href: "/growth/articles",
+        href: "/journey/cross-roads?tab=series#cross-roads-ministries",
       },
       {
         name: "MyWalk",
         blurb: "Personal formation—habits, healing, and spiritual direction.",
-        href: "/contact?type=journey&ministry=MyWalk",
+        href: "/journey/cross-roads?tab=mywalk#cross-roads-ministries",
       },
     ],
   },
@@ -67,17 +67,17 @@ const PATHWAYS: Record<
       {
         name: "Small Groups",
         blurb: "Belong, be known, and grow with others.",
-        href: "/contact?type=connect&ministry=Small%20Groups",
+        href: "/journey/cross-connect?tab=small-groups#cross-connect-ministries",
       },
       {
         name: "Prayer",
         blurb: "Intercession and spiritual covering for people and mission.",
-        href: "/contact?type=connect&ministry=Prayer",
+        href: "/journey/cross-connect?tab=prayer#cross-connect-ministries",
       },
       {
         name: "Ministry Development",
         blurb: "Equip leaders and build sustainable Kingdom work.",
-        href: "/get-involved",
+        href: "/journey/cross-connect?tab=ministry-development#cross-connect-ministries",
       },
     ],
   },
