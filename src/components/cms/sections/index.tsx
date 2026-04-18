@@ -371,6 +371,81 @@ export function DefaultGallery({ section }: SectionProps<"section_gallery">) {
   );
 }
 
+export function DefaultDoctrineBlock({ section }: SectionProps<"section_doctrine_block">) {
+  const isPanel = (section.variant ?? "default") === "muted-panel";
+  return (
+    <SectionFrame className={isPanel ? "bg-black/[0.02]" : ""}>
+      <Eyebrow text={section.eyebrow} />
+      {section.headline ? (
+        <h2 className="mt-2 text-3xl font-semibold text-black md:text-4xl">{section.headline}</h2>
+      ) : null}
+      {section.subheadline ? (
+        <p className="mt-1 text-xs font-medium uppercase tracking-[0.2em] text-black/60">
+          {section.subheadline}
+        </p>
+      ) : null}
+      {section.body ? <p className="mt-4 max-w-3xl text-base text-black/80">{section.body}</p> : null}
+      {section.items && section.items.length > 0 ? (
+        <div className="mt-6 space-y-6">
+          {section.items.map((item) => (
+            <div key={item.id}>
+              <h3 className="text-lg font-semibold text-black">{item.title}</h3>
+              {item.body ? <p className="mt-2 text-sm text-black/70">{item.body}</p> : null}
+              {item.scripture_refs ? (
+                <p className="mt-2 text-xs text-black/50">{item.scripture_refs}</p>
+              ) : null}
+            </div>
+          ))}
+        </div>
+      ) : null}
+      {section.scripture_refs ? (
+        <p className="mt-4 text-xs text-black/50">Scriptures: {section.scripture_refs}</p>
+      ) : null}
+    </SectionFrame>
+  );
+}
+
+export function DefaultPrinciplesPanel({ section }: SectionProps<"section_principles_panel">) {
+  const src = cmsAssetPresets.heroHalf(section.image);
+  return (
+    <SectionFrame>
+      <div className="grid grid-cols-1 gap-8 md:grid-cols-2 md:items-start">
+        <div>
+          <Eyebrow text={section.eyebrow} />
+          <h2 className="mt-2 text-3xl font-semibold text-black md:text-4xl">{section.headline}</h2>
+          {section.subheadline ? (
+            <p className="mt-3 max-w-2xl text-base text-black/70">{section.subheadline}</p>
+          ) : null}
+          {src ? (
+            <div className="relative mt-6 aspect-[4/3] w-full overflow-hidden rounded-2xl">
+              <Image
+                src={src}
+                alt={section.image_alt}
+                fill
+                sizes="(min-width: 768px) 50vw, 100vw"
+                className="object-contain"
+              />
+            </div>
+          ) : null}
+        </div>
+        <div className="space-y-4">
+          {section.items.map((item) => (
+            <div key={item.id} className="rounded-2xl border border-black/[0.06] bg-white p-5">
+              <h3 className="text-sm font-semibold uppercase tracking-wide text-black">
+                {item.title}
+              </h3>
+              {item.body ? <p className="mt-2 text-sm text-black/70">{item.body}</p> : null}
+              {item.scripture_refs ? (
+                <p className="mt-2 text-xs text-black/50">{item.scripture_refs}</p>
+              ) : null}
+            </div>
+          ))}
+        </div>
+      </div>
+    </SectionFrame>
+  );
+}
+
 export function DefaultLogoStrip({ section }: SectionProps<"section_logo_strip">) {
   if (section.items.length === 0) return null;
   return (

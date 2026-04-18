@@ -237,6 +237,53 @@ export const SectionLogoStripSchema = BaseSection.extend({
   items: z.array(LogoStripItemSchema).default([]),
 });
 
+export const DoctrineBlockItemSchema = z.object({
+  id: z.string(),
+  sort: z.number().nullable().optional(),
+  title: z.string().min(1),
+  body: TextOpt,
+  scripture_refs: StringOpt,
+});
+
+/**
+ * A long-form theological / structural block: headline + optional
+ * subheadline + body + comma-separated scripture refs, with optional
+ * nested sub-points (e.g. the Members section on /about/beliefs).
+ */
+export const SectionDoctrineBlockSchema = BaseSection.extend({
+  __collection: z.literal("section_doctrine_block"),
+  eyebrow: StringOpt,
+  headline: StringOpt,
+  subheadline: StringOpt,
+  body: TextOpt,
+  scripture_refs: StringOpt,
+  variant: z.enum(["default", "muted-panel"]).nullable().optional().default("default"),
+  items: z.array(DoctrineBlockItemSchema).nullable().optional().default([]),
+});
+
+export const PrinciplesPanelItemSchema = z.object({
+  id: z.string(),
+  sort: z.number().nullable().optional(),
+  title: z.string().min(1),
+  body: TextOpt,
+  scripture_refs: StringOpt,
+});
+
+/**
+ * Image-left + side-panel-of-principles layout, used by the Ministry
+ * Structure hero (diagram next to a stack of named principles, each
+ * with optional scripture refs).
+ */
+export const SectionPrinciplesPanelSchema = BaseSection.extend({
+  __collection: z.literal("section_principles_panel"),
+  eyebrow: StringOpt,
+  headline: z.string().min(1),
+  subheadline: TextOpt,
+  image: FileRefSchema,
+  image_alt: AltText,
+  items: z.array(PrinciplesPanelItemSchema).default([]),
+});
+
 /* ─── discriminated union ───────────────────────────────────────────────── */
 
 export const SectionSchema = z.discriminatedUnion("__collection", [
@@ -252,6 +299,8 @@ export const SectionSchema = z.discriminatedUnion("__collection", [
   SectionTestimonialsSchema,
   SectionGallerySchema,
   SectionLogoStripSchema,
+  SectionDoctrineBlockSchema,
+  SectionPrinciplesPanelSchema,
 ]);
 
 export type Section = z.infer<typeof SectionSchema>;
@@ -271,6 +320,8 @@ export const SECTION_COLLECTIONS = [
   "section_testimonials",
   "section_gallery",
   "section_logo_strip",
+  "section_doctrine_block",
+  "section_principles_panel",
 ] as const satisfies readonly SectionCollection[];
 
 /* ─── page + site settings ──────────────────────────────────────────────── */

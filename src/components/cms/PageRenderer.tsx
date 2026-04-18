@@ -26,6 +26,8 @@ import {
   DefaultTestimonials,
   DefaultGallery,
   DefaultLogoStrip,
+  DefaultDoctrineBlock,
+  DefaultPrinciplesPanel,
 } from "./sections";
 
 /** Map of each section collection → React component accepting the full section. */
@@ -50,6 +52,8 @@ const DEFAULT_RENDERERS = {
   section_testimonials: DefaultTestimonials,
   section_gallery: DefaultGallery,
   section_logo_strip: DefaultLogoStrip,
+  section_doctrine_block: DefaultDoctrineBlock,
+  section_principles_panel: DefaultPrinciplesPanel,
 } as const satisfies Required<SectionComponentMap>;
 
 export interface PageRendererProps {

@@ -704,6 +704,62 @@ def build_section_gallery() -> None:
     add_o2m_to("section_gallery", "items", "section_gallery_items")
 
 
+def build_section_doctrine_block() -> None:
+    """Doctrine block: long-form theological/structural sections used by
+    pages like Beliefs and Ministry Structure. Supports an optional list of
+    sub-points (each with its own scripture refs) to model nested structures
+    such as the Members section on Beliefs."""
+    _section_base("section_doctrine_block", icon="menu_book", note="Headline + body + optional sub-points + scripture refs.")
+    add_string("section_doctrine_block", "eyebrow")
+    add_string("section_doctrine_block", "headline")
+    add_string("section_doctrine_block", "subheadline", note="Small caps line under the headline (e.g. '(GodHead)').")
+    add_text("section_doctrine_block", "body", markdown=True, note="Paragraphs separated by blank lines. Inline links use [text](url).")
+    add_string("section_doctrine_block", "scripture_refs", note="Comma-separated bible references, rendered with hover tooltips.")
+    add_string("section_doctrine_block", "variant", choices=["default", "muted-panel"], default="default", note="'muted-panel' wraps the block in a soft gray rounded panel.")
+    add_user_timestamps("section_doctrine_block")
+    ensure_collection(
+        "section_doctrine_block_items",
+        note="Sub-points within a section_doctrine_block.",
+        icon="format_list_bulleted",
+        color=SECTION_GROUP_COLOR,
+        archive_field=None,
+        sort_field="sort",
+        hidden=True,
+    )
+    add_sort_field("section_doctrine_block_items")
+    add_string("section_doctrine_block_items", "title", required=True)
+    add_text("section_doctrine_block_items", "body", markdown=True)
+    add_string("section_doctrine_block_items", "scripture_refs")
+    add_o2m_to("section_doctrine_block", "items", "section_doctrine_block_items")
+
+
+def build_section_principles_panel() -> None:
+    """Image-left + principles-panel-right layout. Used by the Ministry
+    Structure hero where a diagram sits next to a stacked panel of named
+    principles (each with optional scripture refs)."""
+    _section_base("section_principles_panel", icon="schema", note="Image + side panel of named principles. Used for diagram-driven hero sections.")
+    add_string("section_principles_panel", "eyebrow")
+    add_string("section_principles_panel", "headline", required=True)
+    add_text("section_principles_panel", "subheadline", note="Short intro line under the headline (kept as text, not markdown).")
+    add_file("section_principles_panel", "image", required=True)
+    add_string("section_principles_panel", "image_alt", required=True)
+    add_user_timestamps("section_principles_panel")
+    ensure_collection(
+        "section_principles_panel_items",
+        note="Named principles displayed alongside the image.",
+        icon="format_list_numbered",
+        color=SECTION_GROUP_COLOR,
+        archive_field=None,
+        sort_field="sort",
+        hidden=True,
+    )
+    add_sort_field("section_principles_panel_items")
+    add_string("section_principles_panel_items", "title", required=True, note="Short uppercase label, e.g. 'Servant management'.")
+    add_text("section_principles_panel_items", "body", markdown=True)
+    add_string("section_principles_panel_items", "scripture_refs", note="Optional comma-separated bible references.")
+    add_o2m_to("section_principles_panel", "items", "section_principles_panel_items")
+
+
 def build_section_logo_strip() -> None:
     _section_base("section_logo_strip", icon="business", note="Row of partner/ministry logos.")
     add_string("section_logo_strip", "eyebrow")
@@ -738,6 +794,8 @@ SECTION_COLLECTIONS = [
     "section_testimonials",
     "section_gallery",
     "section_logo_strip",
+    "section_doctrine_block",
+    "section_principles_panel",
 ]
 
 
@@ -855,6 +913,22 @@ def build_pages_sections_m2a() -> None:
             },
             "relation pages_sections.item → (M2A)",
         )
+    else:
+        # Relation exists — make sure the allowed-collections union grew to
+        # include any new section_* collections added since first install.
+        cur = get(f"/relations/{junction}/item")
+        if cur.ok:
+            cur_meta = (cur.json().get("data") or {}).get("meta") or {}
+            cur_allowed = list(cur_meta.get("one_allowed_collections") or [])
+            missing = [c for c in SECTION_COLLECTIONS if c not in cur_allowed]
+            if missing:
+                merged = cur_allowed + missing
+                patch(
+                    f"/relations/{junction}/item",
+                    {"meta": {"one_allowed_collections": merged}},
+                    f"merge M2A allowed_collections (+{len(missing)})",
+                )
+                print(f"  · M2A allowed_collections grew by: {missing}")
 
     # 7) alias field `sections` on pages (with m2a interface)
     if not field_exists("pages", "sections"):
@@ -889,6 +963,8 @@ PUBLIC_COLLECTIONS = [
     "section_testimonials_items",
     "section_gallery_items",
     "section_logo_strip_items",
+    "section_doctrine_block_items",
+    "section_principles_panel_items",
 ]
 
 
@@ -956,6 +1032,8 @@ def main() -> None:
     build_section_testimonials()
     build_section_gallery()
     build_section_logo_strip()
+    build_section_doctrine_block()
+    build_section_principles_panel()
     print("→ phase 3: pages.sections M2A")
     build_pages_sections_m2a()
     print("→ phase 4: public read permissions")
