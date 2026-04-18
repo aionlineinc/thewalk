@@ -125,12 +125,25 @@ export const SectionStatsSchema = BaseSection.extend({
   items: z.array(StatItemSchema).nullable().optional().default([]),
 });
 
+export const MinistryTabFocusItemSchema = z.object({
+  title: z.string().min(1),
+  body: z.string().min(1),
+});
+
 export const MinistryTabSchema = z.object({
   id: z.string(),
   sort: z.number().nullable().optional(),
+  /** URL slug used by `?tab=…`. Optional — adapter falls back to slugified label. */
+  key: StringOpt,
   label: z.string().min(1),
   title: z.string().min(1),
   body: TextOpt,
+  /** Long ministry description rendered above the focus list (paragraphs split on blank lines). */
+  lede: TextOpt,
+  /** Bullet-style focus list rendered inside the active tab. */
+  focus_items: z.array(MinistryTabFocusItemSchema).nullable().optional().default([]),
+  /** Comma-separated bible references shown in the "Key scriptures" panel. */
+  scriptures: StringOpt,
   image: FileRefSchema,
   image_alt: StringOpt,
   cta_label: StringOpt,
@@ -142,6 +155,8 @@ export const SectionMinistryTabsSchema = BaseSection.extend({
   eyebrow: StringOpt,
   headline: StringOpt,
   intro: TextOpt,
+  /** In-page anchor id used by sticky nav and `?tab=…` deep-links. */
+  section_anchor: StringOpt,
   tabs: z.array(MinistryTabSchema).default([]),
 });
 
@@ -284,6 +299,51 @@ export const SectionPrinciplesPanelSchema = BaseSection.extend({
   items: z.array(PrinciplesPanelItemSchema).default([]),
 });
 
+/**
+ * Photographic, dark-overlay hero used by /journey/cross-* pathway pages.
+ * The visual treatment (rounded full-bleed image, glass-blur card with
+ * eyebrow + chips + footnote) is fixed in the adapter; only the content
+ * comes from CMS.
+ */
+export const SectionPathwayHeroSchema = BaseSection.extend({
+  __collection: z.literal("section_pathway_hero"),
+  eyebrow: StringOpt,
+  headline: z.string().min(1),
+  subheadline: TextOpt,
+  /** Comma-separated list of chip labels rendered as pills under the subhead. */
+  chips_csv: StringOpt,
+  cta_primary_label: StringOpt,
+  cta_primary_url: UrlOpt,
+  back_link_label: StringOpt,
+  back_link_url: UrlOpt,
+  footnote: TextOpt,
+  image: FileRefSchema,
+  image_alt: AltText,
+});
+
+export const PathwayAboutItemSchema = z.object({
+  id: z.string(),
+  sort: z.number().nullable().optional(),
+  title: z.string().min(1),
+  body: TextOpt,
+});
+
+/**
+ * Two-column About block: title + lede left, stacked mini focus cards
+ * right (with optional CTA buttons under the cards).
+ */
+export const SectionPathwayAboutSchema = BaseSection.extend({
+  __collection: z.literal("section_pathway_about"),
+  eyebrow: StringOpt,
+  headline: z.string().min(1),
+  lede: TextOpt,
+  cta_primary_label: StringOpt,
+  cta_primary_url: UrlOpt,
+  cta_secondary_label: StringOpt,
+  cta_secondary_url: UrlOpt,
+  items: z.array(PathwayAboutItemSchema).default([]),
+});
+
 /* ─── discriminated union ───────────────────────────────────────────────── */
 
 export const SectionSchema = z.discriminatedUnion("__collection", [
@@ -301,6 +361,8 @@ export const SectionSchema = z.discriminatedUnion("__collection", [
   SectionLogoStripSchema,
   SectionDoctrineBlockSchema,
   SectionPrinciplesPanelSchema,
+  SectionPathwayHeroSchema,
+  SectionPathwayAboutSchema,
 ]);
 
 export type Section = z.infer<typeof SectionSchema>;
@@ -322,6 +384,8 @@ export const SECTION_COLLECTIONS = [
   "section_logo_strip",
   "section_doctrine_block",
   "section_principles_panel",
+  "section_pathway_hero",
+  "section_pathway_about",
 ] as const satisfies readonly SectionCollection[];
 
 /* ─── page + site settings ──────────────────────────────────────────────── */

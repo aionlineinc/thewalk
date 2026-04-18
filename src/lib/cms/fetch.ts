@@ -39,6 +39,7 @@ const NESTED_ITEM_EXPANSIONS: Partial<Record<string, string[]>> = {
   section_logo_strip: ["items.*", "items.logo.id"],
   section_doctrine_block: ["items.*"],
   section_principles_panel: ["items.*"],
+  section_pathway_about: ["items.*"],
 };
 
 /** Extra file-field expansions for top-level section fields. */
@@ -48,6 +49,7 @@ const SECTION_FILE_EXPANSIONS: Partial<Record<string, string[]>> = {
   section_ministry_tabs: [],
   section_cta_banner: ["background_image.id"],
   section_principles_panel: ["image.id"],
+  section_pathway_hero: ["image.id"],
 };
 
 function buildPageFields(): string[] {

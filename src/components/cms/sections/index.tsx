@@ -446,6 +446,85 @@ export function DefaultPrinciplesPanel({ section }: SectionProps<"section_princi
   );
 }
 
+export function DefaultPathwayHero({ section, index }: SectionProps<"section_pathway_hero">) {
+  const src = cmsAssetPresets.heroFull(section.image);
+  const chips = (section.chips_csv ?? "")
+    .split(",")
+    .map((c) => c.trim())
+    .filter(Boolean);
+  return (
+    <section className="relative w-full overflow-hidden bg-black text-white">
+      {src ? (
+        <div className="absolute inset-0">
+          <Image
+            src={src}
+            alt={section.image_alt}
+            fill
+            priority={index === 0}
+            sizes="100vw"
+            className="object-cover opacity-70"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/40 to-black/70" />
+        </div>
+      ) : null}
+      <div className="relative mx-auto flex w-full max-w-5xl flex-col gap-4 px-4 py-24 md:px-8 md:py-32">
+        <Eyebrow text={section.eyebrow} />
+        <h1 className="text-4xl font-semibold leading-tight md:text-6xl">{section.headline}</h1>
+        {section.subheadline ? <p className="max-w-2xl text-lg text-white/80">{section.subheadline}</p> : null}
+        {chips.length > 0 ? (
+          <ul className="mt-2 flex flex-wrap gap-2">
+            {chips.map((c) => (
+              <li
+                key={c}
+                className="inline-flex items-center rounded-full border border-white/15 bg-white/5 px-4 py-2 text-sm font-medium text-white/90"
+              >
+                {c}
+              </li>
+            ))}
+          </ul>
+        ) : null}
+        <CtaRow
+          items={[
+            { label: section.cta_primary_label, url: section.cta_primary_url, variant: "primary" },
+            { label: section.back_link_label, url: section.back_link_url, variant: "secondary" },
+          ]}
+        />
+        {section.footnote ? (
+          <p className="mt-4 max-w-2xl text-sm text-white/70">{section.footnote}</p>
+        ) : null}
+      </div>
+    </section>
+  );
+}
+
+export function DefaultPathwayAbout({ section }: SectionProps<"section_pathway_about">) {
+  return (
+    <SectionFrame>
+      <div className="grid grid-cols-1 gap-10 md:grid-cols-[1.1fr_1fr] md:gap-14">
+        <div>
+          <Eyebrow text={section.eyebrow} />
+          <h2 className="mt-2 text-3xl font-semibold text-black md:text-4xl">{section.headline}</h2>
+          {section.lede ? <p className="mt-4 max-w-xl text-base text-black/70">{section.lede}</p> : null}
+        </div>
+        <div className="space-y-8">
+          {section.items.map((item) => (
+            <div key={item.id}>
+              <h3 className="text-base font-semibold text-black md:text-lg">{item.title}</h3>
+              {item.body ? <p className="mt-2 text-base text-black/70 md:text-lg">{item.body}</p> : null}
+            </div>
+          ))}
+          <CtaRow
+            items={[
+              { label: section.cta_primary_label, url: section.cta_primary_url, variant: "primary" },
+              { label: section.cta_secondary_label, url: section.cta_secondary_url, variant: "secondary" },
+            ]}
+          />
+        </div>
+      </div>
+    </SectionFrame>
+  );
+}
+
 export function DefaultLogoStrip({ section }: SectionProps<"section_logo_strip">) {
   if (section.items.length === 0) return null;
   return (

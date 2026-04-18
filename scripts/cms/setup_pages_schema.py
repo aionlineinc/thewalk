@@ -583,6 +583,11 @@ def build_section_ministry_tabs() -> None:
     add_string("section_ministry_tabs", "eyebrow")
     add_string("section_ministry_tabs", "headline")
     add_text("section_ministry_tabs", "intro")
+    add_string(
+        "section_ministry_tabs",
+        "section_anchor",
+        note="In-page anchor id for this section, e.g. `cross-over-ministries`. Used by sticky nav and ?tab=… deep-links.",
+    )
     add_user_timestamps("section_ministry_tabs")
     ensure_collection(
         "section_ministry_tabs_tabs",
@@ -594,14 +599,109 @@ def build_section_ministry_tabs() -> None:
         hidden=True,
     )
     add_sort_field("section_ministry_tabs_tabs")
+    add_string(
+        "section_ministry_tabs_tabs",
+        "key",
+        note="URL-safe slug for `?tab=…` (e.g. `rugged`). Optional — defaults to slugified label.",
+    )
     add_string("section_ministry_tabs_tabs", "label", required=True, note="Tab label (short).")
     add_string("section_ministry_tabs_tabs", "title", required=True)
     add_text("section_ministry_tabs_tabs", "body", markdown=True)
+    add_text(
+        "section_ministry_tabs_tabs",
+        "lede",
+        note="Long ministry description rendered above the focus list. Plain text; paragraphs split on blank lines.",
+    )
+    add_json(
+        "section_ministry_tabs_tabs",
+        "focus_items",
+        fields=[
+            {"field": "title", "type": "string", "name": "Title", "meta": {"interface": "input", "width": "full", "required": True}},
+            {"field": "body", "type": "text", "name": "Body", "meta": {"interface": "input-multiline", "width": "full", "required": True}},
+        ],
+        template="{{title}}",
+        note="Bullet-style ministry-focus list rendered inside the active tab.",
+    )
+    add_string(
+        "section_ministry_tabs_tabs",
+        "scriptures",
+        note="Comma-separated bible references shown in the right-hand 'Key scriptures' panel.",
+    )
     add_file("section_ministry_tabs_tabs", "image")
     add_string("section_ministry_tabs_tabs", "image_alt")
-    add_string("section_ministry_tabs_tabs", "cta_label")
-    add_string("section_ministry_tabs_tabs", "cta_url")
+    add_string(
+        "section_ministry_tabs_tabs",
+        "cta_label",
+        note="Per-tab CTA button label (e.g. 'Contact us').",
+    )
+    add_string(
+        "section_ministry_tabs_tabs",
+        "cta_url",
+        note="Per-tab CTA url. Supports `{label}` placeholder which is replaced with the tab label, url-encoded.",
+    )
     add_o2m_to("section_ministry_tabs", "tabs", "section_ministry_tabs_tabs")
+
+
+def build_section_pathway_hero() -> None:
+    """Dark, full-bleed pathway hero used by /journey/cross-over et al.
+
+    A photographic background sits behind a glass-blur card with eyebrow,
+    headline, subhead, optional ministry chips, primary CTA, back link, and
+    a longer footnote paragraph below the card.
+    """
+    _section_base(
+        "section_pathway_hero",
+        icon="landscape",
+        note="Photographic hero with glass card + chips. Used by Cross Over / Roads / Connect.",
+    )
+    add_string("section_pathway_hero", "eyebrow", note="Small uppercase label above the title (e.g. 'Pathway').")
+    add_string("section_pathway_hero", "headline", required=True)
+    add_text("section_pathway_hero", "subheadline", note="One-line subhead under the title.")
+    add_string(
+        "section_pathway_hero",
+        "chips_csv",
+        note="Comma-separated chip labels rendered as pills (e.g. 'Rugged, Covered, Exodus').",
+    )
+    add_string("section_pathway_hero", "cta_primary_label")
+    add_string("section_pathway_hero", "cta_primary_url")
+    add_string("section_pathway_hero", "back_link_label", note="Optional secondary link label (e.g. '← Back to Journey').")
+    add_string("section_pathway_hero", "back_link_url")
+    add_text("section_pathway_hero", "footnote", note="Longer paragraph rendered below the glass card (white-on-dark).")
+    add_file("section_pathway_hero", "image", required=True, note="Background photograph.")
+    add_string("section_pathway_hero", "image_alt", note="Alt text. Empty is allowed for decorative backgrounds.")
+    add_user_timestamps("section_pathway_hero")
+
+
+def build_section_pathway_about() -> None:
+    """Two-column 'About' block: title + lede on the left, 3 short focus
+    cards stacked on the right, with optional CTAs at the bottom of the
+    right column. Used by /journey/cross-over et al."""
+    _section_base(
+        "section_pathway_about",
+        icon="view_column",
+        note="About block: title + lede left, stacked mini-cards right.",
+    )
+    add_string("section_pathway_about", "eyebrow", note="Small uppercase label (e.g. 'About').")
+    add_string("section_pathway_about", "headline", required=True)
+    add_text("section_pathway_about", "lede", note="Lede paragraph under the title.")
+    add_string("section_pathway_about", "cta_primary_label")
+    add_string("section_pathway_about", "cta_primary_url")
+    add_string("section_pathway_about", "cta_secondary_label")
+    add_string("section_pathway_about", "cta_secondary_url")
+    add_user_timestamps("section_pathway_about")
+    ensure_collection(
+        "section_pathway_about_items",
+        note="Mini focus cards rendered in the right column.",
+        icon="format_list_bulleted",
+        color=SECTION_GROUP_COLOR,
+        archive_field=None,
+        sort_field="sort",
+        hidden=True,
+    )
+    add_sort_field("section_pathway_about_items")
+    add_string("section_pathway_about_items", "title", required=True)
+    add_text("section_pathway_about_items", "body")
+    add_o2m_to("section_pathway_about", "items", "section_pathway_about_items")
 
 
 def build_section_cta_banner() -> None:
@@ -796,6 +896,8 @@ SECTION_COLLECTIONS = [
     "section_logo_strip",
     "section_doctrine_block",
     "section_principles_panel",
+    "section_pathway_hero",
+    "section_pathway_about",
 ]
 
 
@@ -965,6 +1067,7 @@ PUBLIC_COLLECTIONS = [
     "section_logo_strip_items",
     "section_doctrine_block_items",
     "section_principles_panel_items",
+    "section_pathway_about_items",
 ]
 
 
@@ -1034,6 +1137,8 @@ def main() -> None:
     build_section_logo_strip()
     build_section_doctrine_block()
     build_section_principles_panel()
+    build_section_pathway_hero()
+    build_section_pathway_about()
     print("→ phase 3: pages.sections M2A")
     build_pages_sections_m2a()
     print("→ phase 4: public read permissions")
