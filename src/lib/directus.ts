@@ -10,7 +10,7 @@ const DIRECTUS_URL =
   "https://cms.thewalk.org";
 
 type FetchOptions = RequestInit & {
-  next?: { revalidate?: number };
+  next?: { revalidate?: number | false; tags?: string[] };
 };
 
 export function directusAuthHeaders(): Record<string, string> {

@@ -1,0 +1,289 @@
+/**
+ * Zod schemas for all CMS content.
+ *
+ * Each `section_*` collection has its own schema. Sections are discriminated
+ * by `__collection` (which we derive from the M2A junction's `collection`
+ * field when fetching). A section that fails validation is dropped from
+ * the rendered page (see `parseSections` in ./fetch.ts) so one broken row
+ * cannot break the whole page.
+ */
+import { z } from "zod";
+
+/* ─── primitives ────────────────────────────────────────────────────────── */
+
+/** A Directus file reference: either a UUID string or an expanded object. */
+export const FileRefSchema = z
+  .union([
+    z.string().min(1),
+    z
+      .object({
+        id: z.string().min(1),
+        filename_disk: z.string().nullable().optional(),
+        filename_download: z.string().nullable().optional(),
+        title: z.string().nullable().optional(),
+        width: z.number().nullable().optional(),
+        height: z.number().nullable().optional(),
+        type: z.string().nullable().optional(),
+      })
+      .passthrough(),
+  ])
+  .nullable()
+  .optional();
+export type FileRef = z.infer<typeof FileRefSchema>;
+
+const StringOpt = z.string().nullable().optional();
+const TextOpt = z.string().nullable().optional();
+const UrlOpt = z.string().nullable().optional();
+
+const BaseSection = z.object({
+  id: z.string(),
+  status: z.string().default("published"),
+  title_internal: StringOpt,
+});
+
+/* ─── section schemas ───────────────────────────────────────────────────── */
+
+export const SectionHeroSchema = BaseSection.extend({
+  __collection: z.literal("section_hero"),
+  eyebrow: StringOpt,
+  headline: z.string().min(1),
+  subheadline: TextOpt,
+  image: FileRefSchema,
+  image_alt: z.string().min(1),
+  image_position: z.enum(["left", "right", "full", "background"]).nullable().optional().default("right"),
+  cta_primary_label: StringOpt,
+  cta_primary_url: UrlOpt,
+  cta_secondary_label: StringOpt,
+  cta_secondary_url: UrlOpt,
+});
+
+export const SectionRichTextSchema = BaseSection.extend({
+  __collection: z.literal("section_rich_text"),
+  eyebrow: StringOpt,
+  headline: StringOpt,
+  body: z.string().min(1),
+  alignment: z.enum(["left", "center"]).nullable().optional().default("left"),
+});
+
+export const FeatureCardItemSchema = z.object({
+  id: z.string(),
+  sort: z.number().nullable().optional(),
+  title: z.string().min(1),
+  body: TextOpt,
+  icon: FileRefSchema,
+  icon_alt: StringOpt,
+  url: UrlOpt,
+});
+
+export const SectionFeatureCardsSchema = BaseSection.extend({
+  __collection: z.literal("section_feature_cards"),
+  eyebrow: StringOpt,
+  headline: StringOpt,
+  intro: TextOpt,
+  columns: z.enum(["2", "3", "4"]).nullable().optional().default("3"),
+  items: z.array(FeatureCardItemSchema).default([]),
+});
+
+export const SectionImageSplitSchema = BaseSection.extend({
+  __collection: z.literal("section_image_split"),
+  eyebrow: StringOpt,
+  headline: z.string().min(1),
+  body: TextOpt,
+  image: FileRefSchema,
+  image_alt: z.string().min(1),
+  image_side: z.enum(["left", "right"]).nullable().optional().default("right"),
+  cta_label: StringOpt,
+  cta_url: UrlOpt,
+});
+
+export const StatItemSchema = z.object({
+  value: z.string().min(1),
+  label: z.string().min(1),
+});
+
+export const SectionStatsSchema = BaseSection.extend({
+  __collection: z.literal("section_stats"),
+  eyebrow: StringOpt,
+  headline: StringOpt,
+  items: z.array(StatItemSchema).nullable().optional().default([]),
+});
+
+export const MinistryTabSchema = z.object({
+  id: z.string(),
+  sort: z.number().nullable().optional(),
+  label: z.string().min(1),
+  title: z.string().min(1),
+  body: TextOpt,
+  image: FileRefSchema,
+  image_alt: StringOpt,
+  cta_label: StringOpt,
+  cta_url: UrlOpt,
+});
+
+export const SectionMinistryTabsSchema = BaseSection.extend({
+  __collection: z.literal("section_ministry_tabs"),
+  eyebrow: StringOpt,
+  headline: StringOpt,
+  intro: TextOpt,
+  tabs: z.array(MinistryTabSchema).default([]),
+});
+
+export const SectionCtaBannerSchema = BaseSection.extend({
+  __collection: z.literal("section_cta_banner"),
+  eyebrow: StringOpt,
+  headline: z.string().min(1),
+  body: TextOpt,
+  cta_label: z.string().min(1),
+  cta_url: z.string().min(1),
+  background_image: FileRefSchema,
+  background_alt: StringOpt,
+  variant: z.enum(["light", "dark", "brand"]).nullable().optional().default("brand"),
+});
+
+export const TimelineItemSchema = z.object({
+  id: z.string(),
+  sort: z.number().nullable().optional(),
+  date_label: z.string().min(1),
+  title: z.string().min(1),
+  body: TextOpt,
+  image: FileRefSchema,
+  image_alt: StringOpt,
+});
+
+export const SectionTimelineSchema = BaseSection.extend({
+  __collection: z.literal("section_timeline"),
+  eyebrow: StringOpt,
+  headline: StringOpt,
+  intro: TextOpt,
+  items: z.array(TimelineItemSchema).default([]),
+});
+
+export const FaqItemSchema = z.object({
+  question: z.string().min(1),
+  answer: z.string().min(1),
+});
+
+export const SectionFaqSchema = BaseSection.extend({
+  __collection: z.literal("section_faq"),
+  eyebrow: StringOpt,
+  headline: StringOpt,
+  intro: TextOpt,
+  items: z.array(FaqItemSchema).nullable().optional().default([]),
+});
+
+export const TestimonialItemSchema = z.object({
+  id: z.string(),
+  sort: z.number().nullable().optional(),
+  quote: z.string().min(1),
+  name: z.string().min(1),
+  role: StringOpt,
+  image: FileRefSchema,
+  image_alt: StringOpt,
+});
+
+export const SectionTestimonialsSchema = BaseSection.extend({
+  __collection: z.literal("section_testimonials"),
+  eyebrow: StringOpt,
+  headline: StringOpt,
+  layout: z.enum(["carousel", "grid"]).nullable().optional().default("grid"),
+  items: z.array(TestimonialItemSchema).default([]),
+});
+
+export const GalleryItemSchema = z.object({
+  id: z.string(),
+  sort: z.number().nullable().optional(),
+  image: FileRefSchema,
+  image_alt: z.string().min(1),
+  caption: StringOpt,
+});
+
+export const SectionGallerySchema = BaseSection.extend({
+  __collection: z.literal("section_gallery"),
+  eyebrow: StringOpt,
+  headline: StringOpt,
+  layout: z.enum(["grid-2", "grid-3", "grid-4", "masonry"]).nullable().optional().default("grid-3"),
+  items: z.array(GalleryItemSchema).default([]),
+});
+
+export const LogoStripItemSchema = z.object({
+  id: z.string(),
+  sort: z.number().nullable().optional(),
+  logo: FileRefSchema,
+  alt: z.string().min(1),
+  url: UrlOpt,
+});
+
+export const SectionLogoStripSchema = BaseSection.extend({
+  __collection: z.literal("section_logo_strip"),
+  eyebrow: StringOpt,
+  headline: StringOpt,
+  items: z.array(LogoStripItemSchema).default([]),
+});
+
+/* ─── discriminated union ───────────────────────────────────────────────── */
+
+export const SectionSchema = z.discriminatedUnion("__collection", [
+  SectionHeroSchema,
+  SectionRichTextSchema,
+  SectionFeatureCardsSchema,
+  SectionImageSplitSchema,
+  SectionStatsSchema,
+  SectionMinistryTabsSchema,
+  SectionCtaBannerSchema,
+  SectionTimelineSchema,
+  SectionFaqSchema,
+  SectionTestimonialsSchema,
+  SectionGallerySchema,
+  SectionLogoStripSchema,
+]);
+
+export type Section = z.infer<typeof SectionSchema>;
+export type SectionCollection = Section["__collection"];
+
+/** The list of all section collection names — kept in sync with the schema union. */
+export const SECTION_COLLECTIONS = [
+  "section_hero",
+  "section_rich_text",
+  "section_feature_cards",
+  "section_image_split",
+  "section_stats",
+  "section_ministry_tabs",
+  "section_cta_banner",
+  "section_timeline",
+  "section_faq",
+  "section_testimonials",
+  "section_gallery",
+  "section_logo_strip",
+] as const satisfies readonly SectionCollection[];
+
+/* ─── page + site settings ──────────────────────────────────────────────── */
+
+export const PageSchema = z.object({
+  id: z.string(),
+  status: z.string(),
+  slug: z.string().min(1),
+  title: z.string().min(1),
+  seo_title: StringOpt,
+  seo_description: TextOpt,
+  seo_image: FileRefSchema,
+  sections: z.array(SectionSchema).default([]),
+});
+export type Page = z.infer<typeof PageSchema>;
+
+export const SiteSettingsSchema = z.object({
+  nav_logo: FileRefSchema,
+  nav_logo_alt: StringOpt,
+  footer_logo: FileRefSchema,
+  footer_logo_alt: StringOpt,
+  default_og_image: FileRefSchema,
+  default_seo_title: StringOpt,
+  default_seo_description: TextOpt,
+  social_instagram: StringOpt,
+  social_facebook: StringOpt,
+  social_youtube: StringOpt,
+  social_tiktok: StringOpt,
+  contact_email: StringOpt,
+  contact_phone: StringOpt,
+  contact_address: TextOpt,
+});
+export type SiteSettings = z.infer<typeof SiteSettingsSchema>;

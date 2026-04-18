@@ -31,6 +31,11 @@ const nextConfig = {
         protocol: 'https',
         hostname: 'images.unsplash.com',
       },
+      {
+        protocol: 'https',
+        hostname: 'cms.thewalk.org',
+        pathname: '/assets/**',
+      },
     ],
   },
 };
