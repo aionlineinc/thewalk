@@ -73,6 +73,12 @@ export const cmsAssetPresets = {
     cmsAsset(ref, { width: 400, quality: 80, format: "webp", fit: "cover" }),
   logo: (ref: AssetFileRef) =>
     cmsAsset(ref, { width: 320, quality: 90, format: "webp", fit: "contain" }),
+  /**
+   * Diagrams / illustrations rendered inline. We use PNG to preserve crisp
+   * edges (no chroma subsampling) and `contain` so nothing gets cropped.
+   */
+  diagram: (ref: AssetFileRef) =>
+    cmsAsset(ref, { width: 1600, quality: 92, format: "png", fit: "contain" }),
   ogImage: (ref: AssetFileRef) =>
     cmsAsset(ref, { width: 1200, height: 630, quality: 85, format: "jpg", fit: "cover" }),
 } as const;

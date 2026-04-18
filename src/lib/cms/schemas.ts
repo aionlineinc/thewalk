@@ -73,6 +73,13 @@ export const SectionRichTextSchema = BaseSection.extend({
   headline: StringOpt,
   body: z.string().min(1),
   alignment: z.enum(["left", "center"]).nullable().optional().default("left"),
+  /**
+   * If true, render in the "reversed" editorial split layout (heading on the
+   * right, body on the left). Otherwise render the default stacked block.
+   * Consumers may ignore this for sections that aren't using an editorial-split
+   * adapter.
+   */
+  reversed: z.boolean().nullable().optional().default(false),
 });
 
 export const FeatureCardItemSchema = z.object({
