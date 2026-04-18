@@ -34,6 +34,16 @@ export type FileRef = z.infer<typeof FileRefSchema>;
 const StringOpt = z.string().nullable().optional();
 const TextOpt = z.string().nullable().optional();
 const UrlOpt = z.string().nullable().optional();
+/**
+ * Image alt text. Empty string is allowed (and meaningful) for purely
+ * decorative images per WCAG 1.1.1. Editors who omit alt entirely also
+ * resolve to "" so consumers never have to guard against null.
+ */
+const AltText = z
+  .string()
+  .nullable()
+  .optional()
+  .transform((v) => v ?? "");
 
 const BaseSection = z.object({
   id: z.string(),
@@ -49,7 +59,7 @@ export const SectionHeroSchema = BaseSection.extend({
   headline: z.string().min(1),
   subheadline: TextOpt,
   image: FileRefSchema,
-  image_alt: z.string().min(1),
+  image_alt: AltText,
   image_position: z.enum(["left", "right", "full", "background"]).nullable().optional().default("right"),
   cta_primary_label: StringOpt,
   cta_primary_url: UrlOpt,
@@ -90,7 +100,7 @@ export const SectionImageSplitSchema = BaseSection.extend({
   headline: z.string().min(1),
   body: TextOpt,
   image: FileRefSchema,
-  image_alt: z.string().min(1),
+  image_alt: AltText,
   image_side: z.enum(["left", "right"]).nullable().optional().default("right"),
   cta_label: StringOpt,
   cta_url: UrlOpt,
@@ -193,7 +203,7 @@ export const GalleryItemSchema = z.object({
   id: z.string(),
   sort: z.number().nullable().optional(),
   image: FileRefSchema,
-  image_alt: z.string().min(1),
+  image_alt: AltText,
   caption: StringOpt,
 });
 
@@ -209,7 +219,7 @@ export const LogoStripItemSchema = z.object({
   id: z.string(),
   sort: z.number().nullable().optional(),
   logo: FileRefSchema,
-  alt: z.string().min(1),
+  alt: AltText,
   url: UrlOpt,
 });
 
@@ -257,6 +267,16 @@ export const SECTION_COLLECTIONS = [
 ] as const satisfies readonly SectionCollection[];
 
 /* ─── page + site settings ──────────────────────────────────────────────── */
+
+/** Find the first section of a given collection on a page. */
+export function findSection<K extends Section["__collection"]>(
+  sections: Section[] | undefined | null,
+  collection: K,
+): Extract<Section, { __collection: K }> | null {
+  if (!sections) return null;
+  const found = sections.find((s) => s.__collection === collection);
+  return (found ?? null) as Extract<Section, { __collection: K }> | null;
+}
 
 export const PageSchema = z.object({
   id: z.string(),

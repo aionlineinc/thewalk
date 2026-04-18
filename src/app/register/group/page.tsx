@@ -1,3 +1,6 @@
+import { AuthPageBackground } from "@/components/cms/AuthPageBackground";
+import { findSection, getPage } from "@/lib/cms";
+
 import { RegisterGroupClient } from "./RegisterGroupClient";
 
 export const metadata = {
@@ -5,18 +8,17 @@ export const metadata = {
   description: "Request onboarding for your ministry or organization.",
 };
 
-export default function RegisterGroupPage() {
+export default async function RegisterGroupPage() {
+  const page = await getPage("register-group");
+  const heroSection = findSection(page?.sections, "section_hero");
+
   return (
     <main
       id="group-register-main"
       className="relative min-h-[calc(100dvh-35px)] pt-[35px]"
       aria-labelledby="group-register-heading"
     >
-      <div
-        aria-hidden
-        className="absolute inset-0 -z-10 bg-[url('https://images.unsplash.com/photo-1523437237164-d442d57cc3c9?q=80&w=2400&auto=format&fit=crop')] bg-cover bg-center"
-      />
-      <div aria-hidden className="absolute inset-0 -z-10 bg-black/15 backdrop-blur-[2px]" />
+      <AuthPageBackground section={heroSection} />
 
       <div className="mx-auto flex min-h-[calc(100dvh-35px)] w-full max-w-6xl items-center justify-center px-4 py-10">
         <RegisterGroupClient />
