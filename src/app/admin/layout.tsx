@@ -3,6 +3,12 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { AdminSidebar } from "./_components/AdminSidebar";
 
+// Admin pages depend on the session and live DB data and must never be
+// statically prerendered at build time (which would also fail without
+// DATABASE_URL being available in the Docker build stage).
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   const session = await getServerSession(authOptions);
 
