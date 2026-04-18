@@ -5,9 +5,11 @@ import Link from "next/link";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import styles from "./JourneyImmersiveScroller.module.css";
 
-type Slide = {
+export type Slide = {
   key: string;
   label: string;
+  /** Optional eyebrow override; defaults computed by the component when absent. */
+  eyebrow?: string;
   title: string;
   body: string;
   href?: string;
@@ -194,7 +196,7 @@ export function JourneyImmersiveScroller({ slides = DEFAULT_SLIDES }: { slides?:
                         <div key={s.key} className={className}>
                         <div>
                         <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.22em] text-white/70">
-                          {i === 0 ? "Journey overview" : `Pathway ${String(i).padStart(2, "0")}`}
+                          {s.eyebrow ?? (i === 0 ? "Journey overview" : `Pathway ${String(i).padStart(2, "0")}`)}
                         </p>
                         <h1 className="max-w-2xl font-sans text-4xl font-normal leading-[1.06] tracking-tight text-white md:text-[54px] md:leading-[1.02]">
                           {s.title}

@@ -344,6 +344,43 @@ export const SectionPathwayAboutSchema = BaseSection.extend({
   items: z.array(PathwayAboutItemSchema).default([]),
 });
 
+export const JourneyScrollerSlideSchema = z.object({
+  id: z.string(),
+  sort: z.number().nullable().optional(),
+  /** Stable React key. Adapter falls back to slugified label when empty. */
+  key: StringOpt,
+  label: z.string().min(1),
+  /**
+   * Optional small uppercase label above the title. When omitted the
+   * adapter computes a sensible default ("Journey overview" on the first
+   * slide; "Pathway 0X" on subsequent slides).
+   */
+  eyebrow: StringOpt,
+  title: z.string().min(1),
+  body: TextOpt,
+  href: UrlOpt,
+  cta_label: StringOpt,
+  /** Comma-separated ministry pill labels. Each links to `${href}#ministries`. */
+  ministries_csv: StringOpt,
+  image: FileRefSchema,
+  image_alt: AltText,
+});
+
+/**
+ * Sticky scroll-driven 4-up overview used by /journey. The mechanics
+ * (sticky stack, scroll progress mapping, right-side numbered nav,
+ * reduced-motion handling) are owned by the `JourneyImmersiveScroller`
+ * client component; the CMS only supplies copy + images + links.
+ */
+export const SectionJourneyScrollerSchema = BaseSection.extend({
+  __collection: z.literal("section_journey_scroller"),
+  /** In-page anchor id. Defaults to "journey-immersive". */
+  section_anchor: StringOpt,
+  /** Aria label for the section. Defaults to "Journey overview". */
+  aria_label: StringOpt,
+  slides: z.array(JourneyScrollerSlideSchema).default([]),
+});
+
 /* ─── discriminated union ───────────────────────────────────────────────── */
 
 export const SectionSchema = z.discriminatedUnion("__collection", [
@@ -363,6 +400,7 @@ export const SectionSchema = z.discriminatedUnion("__collection", [
   SectionPrinciplesPanelSchema,
   SectionPathwayHeroSchema,
   SectionPathwayAboutSchema,
+  SectionJourneyScrollerSchema,
 ]);
 
 export type Section = z.infer<typeof SectionSchema>;
@@ -386,6 +424,7 @@ export const SECTION_COLLECTIONS = [
   "section_principles_panel",
   "section_pathway_hero",
   "section_pathway_about",
+  "section_journey_scroller",
 ] as const satisfies readonly SectionCollection[];
 
 /* ─── page + site settings ──────────────────────────────────────────────── */

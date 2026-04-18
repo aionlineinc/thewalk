@@ -704,6 +704,63 @@ def build_section_pathway_about() -> None:
     add_o2m_to("section_pathway_about", "items", "section_pathway_about_items")
 
 
+def build_section_journey_scroller() -> None:
+    """Sticky, scroll-driven hero for /journey.
+
+    Renders up to 4 ordered slides: an intro slide followed by the three
+    pathway cards. Background photo, eyebrow, title, body, ministry pills,
+    and a primary CTA per slide. The visual contract (sticky stack, radial
+    overlay, right-side numbered nav, reduced-motion support) is fixed in
+    the React component — only copy + image + links flow from the CMS.
+    """
+    _section_base(
+        "section_journey_scroller",
+        icon="view_carousel",
+        note="Sticky scroll-driven 4-up overview used by /journey.",
+    )
+    add_string("section_journey_scroller", "section_anchor", note="In-page anchor id (default 'journey-immersive').")
+    add_string("section_journey_scroller", "aria_label", note="Aria label for the section. Default 'Journey overview'.")
+    add_user_timestamps("section_journey_scroller")
+    ensure_collection(
+        "section_journey_scroller_slides",
+        note="Up to 4 slides for the immersive scroller.",
+        icon="filter_4",
+        color=SECTION_GROUP_COLOR,
+        archive_field=None,
+        sort_field="sort",
+        hidden=True,
+    )
+    add_sort_field("section_journey_scroller_slides")
+    add_string(
+        "section_journey_scroller_slides",
+        "key",
+        note="Stable identifier used as React key (e.g. 'journey-intro', 'cross-over').",
+    )
+    add_string(
+        "section_journey_scroller_slides",
+        "label",
+        required=True,
+        note="Short label shown in the right-side nav (e.g. 'Cross Over').",
+    )
+    add_string(
+        "section_journey_scroller_slides",
+        "eyebrow",
+        note="Optional small uppercase label above the title. Defaults to 'Journey overview' on the first slide and 'Pathway 0X' on subsequent slides.",
+    )
+    add_string("section_journey_scroller_slides", "title", required=True)
+    add_text("section_journey_scroller_slides", "body")
+    add_string("section_journey_scroller_slides", "href", note="Primary CTA destination URL.")
+    add_string("section_journey_scroller_slides", "cta_label", note="Primary CTA button label.")
+    add_string(
+        "section_journey_scroller_slides",
+        "ministries_csv",
+        note="Comma-separated ministry pills (e.g. 'Rugged, Covered, Exodus'). Each pill links to {href}#ministries.",
+    )
+    add_file("section_journey_scroller_slides", "image", required=True, note="Slide background photo.")
+    add_string("section_journey_scroller_slides", "image_alt", note="Alt text. Empty allowed for decorative backgrounds.")
+    add_o2m_to("section_journey_scroller", "slides", "section_journey_scroller_slides")
+
+
 def build_section_cta_banner() -> None:
     _section_base("section_cta_banner", icon="campaign", note="Full-width call-to-action banner.")
     add_string("section_cta_banner", "eyebrow")
@@ -898,6 +955,7 @@ SECTION_COLLECTIONS = [
     "section_principles_panel",
     "section_pathway_hero",
     "section_pathway_about",
+    "section_journey_scroller",
 ]
 
 
@@ -1068,6 +1126,7 @@ PUBLIC_COLLECTIONS = [
     "section_doctrine_block_items",
     "section_principles_panel_items",
     "section_pathway_about_items",
+    "section_journey_scroller_slides",
 ]
 
 
@@ -1139,6 +1198,7 @@ def main() -> None:
     build_section_principles_panel()
     build_section_pathway_hero()
     build_section_pathway_about()
+    build_section_journey_scroller()
     print("→ phase 3: pages.sections M2A")
     build_pages_sections_m2a()
     print("→ phase 4: public read permissions")

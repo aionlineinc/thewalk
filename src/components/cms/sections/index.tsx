@@ -525,6 +525,42 @@ export function DefaultPathwayAbout({ section }: SectionProps<"section_pathway_a
   );
 }
 
+export function DefaultJourneyScroller({ section }: SectionProps<"section_journey_scroller">) {
+  if (section.slides.length === 0) return null;
+  return (
+    <SectionFrame>
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
+        {section.slides.map((s, i) => {
+          const src = cmsAssetPresets.heroFull(s.image);
+          const eyebrow =
+            s.eyebrow ?? (i === 0 ? "Journey overview" : `Pathway ${String(i).padStart(2, "0")}`);
+          return (
+            <article
+              key={s.id}
+              className="relative flex aspect-[3/4] flex-col justify-end overflow-hidden rounded-2xl bg-black text-white"
+            >
+              {src ? (
+                <Image src={src} alt={s.image_alt} fill sizes="(min-width: 1024px) 25vw, 50vw" className="object-cover opacity-70" />
+              ) : null}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
+              <div className="relative z-10 p-5">
+                <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-white/70">{eyebrow}</p>
+                <h3 className="mt-1 text-xl font-semibold">{s.title}</h3>
+                {s.body ? <p className="mt-2 text-sm text-white/80 line-clamp-3">{s.body}</p> : null}
+                {s.href ? (
+                  <Link href={s.href} className="mt-3 inline-flex w-fit items-center justify-center rounded-full bg-white/15 px-3 py-1.5 text-xs font-medium text-white transition-colors hover:bg-white/25">
+                    {s.cta_label ?? "Explore"}
+                  </Link>
+                ) : null}
+              </div>
+            </article>
+          );
+        })}
+      </div>
+    </SectionFrame>
+  );
+}
+
 export function DefaultLogoStrip({ section }: SectionProps<"section_logo_strip">) {
   if (section.items.length === 0) return null;
   return (

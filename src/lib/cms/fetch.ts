@@ -40,6 +40,7 @@ const NESTED_ITEM_EXPANSIONS: Partial<Record<string, string[]>> = {
   section_doctrine_block: ["items.*"],
   section_principles_panel: ["items.*"],
   section_pathway_about: ["items.*"],
+  section_journey_scroller: ["slides.*", "slides.image.id"],
 };
 
 /** Extra file-field expansions for top-level section fields. */

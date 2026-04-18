@@ -30,6 +30,7 @@ import {
   DefaultPrinciplesPanel,
   DefaultPathwayHero,
   DefaultPathwayAbout,
+  DefaultJourneyScroller,
 } from "./sections";
 
 /** Map of each section collection → React component accepting the full section. */
@@ -58,6 +59,7 @@ const DEFAULT_RENDERERS = {
   section_principles_panel: DefaultPrinciplesPanel,
   section_pathway_hero: DefaultPathwayHero,
   section_pathway_about: DefaultPathwayAbout,
+  section_journey_scroller: DefaultJourneyScroller,
 } as const satisfies Required<SectionComponentMap>;
 
 export interface PageRendererProps {
