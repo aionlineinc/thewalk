@@ -26,7 +26,43 @@ const FILTERS: { id: FilterId; label: string }[] = [
 
 function matchesFilter(article: GrowthArticle, filter: FilterId) {
   if (filter === FILTER_ALL) return true;
+  // "Series" is not a category tag — it's membership in a parent series.
+  // An article qualifies if it has a non-null `series` reference. This
+  // unifies the homepage "Current series" block (which is a collection
+  // of articles) with the articles-page concept of a series.
+  if (filter === "series") return !!article.series;
   return article.category === filter;
+}
+
+/**
+ * Group articles by their parent `series` reference, in the order each
+ * series first appears. Articles without a series are dropped. Within
+ * each series, items are sorted by `seriesSort` (nulls last).
+ */
+function groupBySeries(
+  articles: GrowthArticle[],
+): Array<{ slug: string; title: string; items: GrowthArticle[] }> {
+  const order: string[] = [];
+  const groups = new Map<string, { slug: string; title: string; items: GrowthArticle[] }>();
+  for (const a of articles) {
+    if (!a.series) continue;
+    const key = a.series.slug;
+    const existing = groups.get(key);
+    if (existing) {
+      existing.items.push(a);
+    } else {
+      order.push(key);
+      groups.set(key, { slug: key, title: a.series.title, items: [a] });
+    }
+  }
+  for (const g of groups.values()) {
+    g.items.sort((x, y) => {
+      const xs = x.seriesSort ?? Number.POSITIVE_INFINITY;
+      const ys = y.seriesSort ?? Number.POSITIVE_INFINITY;
+      return xs - ys;
+    });
+  }
+  return order.map((k) => groups.get(k)!).filter(Boolean);
 }
 
 function ArticleMeta({ article }: { article: GrowthArticle }) {
@@ -231,6 +267,71 @@ export function GrowthArticlesClient({ articles }: { articles: GrowthArticle[] }
             <p className="rounded-2xl border border-dashed border-gray-200 bg-gray-50 px-6 py-16 text-center text-gray-600">
               No articles in this category yet.
             </p>
+          ) : activeFilter === "series" ? (
+            /**
+             * Series view: group articles by parent series so each series
+             * reads as a single collection (matching the homepage "Current
+             * series" block's mental model). Each group shows the series
+             * title as the row header with its ordered chapters as cards.
+             */
+            <>
+              {groupBySeries(filtered).map((group) => (
+                <section
+                  key={group.slug}
+                  className="mb-20 md:mb-24"
+                  aria-labelledby={`series-${group.slug}-heading`}
+                >
+                  <div className="mb-8 flex items-end justify-between gap-4 border-b border-gray-100 pb-4">
+                    <div>
+                      <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-gray-500">
+                        Series
+                      </p>
+                      <h2
+                        id={`series-${group.slug}-heading`}
+                        className="mt-1 text-2xl font-semibold tracking-tight text-gray-900 md:text-3xl"
+                      >
+                        {group.title}
+                      </h2>
+                    </div>
+                    <span className="shrink-0 text-sm font-light text-gray-500">
+                      {group.items.length}{" "}
+                      {group.items.length === 1 ? "part" : "parts"}
+                    </span>
+                  </div>
+                  <ul className="grid list-none gap-8 p-0 sm:grid-cols-2 lg:grid-cols-3">
+                    {group.items.map((article, i) => (
+                      <li key={article.slug}>
+                        <Link
+                          href={`/growth/articles/${article.slug}`}
+                          className="group block h-full rounded-2xl outline-none transition-colors focus-visible:ring-2 focus-visible:ring-red-900 focus-visible:ring-offset-2"
+                        >
+                          <div className="isolate flex h-full min-h-0 flex-col gap-3 overflow-hidden rounded-2xl p-3">
+                            <div className="relative aspect-[4/3] w-full shrink-0 overflow-hidden rounded-2xl">
+                              <Image
+                                src={article.image}
+                                alt={article.imageAlt}
+                                fill
+                                className="rounded-2xl object-cover transition-transform duration-500 group-hover:scale-[1.02]"
+                                sizes="(max-width:1024px) 100vw, 33vw"
+                              />
+                            </div>
+                            <div className="flex min-h-0 flex-1 flex-col px-1 pb-1 pt-0">
+                              <span className="inline-block text-[11px] font-semibold uppercase tracking-widest text-gray-500">
+                                Part {article.seriesSort ?? i + 1}
+                              </span>
+                              <h3 className="mt-2 line-clamp-2 text-lg font-normal tracking-tight text-gray-900 transition-colors group-hover:text-red-900">
+                                {article.title}
+                              </h3>
+                              <ArticleMeta article={article} />
+                            </div>
+                          </div>
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </section>
+              ))}
+            </>
           ) : (
             <>
               <section className="mb-20 md:mb-24" aria-labelledby="top-articles-heading">

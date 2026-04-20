@@ -16,6 +16,7 @@ import {
   AppLeadOnDark,
 } from "@/components/ui/Typography";
 import { findSection, getPage } from "@/lib/cms";
+import { getCurrentSeries } from "@/lib/series-content";
 
 /* ─── hardcoded fallbacks ─────────────────────────────────────────────────
    These render the exact same JSX as the CMS adapters so the page never
@@ -133,7 +134,10 @@ function HardcodedFinalCta() {
 }
 
 export default async function Home() {
-  const page = await getPage("home");
+  const [page, currentSeries] = await Promise.all([
+    getPage("home"),
+    getCurrentSeries(),
+  ]);
   const heroSection = findSection(page?.sections, "section_hero");
   const introSection = findSection(page?.sections, "section_rich_text");
   const finalCtaSection = findSection(page?.sections, "section_cta_banner");
@@ -156,7 +160,7 @@ export default async function Home() {
 
       <MinistryGroupsSection />
 
-      <CurrentSeriesSection />
+      <CurrentSeriesSection series={currentSeries} />
 
       <WalkWithUsSection />
 

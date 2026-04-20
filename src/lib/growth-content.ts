@@ -6,6 +6,14 @@ export type ArticleCategory =
   | "prayer"
   | "ministry-development";
 
+/** Lightweight series reference attached to each article that belongs to one. */
+export type ArticleSeriesRef = {
+  slug: string;
+  title: string;
+  /** 1-indexed chapter number inside the series, if known. */
+  part?: number;
+};
+
 export type GrowthArticle = {
   slug: string;
   title: string;
@@ -16,6 +24,10 @@ export type GrowthArticle = {
   image: string;
   imageAlt: string;
   featured?: boolean;
+  /** Parent series, if the article belongs to one. */
+  series?: ArticleSeriesRef | null;
+  /** Position within the parent series (1-indexed). */
+  seriesSort?: number | null;
 };
 
 export const ARTICLE_CATEGORY_LABEL: Record<ArticleCategory, string> = {
@@ -234,6 +246,9 @@ type DirectusArticle = {
   image_url: string | null;
   image_alt: string | null;
   featured?: boolean | null;
+  /** Expanded via `fields=series.slug,series.title`. */
+  series?: { slug: string; title: string } | null;
+  series_sort?: number | null;
 };
 
 function formatDate(iso: string | null): string {
@@ -250,7 +265,8 @@ async function tryFetchDirectusArticles(): Promise<GrowthArticle[] | null> {
     const res = await directusFetch<DirectusListResponse<DirectusArticle>>(
       "/items/articles",
       {
-        fields: "slug,title,excerpt,category,author,date_published,image_url,image_alt,featured",
+        fields:
+          "slug,title,excerpt,category,author,date_published,image_url,image_alt,featured,series.slug,series.title,series_sort",
         filter: JSON.stringify({ status: { _eq: "published" } }),
         limit: 200,
         sort: "-date_published",
@@ -269,6 +285,14 @@ async function tryFetchDirectusArticles(): Promise<GrowthArticle[] | null> {
       image: a.image_url ?? "",
       imageAlt: a.image_alt ?? "",
       featured: !!a.featured,
+      series: a.series
+        ? {
+            slug: a.series.slug,
+            title: a.series.title,
+            part: a.series_sort ?? undefined,
+          }
+        : null,
+      seriesSort: a.series_sort ?? null,
     }));
   } catch {
     return null;
