@@ -195,7 +195,7 @@ export function JourneyTransformationSection() {
       className="relative w-full min-h-[380vh] bg-white border-b border-neutral-100"
       aria-labelledby="journey-transformation-heading"
     >
-      <div className="sticky top-0 flex min-h-screen flex-col justify-start pt-10 pb-16 md:justify-center md:py-20 lg:py-[70px]">
+      <div className="sticky top-0 flex min-h-screen flex-col justify-start pt-6 pb-16 md:justify-center md:py-20 lg:py-[70px]">
         <div className="container mx-auto max-w-6xl px-4 md:px-8">
           <header
             id="home-journey-transformation-intro"
