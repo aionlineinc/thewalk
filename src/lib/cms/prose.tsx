@@ -90,3 +90,74 @@ export function renderProseParagraphs(
     </>
   );
 }
+
+/**
+ * Markdown-lite renderer intended for article bodies.
+ *
+ * Supports:
+ *  - `## Heading` blocks → <h2>
+ *  - everything else → <p>
+ *  - inline links `[text](url)` inside both headings and paragraphs
+ *
+ * Intentionally does NOT support arbitrary HTML or full markdown (lists,
+ * blockquotes, etc.) to keep design stable and predictable.
+ */
+export function renderArticleBody(
+  body: string | null | undefined,
+  options: {
+    paragraphClassName?: string;
+    heading2ClassName?: string;
+    firstParagraphClassName?: string;
+  } = {},
+): ReactNode {
+  const blocks = splitParagraphs(body);
+  if (blocks.length === 0) return null;
+  const {
+    paragraphClassName,
+    heading2ClassName,
+    firstParagraphClassName,
+  } = options;
+  return (
+    <>
+      {blocks.map((raw, i) => {
+        // Editors often write markdown headings followed immediately by text:
+        //   ## Heading
+        //   Paragraph...
+        // which arrives as one "block" (no blank line). Handle both cases.
+        const rawLines = raw.split("\n").map((l) => l.trim()).filter(Boolean);
+        const first = rawLines[0] ?? "";
+        const rest = rawLines.slice(1).join(" ").trim();
+        const h2 = first.match(/^##\s+(.+)$/);
+        if (h2) {
+          return (
+            <Fragment key={`h2b-${i}`}>
+              <h2
+                className={
+                  heading2ClassName ??
+                  "mt-10 text-2xl font-semibold tracking-tight text-gray-900 md:text-3xl"
+                }
+              >
+                {renderInline(h2[1], `h2-${i}`)}
+              </h2>
+              {rest ? (
+                <p className={paragraphClassName}>
+                  {renderInline(rest, `h2-${i}-p`)}
+                </p>
+              ) : null}
+            </Fragment>
+          );
+        }
+        return (
+          <p
+            key={`p-${i}`}
+            className={
+              i === 0 ? firstParagraphClassName ?? paragraphClassName : paragraphClassName
+            }
+          >
+            {renderInline(rawLines.join(" "), `p-${i}`)}
+          </p>
+        );
+      })}
+    </>
+  );
+}

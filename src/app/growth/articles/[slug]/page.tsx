@@ -8,7 +8,7 @@ import {
   getGrowthArticleBySlug,
   getGrowthArticles,
 } from "@/lib/growth-content";
-import { renderProseParagraphs } from "@/lib/cms/prose";
+import { renderArticleBody } from "@/lib/cms/prose";
 
 type Props = { params: { slug: string } };
 
@@ -110,9 +110,11 @@ export default async function GrowthArticleDetailPage({ params }: Props) {
         <div className="mt-12 max-w-none">
           <div className="space-y-5 text-[15px] leading-relaxed text-gray-600 md:text-lg">
             {article.body
-              ? renderProseParagraphs(article.body, {
+              ? renderArticleBody(article.body, {
                   paragraphClassName:
                     "text-[15px] leading-relaxed text-gray-600 md:text-lg",
+                  heading2ClassName:
+                    "mt-10 text-2xl font-semibold tracking-tight text-gray-900 md:text-3xl",
                 })
               : (
                   <p className="text-[15px] leading-relaxed text-gray-600 md:text-lg">
