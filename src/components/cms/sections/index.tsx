@@ -13,6 +13,7 @@ import Link from "next/link";
 import * as React from "react";
 
 import { cmsAssetPresets, type Section } from "@/lib/cms";
+import { renderProseParagraphs } from "@/lib/cms/prose";
 
 export { DefaultMinistryTabs } from "./DefaultMinistryTabs";
 
@@ -108,10 +109,12 @@ export function DefaultRichText({ section }: SectionProps<"section_rich_text">) 
       {section.headline ? (
         <h2 className="mt-2 text-3xl font-semibold text-black md:text-4xl">{section.headline}</h2>
       ) : null}
-      <div
-        className="prose prose-neutral mt-4 max-w-3xl"
-        dangerouslySetInnerHTML={{ __html: section.body }}
-      />
+      <div className="mt-4 max-w-3xl text-[15px] font-light leading-relaxed text-muted-foreground md:text-lg">
+        {renderProseParagraphs(section.body, {
+          paragraphClassName:
+            "text-[15px] font-light leading-relaxed text-muted-foreground md:text-lg",
+        })}
+      </div>
     </SectionFrame>
   );
 }
