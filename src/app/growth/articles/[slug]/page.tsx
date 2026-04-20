@@ -8,6 +8,7 @@ import {
   getGrowthArticleBySlug,
   getGrowthArticles,
 } from "@/lib/growth-content";
+import { renderProseParagraphs } from "@/lib/cms/prose";
 
 type Props = { params: { slug: string } };
 
@@ -107,10 +108,18 @@ export default async function GrowthArticleDetailPage({ params }: Props) {
           />
         </div>
         <div className="mt-12 max-w-none">
-          <p className="text-[15px] leading-relaxed text-gray-600 md:text-lg">
-            Full article content will load here from your CMS when connected. This page confirms routing and layout
-            for “{article.title}”.
-          </p>
+          <div className="space-y-5 text-[15px] leading-relaxed text-gray-600 md:text-lg">
+            {article.body
+              ? renderProseParagraphs(article.body, {
+                  paragraphClassName:
+                    "text-[15px] leading-relaxed text-gray-600 md:text-lg",
+                })
+              : (
+                  <p className="text-[15px] leading-relaxed text-gray-600 md:text-lg">
+                    {article.excerpt}
+                  </p>
+                )}
+          </div>
         </div>
 
         {siblings.length > 0 && article.series ? (

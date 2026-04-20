@@ -18,6 +18,8 @@ export type GrowthArticle = {
   slug: string;
   title: string;
   excerpt: string;
+  /** Main body copy (plain text with optional inline links). */
+  body?: string | null;
   category: ArticleCategory;
   author: string;
   date: string;
@@ -233,17 +235,24 @@ type DirectusListResponse<T> = { data: T[] };
 
 /**
  * Directus "articles" collection schema (as authored in cms.thewalk.org):
- *   slug, title, excerpt, category, author, date_published, image_url,
- *   image_alt, featured, status, body
+ *   slug, title, excerpt, category, author, date_published,
+ *   image (file), image_alt, featured, status, body
+ *
+ * Legacy (still supported during migration):
+ *   image_url (string)
  */
 type DirectusArticle = {
   slug: string;
   title: string;
   excerpt: string;
+  body?: string | null;
   category: ArticleCategory;
   author: string;
   date_published: string | null;
-  image_url: string | null;
+  /** New: file field (uuid or { id }). */
+  image?: string | { id: string } | null;
+  /** Legacy: plain URL string field (kept for backwards compatibility). */
+  image_url?: string | null;
   image_alt: string | null;
   featured?: boolean | null;
   /** Expanded via `fields=series.slug,series.title`. */
@@ -260,18 +269,19 @@ function formatDate(iso: string | null): string {
 
 async function tryFetchDirectusArticles(): Promise<GrowthArticle[] | null> {
   const { directusFetch } = await import("@/lib/directus");
+  const { cmsAssetPresets } = await import("@/lib/cms/assets");
 
   try {
     const res = await directusFetch<DirectusListResponse<DirectusArticle>>(
       "/items/articles",
       {
         fields:
-          "slug,title,excerpt,category,author,date_published,image_url,image_alt,featured,series.slug,series.title,series_sort",
+          "slug,title,excerpt,body,category,author,date_published,image.id,image_url,image_alt,featured,series.slug,series.title,series_sort",
         filter: JSON.stringify({ status: { _eq: "published" } }),
         limit: 200,
         sort: "-date_published",
       },
-      { next: { revalidate: 60 } }
+      { next: { revalidate: 60, tags: ["articles"] } }
     );
 
     if (!res?.data?.length) return [];
@@ -279,10 +289,16 @@ async function tryFetchDirectusArticles(): Promise<GrowthArticle[] | null> {
       slug: a.slug,
       title: a.title,
       excerpt: a.excerpt,
+      body: a.body ?? null,
       category: a.category,
       author: a.author ?? "",
       date: formatDate(a.date_published),
-      image: a.image_url ?? "",
+      image:
+        (a.image
+          ? cmsAssetPresets.card(
+              typeof a.image === "string" ? a.image : a.image.id,
+            )
+          : a.image_url) ?? "",
       imageAlt: a.image_alt ?? "",
       featured: !!a.featured,
       series: a.series

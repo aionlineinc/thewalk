@@ -22,6 +22,7 @@ What it does
   2. Extends the existing `articles` collection:
        + series (m2o → series, nullable)
        + series_sort (integer, 1-indexed position within the series)
+       + image (file-image) so editors see thumbnails in Directus
   3. Sets public read permission on `series` (filtered to published).
   4. Downloads + uploads the six original "Components of Walking"
      photographs into the Public/ folder.
@@ -483,6 +484,78 @@ def extend_articles_with_series() -> None:
     add_o2m_alias("series", "articles", "articles", "series")
 
 
+def extend_articles_with_image_file() -> None:
+    """
+    Add a proper file-image field to `articles` so editors see thumbnails.
+
+    We keep legacy `image_url` around for backwards compatibility, but new
+    edits should use `image` going forward.
+    """
+    add_file(
+        "articles",
+        "image",
+        note="Article card image (preferred). Replaces legacy image_url.",
+    )
+
+
+def migrate_article_images() -> None:
+    """
+    Best-effort migration:
+      - If `articles.image` is empty and `image_url` looks like a Directus file id,
+        copy it into `image`.
+      - If `image_url` is a Directus assets URL, extract the id and copy it.
+    """
+    if not field_exists("articles", "image"):
+        print("  · articles.image missing; skipping image migration")
+        return
+
+    r = S.get(
+        f"{BASE}/items/articles",
+        params={
+            "limit": -1,
+            "fields": "id,slug,image,image_url",
+        },
+    )
+    if not r.ok:
+        print(f"  WARN: cannot list articles for image migration: {r.status_code}")
+        return
+
+    def extract_file_id(value: str) -> str | None:
+        v = (value or "").strip()
+        if not v:
+            return None
+        # Directus file id is a UUID.
+        if len(v) == 36 and v.count("-") == 4:
+            return v
+        # Directus assets URL: https://cms.../assets/<uuid>(?...).
+        if "/assets/" in v:
+            after = v.split("/assets/", 1)[1]
+            fid = after.split("?", 1)[0].split("/", 1)[0].strip()
+            if len(fid) == 36 and fid.count("-") == 4:
+                return fid
+        return None
+
+    migrated = 0
+    for row in r.json().get("data", []):
+        if row.get("image"):
+            continue
+        fid = extract_file_id(row.get("image_url") or "")
+        if not fid:
+            continue
+        pr = S.patch(f"{BASE}/items/articles/{row['id']}", json={"image": fid})
+        if pr.ok:
+            migrated += 1
+        else:
+            print(
+                f"  WARN: could not migrate image for {row.get('slug')}: "
+                f"{pr.status_code} {pr.text[:120]}"
+            )
+    if migrated:
+        print(f"  + migrated articles.image for {migrated} rows")
+    else:
+        print("  · no articles.image rows needed migration")
+
+
 # ─── permissions ─────────────────────────────────────────────────────────────
 
 
@@ -682,13 +755,13 @@ CHAPTERS = [
 
 
 def upload_chapter_images(folder_id: str) -> dict[str, str]:
-    """Return slug → absolute asset URL (served by Directus)."""
+    """Return slug → Directus file id."""
     out: dict[str, str] = {}
     for ch in CHAPTERS:
         fid = upload_remote_image(
             ch["image_url"], ch["image_filename"], folder_id, ch["image_title"]
         )
-        out[ch["slug"]] = f"{BASE}/assets/{fid}"
+        out[ch["slug"]] = fid
     return out
 
 
@@ -786,7 +859,10 @@ def seed_components_of_walking(images_by_slug: dict[str, str]) -> None:
                 "author": "theWalk",
                 # Use a stable date so repeated seeds don't churn ordering.
                 "date_published": f"2026-01-{idx:02d}",
-                "image_url": images_by_slug[ch["slug"]],
+                # Prefer the file field for editor thumbnails.
+                "image": images_by_slug[ch["slug"]],
+                # Keep legacy field populated for backwards compatibility.
+                "image_url": f"{BASE}/assets/{images_by_slug[ch['slug']]}",
                 "image_alt": ch["image_alt"],
                 "body": (
                     "Full article content will load here from your CMS when "
@@ -813,6 +889,9 @@ def main() -> None:
     print("→ schema: articles.series (m2o) + articles.series_sort")
     extend_articles_with_series()
 
+    print("→ schema: articles.image (file)")
+    extend_articles_with_image_file()
+
     print("→ permissions: public read")
     ensure_public_read(
         [
@@ -822,7 +901,10 @@ def main() -> None:
             # include the two new fields.
         ]
     )
-    widen_articles_public_fields(["series", "series_sort"])
+    widen_articles_public_fields(["series", "series_sort", "image"])
+
+    print("→ migrate: articles.image from legacy image_url (best-effort)")
+    migrate_article_images()
 
     folder_id = get_public_folder()
     print(f"  Public folder: {folder_id}")

@@ -125,7 +125,10 @@ type DirectusArticleInSeries = {
   slug: string;
   title: string;
   excerpt: string | null;
-  image_url: string | null;
+  /** New: file field (uuid or { id }). */
+  image?: string | { id: string } | null;
+  /** Legacy: plain URL string field (kept for backwards compatibility). */
+  image_url?: string | null;
   image_alt: string | null;
   series_sort: number | null;
 };
@@ -162,7 +165,12 @@ function mapSeries(row: DirectusSeriesRow): Series {
         slug: a.slug,
         title: a.title,
         description: a.excerpt ?? "",
-        image: a.image_url ?? "",
+        image:
+          (a.image
+            ? cmsAssetPresets.card(
+                typeof a.image === "string" ? a.image : a.image.id,
+              )
+            : a.image_url) ?? "",
         imageAlt: a.image_alt ?? "",
       }),
     );
@@ -205,6 +213,7 @@ export async function getCurrentSeries(): Promise<Series> {
     "articles.slug",
     "articles.title",
     "articles.excerpt",
+    "articles.image.id",
     "articles.image_url",
     "articles.image_alt",
     "articles.series_sort",
