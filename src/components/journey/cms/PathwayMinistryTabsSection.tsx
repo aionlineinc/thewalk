@@ -217,35 +217,37 @@ export function PathwayMinistryTabsSection({ section, anchorId }: Props) {
           )}
         </header>
 
-        <div className="mx-auto mt-10 flex w-full justify-center">
-          <div
-            role="tablist"
-            aria-label={section.headline ?? "Ministries"}
-            className="inline-flex max-w-full flex-row flex-wrap items-center justify-center gap-2 rounded-[100px] border border-white/15 bg-white/10 px-3 py-2 backdrop-blur-md sm:px-[18px]"
-          >
-            {tabs.map((t) => {
-              const selected = t.key === active;
-              return (
-                <button
-                  key={t.key}
-                  type="button"
-                  role="tab"
-                  aria-selected={selected}
-                  aria-controls={`${tabsId}-${t.key}-panel`}
-                  id={`${tabsId}-${t.key}-tab`}
-                  tabIndex={selected ? 0 : -1}
-                  onClick={() => setTab(t.key)}
-                  onKeyDown={(e) => onTabKeyDown(e, t.key)}
-                  className={`inline-flex items-center justify-center whitespace-nowrap rounded-[50px] px-5 py-2.5 text-sm font-medium tracking-tight transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-500/60 sm:px-[25px] sm:py-3 ${
-                    selected
-                      ? "bg-white text-earth-900 shadow-sm"
-                      : "text-white/85 hover:bg-white/15"
-                  }`}
-                >
-                  {t.label}
-                </button>
-              );
-            })}
+        <div className="mx-auto mt-10 w-full">
+          <div className="flex w-full justify-center">
+            <div
+              role="tablist"
+              aria-label={section.headline ?? "Ministries"}
+              className="inline-flex max-w-full flex-row flex-wrap items-center justify-center gap-2 rounded-[100px] border border-white/15 bg-white/10 px-3 py-2 backdrop-blur-md sm:px-[18px]"
+            >
+              {tabs.map((t) => {
+                const selected = t.key === active;
+                return (
+                  <button
+                    key={t.key}
+                    type="button"
+                    role="tab"
+                    aria-selected={selected}
+                    aria-controls={`${tabsId}-${t.key}-panel`}
+                    id={`${tabsId}-${t.key}-tab`}
+                    tabIndex={selected ? 0 : -1}
+                    onClick={() => setTab(t.key)}
+                    onKeyDown={(e) => onTabKeyDown(e, t.key)}
+                    className={`inline-flex items-center justify-center whitespace-nowrap rounded-[50px] px-5 py-2.5 text-sm font-medium tracking-tight transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-500/60 sm:px-[25px] sm:py-3 ${
+                      selected
+                        ? "bg-white text-earth-900 shadow-sm"
+                        : "text-white/85 hover:bg-white/15"
+                    }`}
+                  >
+                    {t.label}
+                  </button>
+                );
+              })}
+            </div>
           </div>
 
           <div
