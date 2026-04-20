@@ -103,14 +103,20 @@ export function CurrentSeriesSection({
     "As believers, the concept of \u201cwalking\u201d should have some significance to us in the context of our faith. These six parts outline what is necessary for purposeful walking / movement to take place.";
 
   // Build the card list from either the CMS series (preferred) or the
-  // legacy `articles` prop. Cards from the series always link to the
-  // real article detail page so each card is a real entry point.
+  // legacy `articles` prop.
+  //
+  // All homepage cards link to the articles listing (`/growth/articles`
+  // with the Series view pre-selected), not to individual article
+  // detail pages. The homepage "Current series" block is a teaser that
+  // invites the reader to explore the series in full on the articles
+  // page; readers can drill into specific chapters from there.
+  const listingHref = "/growth/articles?type=series";
   const cards = series
     ? series.articles.map((a) => ({
         key: a.slug,
         title: a.title,
         description: a.description,
-        href: `/growth/articles/${a.slug}`,
+        href: listingHref,
         image: a.image,
         alt: a.imageAlt,
       }))
