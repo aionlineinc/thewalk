@@ -104,19 +104,12 @@ export function CurrentSeriesSection({
 
   // Build the card list from either the CMS series (preferred) or the
   // legacy `articles` prop.
-  //
-  // All homepage cards link to the articles listing (`/growth/articles`
-  // with the Series view pre-selected), not to individual article
-  // detail pages. The homepage "Current series" block is a teaser that
-  // invites the reader to explore the series in full on the articles
-  // page; readers can drill into specific chapters from there.
-  const listingHref = "/growth/articles?type=series";
   const cards = series
     ? series.articles.map((a) => ({
         key: a.slug,
         title: a.title,
         description: a.description,
-        href: listingHref,
+        href: `/growth/articles/${a.slug}`,
         image: a.image,
         alt: a.imageAlt,
       }))
