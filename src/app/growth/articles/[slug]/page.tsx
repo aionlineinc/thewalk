@@ -13,7 +13,9 @@ import { renderArticleBody } from "@/lib/cms/prose";
 type Props = { params: { slug: string } };
 
 export async function generateStaticParams() {
-  return GROWTH_ARTICLES.map((a) => ({ slug: a.slug }));
+  // This route is CMS-driven; slugs can change without a code deploy.
+  // Avoid static params so new articles become available immediately.
+  return [];
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
