@@ -498,12 +498,14 @@ def extend_articles_with_image_file() -> None:
     )
 
 
-def migrate_article_images() -> None:
+def migrate_article_images(folder_id: str) -> None:
     """
     Best-effort migration:
       - If `articles.image` is empty and `image_url` looks like a Directus file id,
         copy it into `image`.
       - If `image_url` is a Directus assets URL, extract the id and copy it.
+      - If `image_url` is an external URL, download + upload into Directus Files
+        and set `image` to the uploaded file id.
     """
     if not field_exists("articles", "image"):
         print("  · articles.image missing; skipping image migration")
@@ -539,17 +541,41 @@ def migrate_article_images() -> None:
     for row in r.json().get("data", []):
         if row.get("image"):
             continue
-        fid = extract_file_id(row.get("image_url") or "")
-        if not fid:
+        image_url = (row.get("image_url") or "").strip()
+
+        fid = extract_file_id(image_url)
+        if fid:
+            pr = S.patch(f"{BASE}/items/articles/{row['id']}", json={"image": fid})
+            if pr.ok:
+                migrated += 1
+            else:
+                print(
+                    f"  WARN: could not migrate image for {row.get('slug')}: "
+                    f"{pr.status_code} {pr.text[:120]}"
+                )
             continue
-        pr = S.patch(f"{BASE}/items/articles/{row['id']}", json={"image": fid})
-        if pr.ok:
-            migrated += 1
-        else:
-            print(
-                f"  WARN: could not migrate image for {row.get('slug')}: "
-                f"{pr.status_code} {pr.text[:120]}"
+
+        # If it's an external URL, upload it and bind the file id.
+        if image_url.startswith("http://") or image_url.startswith("https://"):
+            slug = row.get("slug") or row["id"]
+            filename = f"article-{slug}.jpg"
+            title = f"Article — {slug}"
+            try:
+                uploaded_id = upload_remote_image(image_url, filename, folder_id, title)
+            except Exception as e:
+                print(f"  WARN: could not upload {slug} image_url: {e}")
+                continue
+            pr = S.patch(
+                f"{BASE}/items/articles/{row['id']}",
+                json={"image": uploaded_id},
             )
+            if pr.ok:
+                migrated += 1
+            else:
+                print(
+                    f"  WARN: could not set image for {slug}: "
+                    f"{pr.status_code} {pr.text[:120]}"
+                )
     if migrated:
         print(f"  + migrated articles.image for {migrated} rows")
     else:
@@ -904,7 +930,7 @@ def main() -> None:
     widen_articles_public_fields(["series", "series_sort", "image"])
 
     print("→ migrate: articles.image from legacy image_url (best-effort)")
-    migrate_article_images()
+    migrate_article_images(folder_id)
 
     folder_id = get_public_folder()
     print(f"  Public folder: {folder_id}")
