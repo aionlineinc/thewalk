@@ -17,9 +17,9 @@ const defaultP = "text-[15px] leading-relaxed text-gray-600 md:text-lg";
 const defaultH2 = "mt-10 text-2xl font-semibold tracking-tight text-gray-900 md:text-3xl";
 const defaultH3 = "mt-8 text-xl font-semibold tracking-tight text-gray-900 md:text-2xl";
 const defaultUl =
-  "mt-6 list-inside list-disc space-y-2 pl-6 text-[15px] font-light leading-relaxed text-gray-600 md:text-lg";
+  "mt-6 !list-inside !list-disc space-y-2 pl-6 text-[15px] font-light leading-relaxed text-gray-600 md:text-lg";
 const defaultOl =
-  "mt-6 list-inside list-decimal space-y-2 pl-6 text-[15px] font-light leading-relaxed text-gray-600 md:text-lg";
+  "mt-6 !list-inside !list-decimal space-y-2 pl-6 text-[15px] font-light leading-relaxed text-gray-600 md:text-lg";
 
 /**
  * Full CommonMark + GitHub Flavored Markdown (tables, strikethrough, task lists, autolinks).
@@ -37,7 +37,7 @@ export function ArticleBodyMarkdown({
   const pClass = paragraphClassName;
   const firstPClass = firstParagraphClassName ?? paragraphClassName;
   const olListClass = listClassName.includes("list-disc")
-    ? listClassName.replace("list-disc", "list-decimal")
+    ? listClassName.replace(/!list-disc|list-disc/g, (m) => (m.startsWith("!") ? "!list-decimal" : "list-decimal"))
     : defaultOl;
 
   let pIndex = 0;

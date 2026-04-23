@@ -149,37 +149,37 @@ body {
   .admin-btn-ghost {
     @apply inline-flex items-center justify-center rounded-xl border border-black/[0.08] bg-white px-5 py-3 text-sm font-semibold text-admin-ink transition-colors hover:bg-black/[0.03] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-admin-ink/20;
   }
+}
 
-  /**
-   * Article detail (`react-markdown` in `.article-md`). Tailwind preflight sets
-   * `ul, ol, menu { list-style: none; padding: 0; }` — that removes bullets/numbers
-   * unless every utility layer wins. Re-assert list markers with `list-style-position: inside`
-   * so glyph isn’t drawn in a clipped “outside” margin, and `!important` to beat
-   * accidental `class="list-none"` on nested / CMS-sourced elements.
-   */
-  .article-md :is(ul, ol) {
-    overflow: visible;
-    margin: 0.5rem 0;
-    list-style-position: inside;
-  }
-  .article-md ul {
-    list-style-type: disc !important;
-    list-style-image: none !important;
-  }
-  .article-md ol {
-    list-style-type: decimal !important;
-  }
-  .article-md :is(ul, ol) li {
-    display: list-item;
-  }
-  .article-md :is(ul, ol) li::marker {
-    color: #4b5563; /* align with body text (gray-600) */
-  }
-  .article-md :is(ul, ol) ul {
-    list-style-type: circle !important;
-  }
-  .article-md :is(ul, ol) :is(ul, ol) {
-    margin-top: 0.25rem;
-    margin-bottom: 0.25rem;
-  }
+/**
+ * Article body (`.article-md` + `react-markdown`). **Unlayered** (outside `@layer`) so
+ * list styles win over Tailwind preflight (`ul, ol { list-style: none }`) and over
+ * utilities in `@layer utilities` (e.g. `list-none` on a child layout class).
+ * https://tailwindcss.com/docs/adding-custom-styles#using-css-and-layering
+ */
+.article-md :is(ul, ol) {
+  margin: 0.5rem 0;
+  overflow: visible;
+  list-style-position: inside;
+  padding-left: 1.5rem;
+}
+.article-md ul {
+  list-style: disc !important;
+  list-style-image: none !important;
+}
+.article-md ol {
+  list-style: decimal !important;
+}
+.article-md :is(ul, ol) li {
+  display: list-item;
+}
+.article-md :is(ul, ol) li::marker {
+  color: #4b5563;
+}
+.article-md :is(ul, ol) ul {
+  list-style: circle !important;
+}
+.article-md :is(ul, ol) :is(ul, ol) {
+  margin-top: 0.25rem;
+  margin-bottom: 0.25rem;
 }
