@@ -1,18 +1,17 @@
 import Link from "next/link";
 import { Fragment, type ReactNode } from "react";
 
+import { ArticleBodyMarkdown, type ArticleBodyMarkdownOptions } from "./ArticleBodyMarkdown";
+
+export type { ArticleBodyMarkdownOptions };
+
 /**
- * Lightweight prose renderer for CMS body text.
+ * `renderProseParagraphs` / `splitParagraphs` — lightweight: blank-line paragraphs,
+ * inline links, **bold** / *italic* only (no GFM, no list blocks). Used by Beliefs- and
+ * similar sections that should stay structurally simple.
  *
- * We don't want a full markdown dependency for what amounts to "paragraphs +
- * the occasional inline link", so this helper:
- *   • splits the input on blank lines into paragraphs
- *   • inside each paragraph, recognises `[text](url)` as an inline link
- *
- * Anything else (bold, italics, headings, lists) is intentionally NOT
- * supported — those should be modelled as their own section types so the
- * design stays consistent. Editors can always add explicit blocks instead
- * of inlining structure into a body field.
+ * `renderArticleBody` — full article field: `react-markdown` + `remark-gfm` (headings, lists,
+ * tables, code fences, task lists, images, etc.). Raw HTML in the string is not executed.
  */
 
 /**
@@ -195,162 +194,15 @@ export function renderProseParagraphs(
 }
 
 /**
- * Markdown-lite renderer intended for article bodies.
- *
- * Supports:
- *  - `## Heading` blocks → <h2>
- *  - everything else → <p>
- *  - inline links `[text](url)` inside both headings and paragraphs
- *
- * Intentionally does NOT support arbitrary HTML or full markdown (lists,
- * blockquotes, etc.) to keep design stable and predictable.
+ * Full article body using CommonMark + GFM (react-markdown + remark-gfm):
+ * headings, lists, blockquotes, code fences, tables, task lists, images, autolinks.
+ * Raw HTML in the source is escaped for safety; use a HTML body field in CMS for WYSIWYG
+ * and wire a sanitizer in app code if you need both.
  */
 export function renderArticleBody(
   body: string | null | undefined,
-  options: {
-    paragraphClassName?: string;
-    heading2ClassName?: string;
-    heading3ClassName?: string;
-    listClassName?: string;
-    listItemClassName?: string;
-    firstParagraphClassName?: string;
-  } = {},
+  options: ArticleBodyMarkdownOptions = {},
 ): ReactNode {
-  const {
-    paragraphClassName,
-    heading2ClassName,
-    heading3ClassName,
-    listClassName,
-    listItemClassName,
-    firstParagraphClassName,
-  } = options;
-
-  if (!body) return null;
-  const lines = body.replace(/\r\n/g, "\n").split("\n");
-  const out: ReactNode[] = [];
-  let i = 0;
-  let pIndex = 0;
-
-  const takeWhile = (pred: (line: string) => boolean) => {
-    const taken: string[] = [];
-    while (i < lines.length && pred(lines[i] ?? "")) {
-      taken.push((lines[i] ?? "").trimEnd());
-      i += 1;
-    }
-    return taken;
-  };
-
-  const skipBlank = () => {
-    while (i < lines.length && (lines[i] ?? "").trim() === "") i += 1;
-  };
-
-  const flushParagraph = (paraLines: string[]) => {
-    const text = paraLines.map((l) => l.trim()).filter(Boolean).join(" ");
-    if (!text) return;
-    out.push(
-      <p
-        key={`p-${pIndex}`}
-        className={
-          pIndex === 0
-            ? firstParagraphClassName ?? paragraphClassName
-            : paragraphClassName
-        }
-      >
-        {renderInline(text, `p-${pIndex}`)}
-      </p>,
-    );
-    pIndex += 1;
-  };
-
-  skipBlank();
-  while (i < lines.length) {
-    const line = (lines[i] ?? "").trim();
-    if (!line) {
-      skipBlank();
-      continue;
-    }
-
-    const h2 = line.match(/^##\s+(.+)$/);
-    if (h2) {
-      out.push(
-        <h2
-          key={`h2-${i}`}
-          className={
-            heading2ClassName ??
-            "mt-10 text-2xl font-semibold tracking-tight text-gray-900 md:text-3xl"
-          }
-        >
-          {renderInline(h2[1], `h2-${i}`)}
-        </h2>,
-      );
-      i += 1;
-      skipBlank();
-      continue;
-    }
-
-    const h3 = line.match(/^###\s+(.+)$/);
-    if (h3) {
-      out.push(
-        <h3
-          key={`h3-${i}`}
-          className={
-            heading3ClassName ??
-            "mt-8 text-xl font-semibold tracking-tight text-gray-900 md:text-2xl"
-          }
-        >
-          {renderInline(h3[1], `h3-${i}`)}
-        </h3>,
-      );
-      i += 1;
-      skipBlank();
-      continue;
-    }
-
-    const ulMatch = line.match(/^(?:-|\*)\s+(.+)$/);
-    if (ulMatch) {
-      const items = takeWhile((l) => /^(?:-|\*)\s+/.test((l ?? "").trim()));
-      const parsed = items
-        .map((l) => (l ?? "").trim().replace(/^(?:-|\*)\s+/, "").trim())
-        .filter(Boolean);
-      out.push(
-        <ul
-          key={`ul-${i}`}
-          className={
-            listClassName ??
-            "mt-6 list-disc space-y-2 pl-6 text-[15px] font-light leading-relaxed text-gray-600 md:text-lg"
-          }
-        >
-          {parsed.map((t, idx) => (
-            <li
-              key={`ul-${i}-li-${idx}`}
-              className={listItemClassName}
-            >
-              {renderInline(t, `ul-${i}-li-${idx}`)}
-            </li>
-          ))}
-        </ul>,
-      );
-      skipBlank();
-      continue;
-    }
-
-    // Paragraph: consume until blank line or a new block marker.
-    const paraLines = takeWhile((l) => {
-      const t = (l ?? "").trim();
-      if (!t) return false;
-      if (/^##\s+/.test(t) || /^###\s+/.test(t)) return false;
-      if (/^(?:-|\*)\s+/.test(t)) return false;
-      return true;
-    });
-    flushParagraph(paraLines);
-    skipBlank();
-  }
-
-  return (
-    <>
-      {out.map((n, idx) => (
-        <Fragment key={`b-${idx}`}>{n}</Fragment>
-      ))}
-    </>
-  );
+  if (!body?.trim()) return null;
+  return <ArticleBodyMarkdown body={body} {...options} />;
 }
