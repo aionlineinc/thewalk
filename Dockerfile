@@ -4,6 +4,10 @@ RUN apt-get update \
   && rm -rf /var/lib/apt/lists/*
 WORKDIR /app
 COPY package.json package-lock.json ./
+# Quieter `npm ci` in CI: only errors (hides transitive deprecation warn spam from toolchains)
+ENV NPM_CONFIG_LOGLEVEL=error
+ENV NPM_CONFIG_AUDIT=false
+ENV NPM_CONFIG_FUND=false
 RUN npm ci
 
 FROM node:20-bookworm-slim AS builder
