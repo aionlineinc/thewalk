@@ -10,6 +10,7 @@ import {
   getGrowthArticles,
 } from "@/lib/growth-content";
 import { renderArticleBody } from "@/lib/cms/prose";
+import { ScriptureEnhancedArticleBody } from "./ScriptureEnhancedArticleBody";
 
 export async function GrowthArticleDetail({
   article,
@@ -97,17 +98,19 @@ export async function GrowthArticleDetail({
 
         <div className="mt-12 max-w-none">
           <div className="space-y-5 text-[15px] leading-relaxed text-gray-600 md:text-lg">
-            {article.body
-              ? renderArticleBody(article.body, {
-                  paragraphClassName: "text-[15px] leading-relaxed text-gray-600 md:text-lg",
-                  heading2ClassName:
-                    "mt-12 text-2xl font-medium tracking-tight text-gray-900 md:text-3xl",
-                })
-              : (
-                  <p className="text-[15px] leading-relaxed text-gray-600 md:text-lg">
-                    {article.excerpt}
-                  </p>
-                )}
+            <ScriptureEnhancedArticleBody>
+              {article.body
+                ? renderArticleBody(article.body, {
+                    paragraphClassName: "text-[15px] leading-relaxed text-gray-600 md:text-lg",
+                    heading2ClassName:
+                      "mt-12 text-2xl font-medium tracking-tight text-gray-900 md:text-3xl",
+                  })
+                : (
+                    <p className="text-[15px] leading-relaxed text-gray-600 md:text-lg">
+                      {article.excerpt}
+                    </p>
+                  )}
+            </ScriptureEnhancedArticleBody>
           </div>
         </div>
 
