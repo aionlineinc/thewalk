@@ -10,7 +10,7 @@ import {
 } from "react";
 import { ScriptureRichText } from "./ScriptureRichText";
 
-function mapParagraphChildren(ch: ReactNode): ReactNode {
+function mapInlineScriptureChildren(ch: ReactNode): ReactNode {
   if (typeof ch === "string") {
     if (ch.trim() === "") return ch;
     return <ScriptureRichText>{ch}</ScriptureRichText>;
@@ -40,8 +40,8 @@ function walk(node: ReactNode): ReactNode {
 
   const el = node as ReactElement<{ children?: ReactNode }>;
 
-  if (el.type === "p") {
-    return cloneElement(el, { children: mapParagraphChildren(el.props.children) });
+  if (el.type === "p" || el.type === "li") {
+    return cloneElement(el, { children: mapInlineScriptureChildren(el.props.children) });
   }
 
   if (el.props?.children != null) {
@@ -53,9 +53,11 @@ function walk(node: ReactNode): ReactNode {
 
 /**
  * Walks descendants and wraps plain text in {@link ScriptureRichText} for every
- * native `<p>`. Must run in a **client** component tree: Server Component output
- * passed from the root layout cannot be traversed with `cloneElement`, so wrap
- * scripture-heavy pages (e.g. BeliefsArticle) instead of the app layout.
+ * native `<p>` and `<li>` (markdown list items often render references as direct
+ * text nodes inside `<li>`, not wrapped in `<p>`). Must run in a **client**
+ * component tree: Server Component output passed from the root layout cannot be
+ * traversed with `cloneElement`, so wrap scripture-heavy pages (e.g.
+ * BeliefsArticle) instead of the app layout.
  */
 export function ScriptureEnhance({ children }: { children: ReactNode }) {
   return <>{walk(Children.toArray(children))}</>;
