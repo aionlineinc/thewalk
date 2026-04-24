@@ -59,8 +59,7 @@ export const ARTICLE_CATEGORY_LABEL: Record<string, string> = {
  * - Base: `/growth/<type>/<slug>`
  * - Series: `/growth/series/<seriesSlug>/<slug>`
  * - Category `articles` is singular: `/growth/article/<slug>`
- * - Category `bible-study` is compact: `/growth/biblestudy/<slug>`
- * - Category `ministry-development` is compact: `/growth/men-dev/<slug>`
+ * - Ministry-connected categories use their category slug as the type segment
  */
 export function getGrowthArticleHref(article: Pick<GrowthArticle, "slug" | "category" | "series">): string {
   if (article.category === "series" || article.series?.slug) {
@@ -71,17 +70,14 @@ export function getGrowthArticleHref(article: Pick<GrowthArticle, "slug" | "cate
   const type =
     article.category === "articles"
       ? "article"
-      : article.category === "bible-study"
-        ? "biblestudy"
-        : article.category === "ministry-development"
-          ? "men-dev"
-          : article.category; // for Directus-added categories, the value is the URL segment
+      : article.category; // for Directus-added categories, the value is the URL segment
 
   return `/growth/${type}/${article.slug}`;
 }
 
 export function growthRouteTypeToCategory(type: string): Exclude<ArticleCategory, "series"> {
   if (type === "article") return "articles";
+  // Back-compat aliases (older URLs) → canonical category slugs.
   if (type === "biblestudy") return "bible-study";
   if (type === "men-dev") return "ministry-development";
   return type;
