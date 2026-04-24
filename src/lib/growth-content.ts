@@ -1,5 +1,6 @@
 export type ArticleCategory =
   | "articles"
+  | "testimonies"
   | "exodus"
   | "bible-study"
   | "series"
@@ -34,12 +35,56 @@ export type GrowthArticle = {
 
 export const ARTICLE_CATEGORY_LABEL: Record<ArticleCategory, string> = {
   articles: "Articles",
+  testimonies: "Testimonies",
   exodus: "Exodus",
   "bible-study": "Bible Study",
   series: "Series",
   prayer: "Prayer",
   "ministry-development": "Ministry Development",
 };
+
+/**
+ * Public article URL for the Growth section.
+ *
+ * Rules:
+ * - Base: `/growth/<type>/<slug>`
+ * - Series: `/growth/series/<seriesSlug>/<slug>`
+ * - Category `articles` is singular: `/growth/article/<slug>`
+ * - Category `bible-study` is compact: `/growth/biblestudy/<slug>`
+ * - Category `ministry-development` is compact: `/growth/men-dev/<slug>`
+ */
+export function getGrowthArticleHref(article: Pick<GrowthArticle, "slug" | "category" | "series">): string {
+  if (article.category === "series" || article.series?.slug) {
+    const seriesSlug = article.series?.slug ?? "series";
+    return `/growth/series/${seriesSlug}/${article.slug}`;
+  }
+
+  const type =
+    article.category === "articles"
+      ? "article"
+      : article.category === "bible-study"
+        ? "biblestudy"
+        : article.category === "ministry-development"
+          ? "men-dev"
+          : article.category;
+
+  return `/growth/${type}/${article.slug}`;
+}
+
+export type GrowthArticleRouteType =
+  | "article"
+  | "testimonies"
+  | "exodus"
+  | "biblestudy"
+  | "prayer"
+  | "men-dev";
+
+export function growthRouteTypeToCategory(type: GrowthArticleRouteType): Exclude<ArticleCategory, "series"> {
+  if (type === "article") return "articles";
+  if (type === "biblestudy") return "bible-study";
+  if (type === "men-dev") return "ministry-development";
+  return type;
+}
 
 /** Scaffold content — replace with CMS or API when ready */
 export const GROWTH_ARTICLES: GrowthArticle[] = [
@@ -326,4 +371,23 @@ export async function getGrowthArticles(): Promise<GrowthArticle[]> {
 export async function getGrowthArticleBySlug(slug: string): Promise<GrowthArticle | null> {
   const articles = await getGrowthArticles();
   return articles.find((a) => a.slug === slug) ?? null;
+}
+
+export async function getGrowthArticleByCategoryAndSlug(
+  category: Exclude<ArticleCategory, "series">,
+  slug: string,
+): Promise<GrowthArticle | null> {
+  const articles = await getGrowthArticles();
+  return articles.find((a) => a.slug === slug && a.category === category) ?? null;
+}
+
+export async function getGrowthSeriesArticleBySeriesSlugAndSlug(
+  seriesSlug: string,
+  slug: string,
+): Promise<GrowthArticle | null> {
+  const articles = await getGrowthArticles();
+  return (
+    articles.find((a) => a.slug === slug && (a.category === "series" || a.series?.slug) && a.series?.slug === seriesSlug) ??
+    null
+  );
 }

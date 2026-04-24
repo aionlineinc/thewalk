@@ -9,6 +9,7 @@ import {
   ARTICLE_CATEGORY_LABEL,
   type ArticleCategory,
   type GrowthArticle,
+  getGrowthArticleHref,
 } from "@/lib/growth-content";
 
 const FILTER_ALL = "all" as const;
@@ -145,7 +146,7 @@ export function GrowthArticlesClient({ articles }: { articles: GrowthArticle[] }
           </div>
           <div className="grid gap-8 lg:grid-cols-[minmax(0,1.9fr)_minmax(0,1fr)] lg:gap-10">
             <Link
-              href={`/growth/articles/${main.slug}`}
+              href={getGrowthArticleHref(main)}
               className="group flex min-h-0 flex-col gap-5 transition-shadow"
             >
               <div className="relative aspect-[16/10] w-full isolate overflow-hidden rounded-2xl ring-1 ring-black/[0.06] transition-shadow hover:shadow-md">
@@ -172,7 +173,7 @@ export function GrowthArticlesClient({ articles }: { articles: GrowthArticle[] }
               {side.map((article) => (
                 <Link
                   key={article.slug}
-                  href={`/growth/articles/${article.slug}`}
+                  href={getGrowthArticleHref(article)}
                   className="group block w-full rounded-2xl outline-none transition-shadow hover:shadow-md focus-visible:ring-2 focus-visible:ring-red-900 focus-visible:ring-offset-2"
                 >
                   <div className="isolate overflow-hidden rounded-2xl">
@@ -302,7 +303,7 @@ export function GrowthArticlesClient({ articles }: { articles: GrowthArticle[] }
                     {group.items.map((article, i) => (
                       <li key={article.slug}>
                         <Link
-                          href={`/growth/articles/${article.slug}`}
+                          href={getGrowthArticleHref(article)}
                           className="group block h-full rounded-2xl outline-none transition-colors focus-visible:ring-2 focus-visible:ring-red-900 focus-visible:ring-offset-2"
                         >
                           <div className="isolate flex h-full min-h-0 flex-col gap-3 overflow-hidden rounded-2xl p-3">
@@ -341,7 +342,7 @@ export function GrowthArticlesClient({ articles }: { articles: GrowthArticle[] }
                 {topMain ? (
                   <div className="grid gap-8 lg:grid-cols-[minmax(0,1.9fr)_minmax(0,1fr)] lg:gap-10">
                     <Link
-                      href={`/growth/articles/${topMain.slug}`}
+                      href={getGrowthArticleHref(topMain)}
                       className="group flex min-h-0 flex-col gap-5 transition-shadow"
                     >
                       <div className="relative aspect-[16/10] w-full isolate overflow-hidden rounded-2xl ring-1 ring-black/[0.06] transition-shadow hover:shadow-md">
@@ -369,7 +370,7 @@ export function GrowthArticlesClient({ articles }: { articles: GrowthArticle[] }
                       {topRest.map((article) => (
                         <Link
                           key={article.slug}
-                          href={`/growth/articles/${article.slug}`}
+                          href={getGrowthArticleHref(article)}
                           className="group block w-full rounded-2xl outline-none transition-shadow hover:shadow-md focus-visible:ring-2 focus-visible:ring-red-900 focus-visible:ring-offset-2"
                         >
                           <div className="isolate overflow-hidden rounded-2xl">
@@ -409,7 +410,7 @@ export function GrowthArticlesClient({ articles }: { articles: GrowthArticle[] }
                   {latest.map((article) => (
                     <li key={article.slug}>
                       <Link
-                        href={`/growth/articles/${article.slug}`}
+                        href={getGrowthArticleHref(article)}
                         className="group block h-full rounded-2xl outline-none transition-colors focus-visible:ring-2 focus-visible:ring-red-900 focus-visible:ring-offset-2"
                       >
                         <div className="isolate flex h-full min-h-0 flex-col gap-3 overflow-hidden rounded-2xl p-3">

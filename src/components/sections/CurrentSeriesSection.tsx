@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 import type { Series } from "@/lib/series-content";
+import { getGrowthArticleHref } from "@/lib/growth-content";
 
 /**
  * Legacy external prop shape — kept so external callers (including the
@@ -109,7 +110,11 @@ export function CurrentSeriesSection({
         key: a.slug,
         title: a.title,
         description: a.description,
-        href: `/growth/articles/${a.slug}`,
+        href: getGrowthArticleHref({
+          slug: a.slug,
+          category: "series",
+          series: { slug: series.slug, title: series.title },
+        }),
         image: a.image,
         alt: a.imageAlt,
       }))
