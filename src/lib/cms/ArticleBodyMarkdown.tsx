@@ -57,7 +57,7 @@ export function ArticleBodyMarkdown({
     h6: ({ children }) => (
       <h6 className="mt-6 text-sm font-medium uppercase tracking-wide text-gray-800">{children}</h6>
     ),
-    p: ({ children, ...props }) => {
+    p: ({ children, node: _node, ...props }) => {
       const i = pIndex++;
       const base = i === 0 && firstParagraphClassName != null && firstPClass !== pClass ? firstPClass : pClass;
       // Space between paragraphs/blocks in markdown output (Tailwind preflight removes default margins).
@@ -87,17 +87,17 @@ export function ArticleBodyMarkdown({
         </a>
       );
     },
-    ul: ({ children, className, ...props }) => (
+    ul: ({ children, className, node: _node, ...props }) => (
       <ul className={`${listClassName} ${className ?? ""}`.trim()} {...props}>
         {children}
       </ul>
     ),
-    ol: ({ children, className, ...props }) => (
+    ol: ({ children, className, node: _node, ...props }) => (
       <ol className={`${olListClass} ${className ?? ""}`.trim()} {...props}>
         {children}
       </ol>
     ),
-    li: ({ children, className, ...props }) => {
+    li: ({ children, className, node: _node, ...props }) => {
       const liCls = [listItemClassName, className].filter(Boolean).join(" ");
       return (
         <li className={liCls || undefined} {...props}>
@@ -109,7 +109,7 @@ export function ArticleBodyMarkdown({
       <blockquote className="my-4 border-l-4 border-gray-200 pl-4 text-gray-600">{children}</blockquote>
     ),
     hr: () => <hr className="my-8 border-0 border-t border-gray-200" />,
-    code: ({ className, children, ...props }) => {
+    code: ({ className, children, node: _node, ...props }) => {
       const isBlock = typeof className === "string" && className.includes("language-");
       if (isBlock) {
         return (

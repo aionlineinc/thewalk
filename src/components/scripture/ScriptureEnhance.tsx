@@ -29,6 +29,12 @@ function mapInlineScriptureChildren(ch: ReactNode): ReactNode {
   return ch;
 }
 
+function isLooseMarkdownListItem(children: ReactNode): boolean {
+  const parts = Children.toArray(children).filter((n) => !(typeof n === "string" && n.trim() === ""));
+  if (parts.length === 0) return false;
+  return parts.every((n) => isValidElement(n) && n.type === "p");
+}
+
 function walk(node: ReactNode): ReactNode {
   if (node == null || typeof node === "boolean") return node;
 
@@ -40,7 +46,17 @@ function walk(node: ReactNode): ReactNode {
 
   const el = node as ReactElement<{ children?: ReactNode }>;
 
-  if (el.type === "p" || el.type === "li") {
+  if (el.type === "p") {
+    return cloneElement(el, { children: mapInlineScriptureChildren(el.props.children) });
+  }
+
+  if (el.type === "li") {
+    // `react-markdown` often renders list items as `<li><p>…</p></li>` (loose lists / multi-paragraph items).
+    // In that case, enhancing at the `<li>` level skips nested `<p>` text — so we recurse instead.
+    if (isLooseMarkdownListItem(el.props.children)) {
+      return cloneElement(el, { children: walk(el.props.children) });
+    }
+
     return cloneElement(el, { children: mapInlineScriptureChildren(el.props.children) });
   }
 
@@ -53,8 +69,9 @@ function walk(node: ReactNode): ReactNode {
 
 /**
  * Walks descendants and wraps plain text in {@link ScriptureRichText} for every
- * native `<p>` and `<li>` (markdown list items often render references as direct
- * text nodes inside `<li>`, not wrapped in `<p>`). Must run in a **client**
+ * native `<p>`, and for `<li>` when markdown renders inline text directly inside
+ * the list item (tight lists). For loose list items that render nested `<p>`
+ * blocks, we recurse into those paragraphs instead. Must run in a **client**
  * component tree: Server Component output passed from the root layout cannot be
  * traversed with `cloneElement`, so wrap scripture-heavy pages (e.g.
  * BeliefsArticle) instead of the app layout.
