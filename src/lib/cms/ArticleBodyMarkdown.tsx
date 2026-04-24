@@ -59,7 +59,9 @@ export function ArticleBodyMarkdown({
     ),
     p: ({ children, ...props }) => {
       const i = pIndex++;
-      const cls = i === 0 && firstParagraphClassName != null && firstPClass !== pClass ? firstPClass : pClass;
+      const base = i === 0 && firstParagraphClassName != null && firstPClass !== pClass ? firstPClass : pClass;
+      // Space between paragraphs/blocks in markdown output (Tailwind preflight removes default margins).
+      const cls = i === 0 ? base : `mt-3 ${base}`;
       return (
         <p className={cls} {...props}>
           {children}

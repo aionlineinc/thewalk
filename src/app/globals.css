@@ -183,3 +183,8 @@ body {
   margin-top: 0.25rem;
   margin-bottom: 0.25rem;
 }
+
+/* Generic vertical rhythm for markdown blocks (preflight strips default margins). */
+.article-md > :where(* + *) {
+  margin-top: 0.75rem;
+}
