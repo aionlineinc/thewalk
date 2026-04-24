@@ -101,7 +101,7 @@ export async function GrowthArticleDetail({
               ? renderArticleBody(article.body, {
                   paragraphClassName: "text-[15px] leading-relaxed text-gray-600 md:text-lg",
                   heading2ClassName:
-                    "mt-10 text-2xl font-semibold tracking-tight text-gray-900 md:text-3xl",
+                    "mt-12 text-2xl font-medium tracking-tight text-gray-900 md:text-3xl",
                 })
               : (
                   <p className="text-[15px] leading-relaxed text-gray-600 md:text-lg">

@@ -14,8 +14,8 @@ export type ArticleBodyMarkdownOptions = {
 };
 
 const defaultP = "text-[15px] leading-relaxed text-gray-600 md:text-lg";
-const defaultH2 = "mt-10 text-2xl font-semibold tracking-tight text-gray-900 md:text-3xl";
-const defaultH3 = "mt-8 text-xl font-semibold tracking-tight text-gray-900 md:text-2xl";
+const defaultH2 = "mt-12 text-2xl font-medium tracking-tight text-gray-900 md:text-3xl";
+const defaultH3 = "mt-10 text-xl font-medium tracking-tight text-gray-900 md:text-2xl";
 const defaultUl =
   "mt-6 !list-inside !list-disc space-y-2 pl-6 text-[15px] font-light leading-relaxed text-gray-600 md:text-lg";
 const defaultOl =
@@ -44,18 +44,18 @@ export function ArticleBodyMarkdown({
 
   const components: Components = {
     h1: ({ children }) => (
-      <h1 className="mt-10 text-3xl font-semibold tracking-tight text-gray-900 md:text-4xl">{children}</h1>
+      <h1 className="mt-14 text-3xl font-medium tracking-tight text-gray-900 md:text-4xl">{children}</h1>
     ),
     h2: ({ children }) => <h2 className={heading2ClassName}>{children}</h2>,
     h3: ({ children }) => <h3 className={heading3ClassName}>{children}</h3>,
     h4: ({ children }) => (
-      <h4 className="mt-6 text-lg font-semibold text-gray-900">{children}</h4>
+      <h4 className="mt-8 text-lg font-medium text-gray-900">{children}</h4>
     ),
     h5: ({ children }) => (
-      <h5 className="mt-5 text-base font-semibold text-gray-900">{children}</h5>
+      <h5 className="mt-7 text-base font-medium text-gray-900">{children}</h5>
     ),
     h6: ({ children }) => (
-      <h6 className="mt-4 text-sm font-semibold uppercase tracking-wide text-gray-800">{children}</h6>
+      <h6 className="mt-6 text-sm font-medium uppercase tracking-wide text-gray-800">{children}</h6>
     ),
     p: ({ children, ...props }) => {
       const i = pIndex++;
@@ -157,7 +157,7 @@ export function ArticleBodyMarkdown({
         {...props}
       />
     ),
-    strong: ({ children }) => <strong className="font-semibold text-gray-900">{children}</strong>,
+    strong: ({ children }) => <strong className="font-medium text-gray-900">{children}</strong>,
     em: ({ children }) => <em className="italic">{children}</em>,
     del: ({ children }) => <del className="text-gray-500 line-through">{children}</del>,
     input: ({ type, checked, ...props }) => {
