@@ -7,23 +7,23 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { BlogHeroCollage } from "@/components/growth/BlogHeroCollage";
 import {
   ARTICLE_CATEGORY_LABEL,
-  type ArticleCategory,
   type GrowthArticle,
   getGrowthArticleHref,
 } from "@/lib/growth-content";
 
 const FILTER_ALL = "all" as const;
-type FilterId = typeof FILTER_ALL | ArticleCategory;
+type FilterId = typeof FILTER_ALL | "series" | string;
 
-const FILTERS: { id: FilterId; label: string }[] = [
-  { id: FILTER_ALL, label: "All" },
-  { id: "articles", label: "Articles" },
-  { id: "exodus", label: "Exodus" },
-  { id: "bible-study", label: "Bible Study" },
-  { id: "series", label: "Series" },
-  { id: "prayer", label: "Prayer" },
-  { id: "ministry-development", label: "Ministry Development" },
-];
+function categoryLabel(category: string): string {
+  const hit = ARTICLE_CATEGORY_LABEL[category];
+  if (hit) return hit;
+  // slug → Title Case
+  return category
+    .split(/[-_]/g)
+    .filter(Boolean)
+    .map((w) => w.slice(0, 1).toUpperCase() + w.slice(1))
+    .join(" ");
+}
 
 function matchesFilter(article: GrowthArticle, filter: FilterId) {
   if (filter === FILTER_ALL) return true;
@@ -83,11 +83,24 @@ export function GrowthArticlesClient({ articles }: { articles: GrowthArticle[] }
   const pathname = usePathname() ?? "";
   const searchParams = useSearchParams();
   const raw = searchParams?.get("type") ?? null;
+  const filters = useMemo(() => {
+    const cats = new Set<string>();
+    for (const a of articles) {
+      if (a.category && a.category !== "series") cats.add(a.category);
+    }
+    const sorted = Array.from(cats).sort((a, b) => a.localeCompare(b));
+    return [
+      { id: FILTER_ALL as FilterId, label: "All" },
+      ...sorted.map((c) => ({ id: c as FilterId, label: categoryLabel(c) })),
+      { id: "series" as FilterId, label: "Series" },
+    ];
+  }, [articles]);
+
   const activeFilter: FilterId = useMemo(() => {
     if (!raw || raw === FILTER_ALL) return FILTER_ALL;
-    const ok = FILTERS.some((f) => f.id === raw);
+    const ok = filters.some((f) => f.id === raw);
     return ok ? (raw as FilterId) : FILTER_ALL;
-  }, [raw]);
+  }, [filters, raw]);
 
   const setFilter = useCallback(
     (id: FilterId) => {
@@ -123,7 +136,7 @@ export function GrowthArticlesClient({ articles }: { articles: GrowthArticle[] }
   }, [filtered, topMain, topRest]);
 
   const spotlight = useCallback(
-    (category: ArticleCategory, title: string) => {
+    (category: string, title: string) => {
       if (activeFilter !== FILTER_ALL && activeFilter !== category) return null;
       const list = articles.filter((a) => a.category === category).slice(0, 3);
       if (list.length === 0) return null;
@@ -240,7 +253,7 @@ export function GrowthArticlesClient({ articles }: { articles: GrowthArticle[] }
             role="group"
             aria-labelledby="article-type-filter-label"
           >
-            {FILTERS.map((f) => {
+            {filters.map((f) => {
               const isOn = activeFilter === f.id;
               return (
                 <button

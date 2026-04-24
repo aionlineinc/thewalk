@@ -1,4 +1,10 @@
-export type ArticleCategory =
+/**
+ * Directus-driven category slug.
+ *
+ * Known categories are documented here for UI labels and routing, but **new categories**
+ * can be added in Directus without requiring a code deploy — they are treated as slugs.
+ */
+export type KnownArticleCategory =
   | "articles"
   | "testimonies"
   | "exodus"
@@ -6,6 +12,8 @@ export type ArticleCategory =
   | "series"
   | "prayer"
   | "ministry-development";
+
+export type ArticleCategory = KnownArticleCategory | (string & {});
 
 /** Lightweight series reference attached to each article that belongs to one. */
 export type ArticleSeriesRef = {
@@ -33,7 +41,7 @@ export type GrowthArticle = {
   seriesSort?: number | null;
 };
 
-export const ARTICLE_CATEGORY_LABEL: Record<ArticleCategory, string> = {
+export const ARTICLE_CATEGORY_LABEL: Record<string, string> = {
   articles: "Articles",
   testimonies: "Testimonies",
   exodus: "Exodus",
@@ -66,20 +74,12 @@ export function getGrowthArticleHref(article: Pick<GrowthArticle, "slug" | "cate
         ? "biblestudy"
         : article.category === "ministry-development"
           ? "men-dev"
-          : article.category;
+          : article.category; // for Directus-added categories, the value is the URL segment
 
   return `/growth/${type}/${article.slug}`;
 }
 
-export type GrowthArticleRouteType =
-  | "article"
-  | "testimonies"
-  | "exodus"
-  | "biblestudy"
-  | "prayer"
-  | "men-dev";
-
-export function growthRouteTypeToCategory(type: GrowthArticleRouteType): Exclude<ArticleCategory, "series"> {
+export function growthRouteTypeToCategory(type: string): Exclude<ArticleCategory, "series"> {
   if (type === "article") return "articles";
   if (type === "biblestudy") return "bible-study";
   if (type === "men-dev") return "ministry-development";
