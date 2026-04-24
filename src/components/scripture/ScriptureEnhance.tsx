@@ -20,11 +20,16 @@ function mapInlineScriptureChildren(ch: ReactNode): ReactNode {
       <Fragment key={i}>
         {typeof part === "string" && part.trim() !== "" ? (
           <ScriptureRichText>{part}</ScriptureRichText>
+        ) : isValidElement(part) ? (
+          walk(part)
         ) : (
           part
         )}
       </Fragment>
     ));
+  }
+  if (isValidElement(ch)) {
+    return walk(ch);
   }
   return ch;
 }
