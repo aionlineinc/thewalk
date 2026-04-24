@@ -43,6 +43,7 @@ export type GrowthArticle = {
 
 export const ARTICLE_CATEGORY_LABEL: Record<string, string> = {
   articles: "Articles",
+  "as-we-walked": "As We Walked",
   testimonies: "Testimonies",
   exodus: "Exodus",
   "bible-study": "Bible Study",
