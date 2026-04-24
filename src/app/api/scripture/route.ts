@@ -1,5 +1,51 @@
 import { NextResponse } from "next/server";
 
+/**
+ * Supported translations for https://bible-api.com (see `/data`).
+ *
+ * Note: NKJV is **not** available here (copyrighted translation). If you need NKJV,
+ * you’ll need a licensed Bible text provider + a different API route implementation.
+ */
+const BIBLE_API_TRANSLATIONS = new Set([
+  "asv",
+  "bbe",
+  "darby",
+  "dra",
+  "kjv",
+  "web",
+  "ylt",
+  "oeb-cw",
+  "webbe",
+  "oeb-us",
+  // Non-English / specialty public-domain texts also exposed by bible-api.com
+  "cherokee",
+  "cuv",
+  "bkr",
+  "clementine",
+  "almeida",
+  "rccv",
+  "synodal",
+]);
+
+const TRANSLATION_LABEL: Record<string, string> = {
+  web: "World English Bible",
+  kjv: "King James Version",
+  asv: "American Standard Version (1901)",
+  bbe: "Bible in Basic English",
+  darby: "Darby Bible",
+  dra: "Douay-Rheims 1899 American Edition",
+  ylt: "Young's Literal Translation (NT only)",
+  "oeb-cw": "Open English Bible, Commonwealth Edition",
+  webbe: "World English Bible, British Edition",
+  "oeb-us": "Open English Bible, US Edition",
+};
+
+function getRequestedTranslation(): { id: string; label: string } {
+  const raw = (process.env.BIBLE_API_TRANSLATION ?? "web").trim().toLowerCase();
+  const id = BIBLE_API_TRANSLATIONS.has(raw) ? raw : "web";
+  return { id, label: TRANSLATION_LABEL[id] ?? id.toUpperCase() };
+}
+
 type BibleApiVerse = {
   verse: number;
   text: string;
@@ -22,7 +68,8 @@ export async function GET(req: Request) {
   }
 
   const trimmed = ref.trim();
-  const url = `https://bible-api.com/${encodeURIComponent(trimmed)}`;
+  const translation = getRequestedTranslation();
+  const url = `https://bible-api.com/${encodeURIComponent(trimmed)}?translation=${encodeURIComponent(translation.id)}`;
 
   try {
     const res = await fetch(url, {
@@ -44,7 +91,7 @@ export async function GET(req: Request) {
       {
         reference: data.reference,
         text: text || "No text returned for this reference.",
-        translationName: data.translation_name ?? "World English Bible",
+        translationName: data.translation_name ?? translation.label,
       },
       {
         headers: {
