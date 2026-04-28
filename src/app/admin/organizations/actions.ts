@@ -2,8 +2,8 @@
 
 import { z } from "zod";
 import { revalidatePath } from "next/cache";
-import { prisma } from "@/lib/prisma";
 import { requireStaffSession } from "../_lib/require-staff";
+import { organizationsService } from "@/server/services";
 
 const createOrgSchema = z.object({
   name: z.string().min(2).max(120),
@@ -29,13 +29,14 @@ export async function createOrganization(formData: FormData) {
     return { ok: false as const, error: parsed.error.issues[0]?.message ?? "Invalid input" };
   }
 
-  try {
-    await prisma.organization.create({ data: parsed.data });
-    revalidatePath("/admin/organizations");
-    revalidatePath("/admin");
-    return { ok: true as const };
-  } catch {
+  const organizations = organizationsService();
+  const result = await organizations.createOrganization(parsed.data);
+  if (!result.ok) {
     return { ok: false as const, error: "Failed to create organization (slug must be unique)." };
   }
+
+  revalidatePath("/admin/organizations");
+  revalidatePath("/admin");
+  return { ok: true as const };
 }
 

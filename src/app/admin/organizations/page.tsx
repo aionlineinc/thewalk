@@ -1,6 +1,6 @@
 import Link from "next/link";
-import { prisma } from "@/lib/prisma";
 import { createOrganization } from "./actions";
+import { adminOrganizationsPageData } from "@/server/admin/queries";
 
 type OrgRow = {
   id: string;
@@ -12,17 +12,7 @@ type OrgRow = {
 };
 
 export default async function AdminOrganizationsPage() {
-  const orgs: OrgRow[] = await prisma.organization.findMany({
-    orderBy: { createdAt: "desc" },
-    select: {
-      id: true,
-      name: true,
-      slug: true,
-      kind: true,
-      createdAt: true,
-      _count: { select: { memberships: true } },
-    },
-  });
+  const { orgs } = await adminOrganizationsPageData();
 
   return (
     <section className="w-full max-w-5xl">

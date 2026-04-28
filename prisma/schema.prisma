@@ -20,6 +20,12 @@ enum GroupRegistrationStatus {
   REJECTED
 }
 
+enum ApiKeyScope {
+  PUBLIC_READ
+  REGISTRATIONS_WRITE
+  ADMIN_READ
+}
+
 model User {
   id        String   @id @default(uuid())
   email     String   @unique
@@ -70,4 +76,34 @@ model GroupRegistration {
 
   @@index([status])
   @@index([contactEmail])
+}
+
+model ApiKey {
+  id           String       @id @default(uuid())
+  name         String
+  keyHash      String       @unique
+  scopes       ApiKeyScope[]
+  isActive     Boolean      @default(true)
+  lastUsedAt   DateTime?
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+
+  @@index([isActive])
+}
+
+model OutboxMessage {
+  id            String   @id @default(uuid())
+  type          String
+  aggregateType String?
+  aggregateId   String?
+  payloadJson   Json
+  createdAt     DateTime @default(now())
+  availableAt   DateTime @default(now())
+  deliveredAt   DateTime?
+  attempts      Int      @default(0)
+  lastError     String?
+
+  @@index([deliveredAt])
+  @@index([availableAt])
+  @@index([type])
 }

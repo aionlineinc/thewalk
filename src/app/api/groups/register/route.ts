@@ -1,24 +1,5 @@
 import { NextResponse } from "next/server";
-import { z } from "zod";
-import { prisma } from "@/lib/prisma";
-
-const bodySchema = z.object({
-  organizationName: z.string().min(2).max(200).trim(),
-  desiredSlug: z.preprocess(
-    (v) => (v == null || (typeof v === "string" && v.trim() === "") ? undefined : v),
-    z
-      .string()
-      .min(2)
-      .max(80)
-      .trim()
-      .regex(/^[a-z0-9-]+$/, "Slug may only contain lowercase letters, numbers, and dashes.")
-      .optional()
-  ),
-  contactName: z.string().min(2).max(120).trim(),
-  contactEmail: z.string().email().max(320).trim().toLowerCase(),
-  phone: z.string().max(40).trim().optional().or(z.literal("")),
-  notes: z.string().max(4000).trim().optional().or(z.literal("")),
-});
+import { groupRegistrationService } from "@/server/services";
 
 export async function POST(req: Request) {
   let json: unknown;
@@ -28,23 +9,13 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
   }
 
-  const parsed = bodySchema.safeParse(json);
-  if (!parsed.success) {
-    return NextResponse.json({ error: parsed.error.issues[0]?.message ?? "Invalid input" }, { status: 400 });
+  const registrations = groupRegistrationService();
+  const result = await registrations.submit(json as any);
+  if (!result.ok) {
+    const e = result.error;
+    if (e.kind === "Validation") return NextResponse.json({ error: e.message }, { status: 400 });
+    return NextResponse.json({ error: "Could not submit registration" }, { status: 500 });
   }
-
-  const { organizationName, desiredSlug, contactName, contactEmail, phone, notes } = parsed.data;
-
-  await prisma.groupRegistration.create({
-    data: {
-      organizationName,
-      desiredSlug: desiredSlug || null,
-      contactName,
-      contactEmail,
-      phone: phone || null,
-      notes: notes || null,
-    },
-  });
 
   return NextResponse.json({ ok: true });
 }

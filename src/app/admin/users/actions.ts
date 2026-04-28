@@ -1,10 +1,10 @@
 "use server";
 
 import { z } from "zod";
-import { prisma } from "@/lib/prisma";
 import { UserRole } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import { requireStaffSession } from "../_lib/require-staff";
+import { identityService, organizationsService } from "@/server/services";
 
 const updateUserRoleSchema = z.object({
   userId: z.string().uuid(),
@@ -21,10 +21,9 @@ export async function updateUserRole(formData: FormData) {
   });
   if (!parsed.success) return { ok: false as const, error: parsed.error.issues[0]?.message ?? "Invalid input" };
 
-  await prisma.user.update({
-    where: { id: parsed.data.userId },
-    data: { role: parsed.data.role },
-  });
+  const identity = identityService();
+  const result = await identity.updateUserRole({ userId: parsed.data.userId, role: parsed.data.role });
+  if (!result.ok) return { ok: false as const, error: result.error.message ?? "Could not update role" };
 
   revalidatePath("/admin/users");
   revalidatePath("/admin");
@@ -48,17 +47,13 @@ export async function addMembership(formData: FormData) {
   });
   if (!parsed.success) return { ok: false as const, error: parsed.error.issues[0]?.message ?? "Invalid input" };
 
-  try {
-    await prisma.organizationMembership.create({
-      data: {
-        userId: parsed.data.userId,
-        organizationId: parsed.data.organizationId,
-        role: parsed.data.role,
-      },
-    });
-  } catch {
-    return { ok: false as const, error: "Membership already exists for this user + org." };
-  }
+  const organizations = organizationsService();
+  const result = await organizations.addMembership({
+    userId: parsed.data.userId,
+    organizationId: parsed.data.organizationId,
+    role: parsed.data.role,
+  });
+  if (!result.ok) return { ok: false as const, error: result.error.message ?? "Could not add membership" };
 
   revalidatePath("/admin/users");
   revalidatePath("/admin/organizations");
@@ -79,7 +74,10 @@ export async function removeMembership(formData: FormData) {
   });
   if (!parsed.success) return { ok: false as const, error: parsed.error.issues[0]?.message ?? "Invalid input" };
 
-  await prisma.organizationMembership.delete({ where: { id: parsed.data.membershipId } });
+  const organizations = organizationsService();
+  const result = await organizations.removeMembership({ membershipId: parsed.data.membershipId });
+  if (!result.ok) return { ok: false as const, error: result.error.message ?? "Could not remove membership" };
+
   revalidatePath("/admin/users");
   revalidatePath("/admin/organizations");
   revalidatePath("/admin");

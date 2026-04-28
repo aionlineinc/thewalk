@@ -1,8 +1,6 @@
 import { NextResponse } from "next/server";
-import bcrypt from "bcryptjs";
 import { z } from "zod";
-import { prisma } from "@/lib/prisma";
-import { UserRole } from "@prisma/client";
+import { identityService } from "@/server/services";
 
 const bodySchema = z.object({
   email: z.string().email().max(320),
@@ -30,30 +28,19 @@ export async function POST(req: Request) {
   // - no SUPER_ADMIN exists yet, and
   // - the email matches the intended initial admin
   if (!process.env.BOOTSTRAP_SECRET) {
-    const existingAdmins = await prisma.user.count({ where: { role: UserRole.SUPER_ADMIN } });
-    if (existingAdmins > 0 || email.toLowerCase() !== "andreifill@thewalk.org") {
+    const identity = identityService();
+    const allowed = await identity.canBootstrapWithoutSecret({ email });
+    if (!allowed) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
   }
 
-  const passwordHash = await bcrypt.hash(password, 12);
+  const identity = identityService();
+  const result = await identity.upsertSuperAdmin({ email, password, name });
+  if (!result.ok) {
+    return NextResponse.json({ error: "Invalid payload" }, { status: 400 });
+  }
 
-  const user = await prisma.user.upsert({
-    where: { email },
-    create: {
-      email,
-      name: name?.trim() ? name.trim() : null,
-      passwordHash,
-      role: UserRole.SUPER_ADMIN,
-    },
-    update: {
-      passwordHash,
-      role: UserRole.SUPER_ADMIN,
-      name: name?.trim() ? name.trim() : undefined,
-    },
-    select: { id: true, email: true, role: true, createdAt: true, updatedAt: true },
-  });
-
-  return NextResponse.json({ ok: true, user });
+  return NextResponse.json({ ok: true, user: result.value.user });
 }
 

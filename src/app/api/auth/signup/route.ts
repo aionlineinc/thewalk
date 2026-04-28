@@ -1,43 +1,18 @@
 import { NextResponse } from "next/server";
-import bcrypt from "bcryptjs";
-import { z } from "zod";
-import { prisma } from "@/lib/prisma";
-
-function normalizeEmail(email: string) {
-  return email.trim().toLowerCase();
-}
-
-const signupSchema = z.object({
-  email: z.preprocess((v) => (typeof v === "string" ? normalizeEmail(v) : v), z.string().email().max(320)),
-  password: z.string().min(8).max(200),
-  name: z.string().max(120).optional(),
-});
+import { identityService } from "@/server/services";
 
 export async function POST(req: Request) {
   const json = await req.json().catch(() => null);
-  const parsed = signupSchema.safeParse(json);
-  if (!parsed.success) {
-    return NextResponse.json({ error: "Invalid payload" }, { status: 400 });
+  const identity = identityService();
+  const result = await identity.signup(json as any);
+
+  if (!result.ok) {
+    const e = result.error;
+    if (e.kind === "Validation") return NextResponse.json({ error: "Invalid payload" }, { status: 400 });
+    if (e.kind === "Conflict") return NextResponse.json({ error: e.message }, { status: 409 });
+    return NextResponse.json({ error: "Signup failed" }, { status: 500 });
   }
 
-  const { email, password, name } = parsed.data;
-  const existing = await prisma.user.findFirst({
-    where: { email: { equals: email, mode: "insensitive" } },
-  });
-  if (existing) {
-    return NextResponse.json({ error: "Email already in use" }, { status: 409 });
-  }
-
-  const passwordHash = await bcrypt.hash(password, 12);
-  const user = await prisma.user.create({
-    data: {
-      email,
-      name: name?.trim() ? name.trim() : null,
-      passwordHash,
-    },
-    select: { id: true, email: true, name: true, role: true, createdAt: true },
-  });
-
-  return NextResponse.json({ user }, { status: 201 });
+  return NextResponse.json({ user: result.value.user }, { status: 201 });
 }
 

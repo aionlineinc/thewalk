@@ -1,9 +1,8 @@
 import Link from "next/link";
 import { getServerSession } from "next-auth";
-import { GroupRegistrationStatus } from "@prisma/client";
 import { authOptions } from "@/lib/auth";
-import { prisma } from "@/lib/prisma";
 import { directusAdminUiUrl } from "@/lib/admin-directus";
+import { adminOverview } from "@/server/admin/queries";
 import { AdminStatSegmentBar } from "./_components/AdminStatSegmentBar";
 
 export default async function AdminHome() {
@@ -11,22 +10,7 @@ export default async function AdminHome() {
   const firstName =
     session?.user?.name?.trim().split(/\s+/)[0] ?? session?.user?.email?.split("@")[0] ?? "there";
 
-  const [usersCount, orgsCount, membershipsCount, pendingGroups, recentUsers, recentOrgs] = await Promise.all([
-    prisma.user.count(),
-    prisma.organization.count(),
-    prisma.organizationMembership.count(),
-    prisma.groupRegistration.count({ where: { status: GroupRegistrationStatus.PENDING } }),
-    prisma.user.findMany({
-      orderBy: { createdAt: "desc" },
-      take: 5,
-      select: { id: true, email: true, name: true, role: true, createdAt: true },
-    }),
-    prisma.organization.findMany({
-      orderBy: { createdAt: "desc" },
-      take: 5,
-      select: { id: true, name: true, slug: true, kind: true, createdAt: true, _count: { select: { memberships: true } } },
-    }),
-  ]);
+  const { usersCount, orgsCount, membershipsCount, pendingGroups, recentUsers, recentOrgs } = await adminOverview();
 
   const totalNav = usersCount + orgsCount + pendingGroups + membershipsCount || 1;
 

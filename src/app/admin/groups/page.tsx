@@ -1,12 +1,10 @@
 import Link from "next/link";
 import { GroupRegistrationStatus } from "@prisma/client";
-import { prisma } from "@/lib/prisma";
 import { approveGroupRegistration, rejectGroupRegistration } from "./actions";
+import { adminGroupsPageData } from "@/server/admin/queries";
 
 export default async function AdminGroupsPage() {
-  const rows = await prisma.groupRegistration.findMany({
-    orderBy: { createdAt: "desc" },
-  });
+  const { rows } = await adminGroupsPageData();
 
   const pending = rows.filter((r) => r.status === GroupRegistrationStatus.PENDING);
   const done = rows.filter((r) => r.status !== GroupRegistrationStatus.PENDING);

@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { createScriptureService } from "@/modules/scripture";
 
 /**
  * Supported translations for https://bible-api.com (see `/data`).
@@ -46,20 +47,6 @@ function getRequestedTranslation(): { id: string; label: string } {
   return { id, label: TRANSLATION_LABEL[id] ?? id.toUpperCase() };
 }
 
-type BibleApiVerse = {
-  verse: number;
-  text: string;
-  chapter: number;
-  book_name: string;
-};
-
-type BibleApiResponse = {
-  reference: string;
-  verses: BibleApiVerse[];
-  text: string;
-  translation_name?: string;
-};
-
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
   const ref = searchParams.get("ref");
@@ -67,39 +54,28 @@ export async function GET(req: Request) {
     return NextResponse.json({ error: "Invalid reference" }, { status: 400 });
   }
 
-  const trimmed = ref.trim();
   const translation = getRequestedTranslation();
-  const url = `https://bible-api.com/${encodeURIComponent(trimmed)}?translation=${encodeURIComponent(translation.id)}`;
 
-  try {
-    const res = await fetch(url, {
-      headers: { Accept: "application/json" },
-      next: { revalidate: 86400 },
-    });
+  const scripture = createScriptureService();
+  const result = await scripture.lookup({ ref });
 
-    if (!res.ok) {
-      return NextResponse.json({ error: "Passage not found" }, { status: 404 });
-    }
-
-    const data = (await res.json()) as BibleApiResponse;
-    const text =
-      typeof data.text === "string" && data.text.trim().length > 0
-        ? data.text.trim()
-        : (data.verses ?? []).map((v) => v.text.trim()).join("\n\n");
-
-    return NextResponse.json(
-      {
-        reference: data.reference,
-        text: text || "No text returned for this reference.",
-        translationName: data.translation_name ?? translation.label,
-      },
-      {
-        headers: {
-          "Cache-Control": "public, s-maxage=86400, stale-while-revalidate=604800",
-        },
-      },
-    );
-  } catch {
+  if (!result.ok) {
+    const e = result.error;
+    if (e.kind === "Validation") return NextResponse.json({ error: "Invalid reference" }, { status: 400 });
+    if (e.message === "Passage not found") return NextResponse.json({ error: "Passage not found" }, { status: 404 });
     return NextResponse.json({ error: "Lookup failed" }, { status: 502 });
   }
+
+  return NextResponse.json(
+    {
+      reference: result.value.reference,
+      text: result.value.text,
+      translationName: result.value.translationName ?? translation.label,
+    },
+    {
+      headers: {
+        "Cache-Control": "public, s-maxage=86400, stale-while-revalidate=604800",
+      },
+    },
+  );
 }

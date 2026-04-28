@@ -1,32 +1,10 @@
 import Link from "next/link";
-import { prisma } from "@/lib/prisma";
 import { UserRole } from "@prisma/client";
 import { addMembership, removeMembership, updateUserRole } from "./actions";
+import { adminUsersPageData } from "@/server/admin/queries";
 
 export default async function AdminUsersPage() {
-  const users = await prisma.user.findMany({
-    orderBy: { createdAt: "desc" },
-    select: {
-      id: true,
-      email: true,
-      name: true,
-      role: true,
-      createdAt: true,
-      memberships: {
-        select: {
-          id: true,
-          role: true,
-          organization: { select: { id: true, name: true, slug: true } },
-        },
-        orderBy: { createdAt: "desc" },
-      },
-    },
-  });
-
-  const orgs = await prisma.organization.findMany({
-    orderBy: { createdAt: "desc" },
-    select: { id: true, name: true, slug: true },
-  });
+  const { users, orgs } = await adminUsersPageData();
 
   return (
     <section className="w-full">
