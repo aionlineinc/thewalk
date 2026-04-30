@@ -28,29 +28,41 @@ export default function Shop() {
             </AppBodyMuted>
           </div>
 
-          <div id="shop-books-grid" className="mt-14 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4 lg:gap-8">
-            {[1, 2, 3, 4].map((i) => (
-              <div
-                key={i}
-                id={`shop-book-card-${i}`}
-                className="group flex h-full flex-col rounded-2xl border border-gray-100 bg-gray-50/80 p-6 text-center shadow-sm transition-shadow hover:shadow-md"
-              >
-                <div className="w-full aspect-[2/3] overflow-hidden rounded-xl border border-gray-100 bg-white/60 mb-6 flex items-center justify-center transition-colors group-hover:border-gray-200">
-                  <span className="text-gray-500/70">Book cover</span>
+          <ul
+            id="shop-books-grid"
+            className="m-0 mt-14 grid list-none grid-cols-1 gap-x-6 gap-y-12 p-0 sm:grid-cols-2 lg:grid-cols-3"
+          >
+            {[1, 2, 3, 4, 5, 6].map((i) => (
+              <li key={i} id={`shop-book-card-${i}`}>
+                <div className="flex h-full flex-col gap-4 overflow-hidden rounded-2xl bg-white p-4 ring-1 ring-black/[0.06] shadow-sm md:p-5">
+                  <div className="relative aspect-[4/3] w-full isolate overflow-hidden rounded-2xl bg-neutral-100">
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <span className="text-sm text-gray-500/80">Book cover</span>
+                    </div>
+                  </div>
+                  <div className="flex flex-1 flex-col">
+                    <div className="flex flex-wrap gap-2">
+                      <span className="inline-flex rounded-full border border-gray-200 bg-gray-50 px-3 py-1 text-[11px] font-medium text-gray-700">
+                        Book
+                      </span>
+                      <span className="inline-flex rounded-full border border-gray-200 bg-gray-50 px-3 py-1 text-[11px] font-medium text-gray-700">
+                        $19.99
+                      </span>
+                    </div>
+                    <h3 className="mt-4 text-xl font-medium tracking-tight text-gray-900">Book Title {i}</h3>
+                    <p className="mt-2 flex-1 text-[15px] font-light leading-relaxed text-gray-500">
+                      A short description that supports reflection and practice.
+                    </p>
+                    <div className="mt-8">
+                      <button className="inline-flex w-full items-center justify-center rounded-full bg-red-soft px-6 py-3 text-sm font-medium text-white shadow-lg shadow-black/15 transition-colors hover:bg-red-soft-hover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-900 sm:w-auto">
+                        View details
+                      </button>
+                    </div>
+                  </div>
                 </div>
-                <h3 className="text-lg font-semibold tracking-tight text-gray-900 transition-colors group-hover:text-red-900">
-                  Book Title {i}
-                </h3>
-                <p className="mt-2 flex-1 text-sm leading-relaxed text-gray-600">
-                  A short description that supports reflection and practice.
-                </p>
-                <div className="mt-4 text-base font-semibold text-gray-900">$19.99</div>
-                <button className="mt-5 w-full rounded-full border border-gray-200 bg-white py-2.5 text-sm font-medium text-gray-900 transition-colors hover:border-gray-300 hover:bg-gray-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-900">
-                  View details
-                </button>
-              </div>
+              </li>
             ))}
-          </div>
+          </ul>
         </div>
       </section>
 
