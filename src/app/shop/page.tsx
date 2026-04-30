@@ -2,8 +2,15 @@ import { Hero } from "@/components/ui/Hero";
 import { EditorialSplitBlock } from "@/components/ui/EditorialSplitBlock";
 import { Button } from "@/components/ui/Button";
 import { AppBodyMuted, AppHeadingSection } from "@/components/ui/Typography";
+import Image from "next/image";
 
-export default function Shop() {
+import { cmsAssetPresets } from "@/lib/cms/assets";
+import { listShopProducts } from "@/lib/shop";
+import { CheckoutButton } from "@/components/shop/CheckoutButton";
+
+export default async function Shop() {
+  const products = await listShopProducts();
+
   return (
     <>
       <Hero
@@ -32,36 +39,61 @@ export default function Shop() {
             id="shop-books-grid"
             className="m-0 mt-14 grid list-none grid-cols-1 gap-x-6 gap-y-12 p-0 sm:grid-cols-2 lg:grid-cols-3"
           >
-            {[1, 2, 3, 4, 5, 6].map((i) => (
-              <li key={i} id={`shop-book-card-${i}`}>
-                <div className="flex h-full flex-col gap-4 overflow-hidden rounded-2xl bg-white p-4 ring-1 ring-black/[0.06] shadow-sm md:p-5">
-                  <div className="relative aspect-[4/3] w-full isolate overflow-hidden rounded-2xl bg-neutral-100">
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <span className="text-sm text-gray-500/80">Book cover</span>
+            {products.length === 0 ? (
+              <li className="rounded-2xl border border-gray-100 bg-gray-50/80 p-8 text-left">
+                <h3 className="text-lg font-semibold tracking-tight text-gray-900">Shop is being prepared</h3>
+                <p className="mt-2 text-sm leading-relaxed text-gray-600">
+                  Products will appear here once they’re published in Directus.
+                </p>
+              </li>
+            ) : null}
+
+            {products.map((p) => {
+              const imageUrl = cmsAssetPresets.card(p.image ?? null);
+              const category = p.category?.trim() || "Product";
+              const priceLabel = p.price_label?.trim();
+
+              return (
+                <li key={String(p.id)} id={`shop-product-${String(p.id)}`}>
+                  <div className="flex h-full flex-col gap-4 overflow-hidden rounded-2xl bg-white p-4 ring-1 ring-black/[0.06] shadow-sm md:p-5">
+                    <div className="relative aspect-[4/3] w-full isolate overflow-hidden rounded-2xl bg-neutral-100">
+                      {imageUrl ? (
+                        <Image
+                          src={imageUrl}
+                          alt=""
+                          fill
+                          className="rounded-2xl object-cover"
+                          sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+                        />
+                      ) : (
+                        <div className="absolute inset-0 flex items-center justify-center">
+                          <span className="text-sm text-gray-500/80">Image coming soon</span>
+                        </div>
+                      )}
                     </div>
-                  </div>
                   <div className="flex flex-1 flex-col">
                     <div className="flex flex-wrap gap-2">
                       <span className="inline-flex rounded-full border border-gray-200 bg-gray-50 px-3 py-1 text-[11px] font-medium text-gray-700">
-                        Book
+                        {category}
                       </span>
-                      <span className="inline-flex rounded-full border border-gray-200 bg-gray-50 px-3 py-1 text-[11px] font-medium text-gray-700">
-                        $19.99
-                      </span>
+                      {priceLabel ? (
+                        <span className="inline-flex rounded-full border border-gray-200 bg-gray-50 px-3 py-1 text-[11px] font-medium text-gray-700">
+                          {priceLabel}
+                        </span>
+                      ) : null}
                     </div>
-                    <h3 className="mt-4 text-xl font-medium tracking-tight text-gray-900">Book Title {i}</h3>
-                    <p className="mt-2 flex-1 text-[15px] font-light leading-relaxed text-gray-500">
-                      A short description that supports reflection and practice.
-                    </p>
+                    <h3 className="mt-4 text-xl font-medium tracking-tight text-gray-900">{p.title}</h3>
+                    {p.summary ? (
+                      <p className="mt-2 flex-1 text-[15px] font-light leading-relaxed text-gray-500">{p.summary}</p>
+                    ) : null}
                     <div className="mt-8">
-                      <button className="inline-flex w-full items-center justify-center rounded-full bg-red-soft px-6 py-3 text-sm font-medium text-white shadow-lg shadow-black/15 transition-colors hover:bg-red-soft-hover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-900 sm:w-auto">
-                        View details
-                      </button>
+                      <CheckoutButton priceId={p.stripe_price_id} label="Buy" />
                     </div>
                   </div>
                 </div>
               </li>
-            ))}
+              );
+            })}
           </ul>
         </div>
       </section>
