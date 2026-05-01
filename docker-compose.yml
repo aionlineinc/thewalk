@@ -27,6 +27,10 @@ services:
       PUBLIC_URL: "http://localhost:8055"
     ports:
       - "8055:8055"
+    volumes:
+      # Without this, uploads live only in the container layer and are lost on every
+      # recreate/redeploy. Matches Directus docs: /directus/uploads
+      - thewalk_directus_uploads:/directus/uploads
     depends_on:
       - db
 
@@ -48,4 +52,5 @@ services:
 
 volumes:
   thewalk_db:
+  thewalk_directus_uploads:
 
