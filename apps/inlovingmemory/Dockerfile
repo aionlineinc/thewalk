@@ -53,4 +53,5 @@ COPY --from=builder /app/node_modules/.bin/prisma ./node_modules/.bin/prisma
 USER nextjs
 EXPOSE 3001
 
-CMD ["sh", "-c", "if [ -n \"${DATABASE_URL}\" ]; then node ./node_modules/.bin/prisma migrate deploy || echo \"[warn] prisma migrate deploy failed\"; else echo \"[warn] DATABASE_URL not set; skipping migrate\"; fi; exec node apps/inlovingmemory/server.js"]
+# Sync auth secrets so setting only AUTH_SECRET (e.g. copied from main app) still satisfies NextAuth + middleware.
+CMD ["sh", "-c", "if [ -z \"${NEXTAUTH_SECRET}\" ] && [ -n \"${AUTH_SECRET}\" ]; then export NEXTAUTH_SECRET=\"${AUTH_SECRET}\"; fi; if [ -z \"${AUTH_SECRET}\" ] && [ -n \"${NEXTAUTH_SECRET}\" ]; then export AUTH_SECRET=\"${NEXTAUTH_SECRET}\"; fi; if [ -n \"${DATABASE_URL}\" ]; then node ./node_modules/.bin/prisma migrate deploy || echo \"[warn] prisma migrate deploy failed\"; else echo \"[warn] DATABASE_URL not set; skipping migrate\"; fi; exec node apps/inlovingmemory/server.js"]

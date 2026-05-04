@@ -3,7 +3,6 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
 import { z } from "zod";
 import { prisma } from "@/lib/prisma";
-import { getAuthSecret } from "@/lib/auth-secret";
 
 function normalizeEmail(email: string) {
   return email.trim().toLowerCase();
@@ -17,8 +16,8 @@ const credentialsSchema = z.object({
 /** Optional e.g. `.thewalk.org` while ILM lives on ilm.thewalk.org — omit when using a standalone apex (inlovingmemory.cloud). */
 const cookieDomain = process.env.AUTH_COOKIE_DOMAIN?.trim();
 
+/** Omit `secret` so NextAuth uses `NEXTAUTH_SECRET` / `AUTH_SECRET` at runtime (a literal empty string would block that). */
 export const authOptions: NextAuthOptions = {
-  secret: getAuthSecret(),
   session: { strategy: "jwt", maxAge: 30 * 24 * 60 * 60 },
   providers: [
     CredentialsProvider({
