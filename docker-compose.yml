@@ -61,6 +61,9 @@ services:
       HOSTNAME: "0.0.0.0"
       DATABASE_URL: "postgresql://postgres:postgres@db:5432/thewalk?schema=public"
       NEXT_PUBLIC_ILM_URL: "http://localhost:3001"
+      NEXTAUTH_URL: "http://localhost:3001"
+      AUTH_SECRET: "compose-dev-only-change-me"
+      NEXTAUTH_SECRET: "compose-dev-only-change-me"
     ports:
       - "3001:3001"
     depends_on:

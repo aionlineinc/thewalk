@@ -1,4 +1,8 @@
 import type { Metadata } from "next";
+import { getServerSession } from "next-auth";
+import { IlmHeader } from "@/components/ilm-header";
+import { SessionProvider } from "@/components/session-provider";
+import { authOptions } from "@/lib/auth";
 import "./globals.css";
 
 const ilmBase =
@@ -11,10 +15,17 @@ export const metadata: Metadata = {
   description: "More than a memorial — a living legacy",
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const session = await getServerSession(authOptions);
+
   return (
     <html lang="en">
-      <body className="min-h-screen antialiased">{children}</body>
+      <body className="min-h-screen antialiased">
+        <SessionProvider session={session}>
+          <IlmHeader session={session} />
+          {children}
+        </SessionProvider>
+      </body>
     </html>
   );
 }
