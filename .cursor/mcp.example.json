@@ -1,0 +1,25 @@
+{
+  "mcpServers": {
+    "cms-directus-thewalk": {
+      "url": "https://cms.thewalk.org/mcp",
+      "headers": {
+        "Authorization": "Bearer YOUR_DIRECTUS_STATIC_TOKEN"
+      }
+    },
+    "postgres-thewalk": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-postgres",
+        "postgresql://USER:PASSWORD@HOST:5432/thewalk?schema=public"
+      ]
+    },
+    "github-thewalk": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-github"],
+      "env": {
+        "GITHUB_PERSONAL_ACCESS_TOKEN": ""
+      }
+    }
+  }
+}

@@ -40,6 +40,10 @@ yarn-error.log*
 # env files (can opt-in for committing if needed)
 .env*
 
+# Cursor MCP (secrets); copy from .cursor/mcp.example.json → .cursor/mcp.json locally
+.cursor/mcp.json
+.cursor/*.log
+
 # vercel
 .vercel
 
