@@ -33,6 +33,15 @@ model User {
   passwordHash String
   role      UserRole @default(MEMBER)
   memberships OrganizationMembership[]
+
+  ilmMemorialsAsPageKeeper   IlmMemorial[]              @relation("IlmPageKeeper")
+  ilmGenerationsVaultsOwned   IlmGenerationsVault[]       @relation("IlmVaultOwner")
+  ilmCounsellorProfile        IlmCounsellor?
+  ilmGriefRequests            IlmGriefRequest[]           @relation("IlmGriefRequester")
+  ilmVaultMemberships         IlmVaultMember[]
+  ilmOrgAccountsAdmin         IlmOrgAccount[]             @relation("IlmOrgAdmin")
+  platformAppEntitlements     UserApplicationEntitlement[]
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -106,4 +115,386 @@ model OutboxMessage {
   @@index([deliveredAt])
   @@index([availableAt])
   @@index([type])
+}
+
+// Hub registry — external products (ILM, Connect8). Not used for myWalk (ministry).
+model PlatformApplication {
+  id        String   @id @default(uuid())
+  slug      String   @unique
+  label     String
+  baseUrl   String
+  enabled   Boolean  @default(true)
+  sortOrder Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  entitlements UserApplicationEntitlement[]
+}
+
+model UserApplicationEntitlement {
+  id            String @id @default(uuid())
+  userId        String
+  applicationId String
+  user          User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  application   PlatformApplication @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  @@unique([userId, applicationId])
+  @@index([userId])
+  @@map("user_application_entitlement")
+}
+
+// --- inLovingMemory (tables prefixed ilm_) ---
+
+enum IlmMemorialKind {
+  MEMORIAL
+  LIVING_LEGACY
+}
+
+enum IlmTier {
+  BASIC
+  PREMIUM
+  GENERATIONS
+}
+
+enum IlmPrivacyLevel {
+  PUBLIC
+  PASSWORD
+  FAMILY_ONLY
+  INVITE_ONLY
+}
+
+enum IlmMediaKind {
+  PHOTO
+  VIDEO
+  AUDIO
+  DOCUMENT
+  OTHER
+}
+
+enum IlmSubmissionStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum IlmEventKind {
+  FUNERAL
+  VISITATION
+  OTHER
+}
+
+enum IlmOrgKind {
+  FUNERAL_HOME
+  MINISTRY
+}
+
+enum IlmVaultMemberRole {
+  VAULT_OWNER
+  GENERATIONS_GUARDIAN
+  BACKUP_GUARDIAN
+  FAMILY_EDITOR
+  FAMILY_VIEWER
+  SECTION_KEEPER
+}
+
+enum IlmGriefRequestStatus {
+  OPEN
+  MATCHED
+  CLOSED
+  CANCELLED
+}
+
+enum IlmProductOrderStatus {
+  PENDING
+  PAID
+  FULFILMENT
+  SHIPPED
+  COMPLETED
+  CANCELLED
+}
+
+model IlmMemorial {
+  id            String          @id @default(uuid())
+  kind          IlmMemorialKind
+  slug          String          @unique
+  tier          IlmTier         @default(BASIC)
+  privacyLevel  IlmPrivacyLevel @default(PUBLIC)
+  passwordHash  String?
+
+  displayName String
+  birthDate   DateTime?
+  deathDate   DateTime?
+  biography   String?         @db.Text
+  hideFromDirectory     Boolean @default(false)
+  hideFromSearchEngines Boolean @default(false)
+
+  pageKeeperId String
+  pageKeeper   User   @relation("IlmPageKeeper", fields: [pageKeeperId], references: [id], onDelete: Restrict)
+
+  orgAccountId String?
+  orgAccount   IlmOrgAccount? @relation(fields: [orgAccountId], references: [id], onDelete: SetNull)
+
+  media            IlmMedia[]
+  guestbookEntries IlmGuestbookEntry[]
+  prayers          IlmPrayer[]
+  events           IlmEvent[]
+  pamphlets        IlmPamphlet[]
+  griefRequests    IlmGriefRequest[]
+  generationsVault IlmGenerationsVault?
+  productOrders    IlmProductOrder[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("ilm_memorial")
+  @@index([pageKeeperId])
+  @@index([orgAccountId])
+}
+
+model IlmMedia {
+  id         String      @id @default(uuid())
+  memorialId String
+  memorial   IlmMemorial @relation(fields: [memorialId], references: [id], onDelete: Cascade)
+  kind       IlmMediaKind
+  storageUrl String
+  title      String?
+  byteSize   Int?
+  width      Int?
+  height     Int?
+
+  submittedByUserId String?
+  authorGuestName   String?
+  status            IlmSubmissionStatus @default(APPROVED)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("ilm_media")
+  @@index([memorialId])
+}
+
+model IlmGuestbookEntry {
+  id         String      @id @default(uuid())
+  memorialId String
+  memorial   IlmMemorial @relation(fields: [memorialId], references: [id], onDelete: Cascade)
+  content    String      @db.Text
+  authorName String
+  authorEmail String?
+  status     IlmSubmissionStatus @default(PENDING)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("ilm_guestbook_entry")
+  @@index([memorialId])
+}
+
+model IlmPrayer {
+  id         String      @id @default(uuid())
+  memorialId String
+  memorial   IlmMemorial @relation(fields: [memorialId], references: [id], onDelete: Cascade)
+  content    String      @db.Text
+  authorName String
+  authorEmail String?
+  notifyAuthor Boolean   @default(false)
+  status     IlmSubmissionStatus @default(APPROVED)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("ilm_prayer")
+  @@index([memorialId])
+}
+
+model IlmEvent {
+  id         String      @id @default(uuid())
+  memorialId String
+  memorial   IlmMemorial @relation(fields: [memorialId], references: [id], onDelete: Cascade)
+  kind       IlmEventKind
+  title      String?
+  startsAt   DateTime?
+  endsAt     DateTime?
+  venue      String?
+  streamUrl  String?
+  notes      String?     @db.Text
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("ilm_event")
+  @@index([memorialId])
+}
+
+model IlmPamphlet {
+  id         String      @id @default(uuid())
+  memorialId String
+  memorial   IlmMemorial @relation(fields: [memorialId], references: [id], onDelete: Cascade)
+  pdfUrl     String?
+  qrCodeUrl  String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("ilm_pamphlet")
+  @@index([memorialId])
+}
+
+model IlmGenerationsVault {
+  id               String    @id @default(uuid())
+  ownerId          String
+  owner            User      @relation("IlmVaultOwner", fields: [ownerId], references: [id], onDelete: Cascade)
+  linkedMemorialId String?   @unique
+  linkedMemorial   IlmMemorial? @relation(fields: [linkedMemorialId], references: [id], onDelete: SetNull)
+  storageQuotaBytes BigInt   @default(0)
+
+  collections IlmVaultCollection[]
+  messages    IlmVaultMessage[]
+  members     IlmVaultMember[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("ilm_generations_vault")
+  @@index([ownerId])
+}
+
+model IlmVaultCollection {
+  id       String @id @default(uuid())
+  vaultId  String
+  vault    IlmGenerationsVault @relation(fields: [vaultId], references: [id], onDelete: Cascade)
+  name     String
+  parentId String?
+  parent   IlmVaultCollection? @relation("VaultCollectionTree", fields: [parentId], references: [id], onDelete: SetNull)
+  children IlmVaultCollection[] @relation("VaultCollectionTree")
+
+  items IlmVaultItem[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("ilm_vault_collection")
+  @@index([vaultId])
+  @@index([parentId])
+}
+
+model IlmVaultItem {
+  id           String @id @default(uuid())
+  collectionId String
+  collection   IlmVaultCollection @relation(fields: [collectionId], references: [id], onDelete: Cascade)
+  kind         IlmMediaKind
+  storageUrl   String
+  title        String?
+  description  String? @db.Text
+  lockedAt     DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("ilm_vault_item")
+  @@index([collectionId])
+}
+
+model IlmVaultMessage {
+  id             String @id @default(uuid())
+  vaultId        String
+  vault          IlmGenerationsVault @relation(fields: [vaultId], references: [id], onDelete: Cascade)
+  recipientEmail String?
+  body           String?  @db.Text
+  unlockTrigger  Json?
+  lockedAt       DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("ilm_vault_message")
+  @@index([vaultId])
+}
+
+model IlmVaultMember {
+  id                  String @id @default(uuid())
+  vaultId             String
+  vault               IlmGenerationsVault @relation(fields: [vaultId], references: [id], onDelete: Cascade)
+  userId              String
+  user                User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role                IlmVaultMemberRole
+  sectionRestrictions Json?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([vaultId, userId])
+  @@map("ilm_vault_member")
+  @@index([userId])
+}
+
+model IlmCounsellor {
+  id               String   @id @default(uuid())
+  userId           String   @unique
+  user             User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  verifiedAt       DateTime?
+  specialisations  Json?
+  availabilityJson Json?
+  bio              String?  @db.Text
+
+  griefRequestsMatched IlmGriefRequest[] @relation("IlmGriefCounsellor")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("ilm_counsellor")
+}
+
+model IlmGriefRequest {
+  id                  String @id @default(uuid())
+  memorialId          String
+  memorial            IlmMemorial @relation(fields: [memorialId], references: [id], onDelete: Cascade)
+  requesterId         String
+  requester           User   @relation("IlmGriefRequester", fields: [requesterId], references: [id], onDelete: Cascade)
+  status              IlmGriefRequestStatus @default(OPEN)
+  brief               String? @db.Text
+  matchedCounsellorId String?
+  matchedCounsellor   IlmCounsellor? @relation("IlmGriefCounsellor", fields: [matchedCounsellorId], references: [id], onDelete: SetNull)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("ilm_grief_request")
+  @@index([memorialId])
+  @@index([requesterId])
+}
+
+model IlmOrgAccount {
+  id          String     @id @default(uuid())
+  kind        IlmOrgKind
+  name        String
+  slug        String     @unique
+  tier        String     @default("starter")
+  adminUserId String
+  adminUser   User       @relation("IlmOrgAdmin", fields: [adminUserId], references: [id], onDelete: Restrict)
+
+  memorials IlmMemorial[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("ilm_org_account")
+  @@index([adminUserId])
+}
+
+model IlmProductOrder {
+  id              String @id @default(uuid())
+  memorialId      String
+  memorial        IlmMemorial @relation(fields: [memorialId], references: [id], onDelete: Cascade)
+  productType     String
+  status          IlmProductOrderStatus @default(PENDING)
+  fulfilmentRef   String?
+  stripeSessionId String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("ilm_product_order")
+  @@index([memorialId])
 }

@@ -21,7 +21,15 @@ function navLinkClass(active: boolean) {
   }`;
 }
 
-export function AdminSidebar({ email, name }: { email?: string | null; name?: string | null }) {
+export function AdminSidebar({
+  email,
+  name,
+  externalProducts = [],
+}: {
+  email?: string | null;
+  name?: string | null;
+  externalProducts?: { slug: string; label: string; href: string }[];
+}) {
   const pathname = usePathname() ?? "";
   const display = name?.trim() || email?.split("@")[0] || "—";
 
@@ -31,6 +39,26 @@ export function AdminSidebar({ email, name }: { email?: string | null; name?: st
         <p className="px-1 text-[10px] font-bold uppercase tracking-[0.2em] text-admin-muted">Menu</p>
         <p className="mt-3 truncate px-1 text-base font-semibold tracking-tight text-admin-ink">{display}</p>
         <p className="mt-0.5 truncate px-1 text-xs text-admin-muted">{email ?? ""}</p>
+
+        {externalProducts.length > 0 ? (
+          <div className="mt-6 border-b border-black/[0.06] pb-5">
+            <p className="px-1 text-[10px] font-bold uppercase tracking-[0.2em] text-admin-muted">Products</p>
+            <nav className="mt-3 space-y-1" aria-label="External products">
+              {externalProducts.map(({ slug, label, href }) => (
+                <a
+                  key={slug}
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block rounded-2xl px-3 py-2.5 text-sm font-medium text-admin-ink/80 transition-colors hover:bg-black/[0.04] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-admin-accent/40"
+                >
+                  {label}
+                  <span className="sr-only"> (opens in new tab)</span>
+                </a>
+              ))}
+            </nav>
+          </div>
+        ) : null}
 
         <nav className="mt-6 space-y-1" aria-label="Admin navigation">
           {items.map(({ href, label, match }) => (

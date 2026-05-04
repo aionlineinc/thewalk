@@ -2,10 +2,14 @@
   "name": "thewalk",
   "version": "0.1.0",
   "private": true,
+  "workspaces": [
+    "apps/inlovingmemory"
+  ],
   "engines": {
     "node": ">=18.17.0"
   },
   "scripts": {
+    "postinstall": "prisma generate",
     "clean": "rm -rf .next node_modules/.cache",
     "clean:cache": "rm -rf \"$HOME/Library/Caches/thewalk-next\" 2>/dev/null || true",
     "ports": "lsof -nP -iTCP:3000 -sTCP:LISTEN || true",
@@ -22,8 +26,11 @@
     "dev:lan": "npm run fix:port3000 && NEXT_TELEMETRY_DISABLED=1 USE_LOCAL_NEXT_CACHE=1 next dev -H 0.0.0.0 -p 3000",
     "dev:turbo": "npm run fix:port3000 && NEXT_TELEMETRY_DISABLED=1 USE_LOCAL_NEXT_CACHE=1 next dev -p 3000 --turbo",
     "build": "next build",
+    "build:ilm": "npm run build -w @thewalk/inlovingmemory",
+    "dev:ilm": "npm run dev -w @thewalk/inlovingmemory",
     "prisma:generate": "prisma generate",
     "prisma:migrate:deploy": "prisma migrate deploy",
+    "prisma:seed": "node prisma/seed.mjs",
     "start": "next start",
     "lint": "next lint"
   },
@@ -52,5 +59,8 @@
     "sanitize-html": "^2.17.3",
     "stripe": "^22.1.0",
     "zod": "^4.3.6"
+  },
+  "prisma": {
+    "seed": "node prisma/seed.mjs"
   }
 }
