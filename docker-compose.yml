@@ -50,6 +50,22 @@ services:
       - db
       - cms
 
+  # Application B — inLovingMemory (matches Dokploy: Dockerfile apps/inlovingmemory/Dockerfile, context .)
+  ilm:
+    build:
+      context: .
+      dockerfile: apps/inlovingmemory/Dockerfile
+    environment:
+      NODE_ENV: production
+      PORT: "3001"
+      HOSTNAME: "0.0.0.0"
+      DATABASE_URL: "postgresql://postgres:postgres@db:5432/thewalk?schema=public"
+      NEXT_PUBLIC_ILM_URL: "http://localhost:3001"
+    ports:
+      - "3001:3001"
+    depends_on:
+      - db
+
 volumes:
   thewalk_db:
   thewalk_directus_uploads:

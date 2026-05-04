@@ -28,6 +28,7 @@
     "build": "next build",
     "build:ilm": "npm run build -w @thewalk/inlovingmemory",
     "dev:ilm": "npm run dev -w @thewalk/inlovingmemory",
+    "compose:ilm": "docker compose up --build ilm",
     "prisma:generate": "prisma generate",
     "prisma:migrate:deploy": "prisma migrate deploy",
     "prisma:seed": "node prisma/seed.mjs",

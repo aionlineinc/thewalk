@@ -20,6 +20,8 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 ENV NEXT_TELEMETRY_DISABLED=1
+ARG NEXT_PUBLIC_ILM_URL=""
+ENV NEXT_PUBLIC_ILM_URL=$NEXT_PUBLIC_ILM_URL
 RUN node ./node_modules/.bin/prisma generate
 RUN npm run build:ilm
 
@@ -32,6 +34,8 @@ ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV PORT=3001
 ENV HOSTNAME=0.0.0.0
+ARG GIT_COMMIT=""
+ENV GIT_COMMIT=$GIT_COMMIT
 
 RUN addgroup --system --gid 1001 nodejs \
   && adduser --system --uid 1001 nextjs
