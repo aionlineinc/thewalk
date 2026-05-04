@@ -4,6 +4,10 @@ RUN apt-get update \
   && rm -rf /var/lib/apt/lists/*
 WORKDIR /app
 COPY package.json package-lock.json ./
+# Workspaces + Prisma: `postinstall` runs `prisma generate` and must see the schema; `npm ci`
+# also requires each workspace package.json to exist.
+COPY prisma ./prisma
+COPY apps/inlovingmemory/package.json ./apps/inlovingmemory/package.json
 # Quieter `npm ci` in CI: only errors (hides transitive deprecation warn spam from toolchains)
 ENV NPM_CONFIG_LOGLEVEL=error
 ENV NPM_CONFIG_AUDIT=false
