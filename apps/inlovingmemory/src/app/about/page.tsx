@@ -1,5 +1,6 @@
-import Link from "next/link";
 import { getIlmMarketingContent } from "@/lib/cms/ilm-content";
+import { ButtonLink } from "@/components/ui/button";
+import { Card, CardBody } from "@/components/ui/card";
 
 export const metadata = {
   title: "About · inLovingMemory",
@@ -10,36 +11,44 @@ export const metadata = {
 export default async function AboutPage() {
   const content = await getIlmMarketingContent();
   return (
-    <main className="mx-auto max-w-3xl px-6 py-16 sm:px-8">
-      <p className="text-xs font-semibold uppercase tracking-[0.28em] text-earth-500">About</p>
-      <h1 className="mt-4 text-3xl font-semibold tracking-tight text-earth-900">{content.about.title}</h1>
-      <p className="mt-6 text-lg leading-relaxed text-earth-800">{content.about.body}</p>
-      <div className="mt-10 space-y-4 text-earth-700">
-        <p>
-          We are more than a memorial platform. We are a community of remembrance, grief support, and generational
-          legacy.
-        </p>
-        <p>
-          When someone’s walk in this life ends, their story does not. We help families create a beautiful place to
-          honour, share, and carry a life forward — one memory at a time.
-        </p>
-      </div>
+    <main>
+      <section className="border-b border-earth-200/80 bg-earth-50/30">
+        <div className="mx-auto max-w-content px-6 py-16 sm:px-8">
+          <p className="text-xs font-semibold uppercase tracking-[0.28em] text-earth-500">About</p>
+          <h1 className="mt-4 text-3xl font-semibold tracking-tight text-earth-900">{content.about.title}</h1>
+          <p className="mt-6 max-w-2xl text-lg leading-relaxed text-earth-800">{content.about.body}</p>
+          <div className="mt-10 flex flex-wrap gap-4">
+            {content.about.links.map((l, idx) => (
+              <ButtonLink key={l.href} href={l.href} variant={idx === 0 ? "primary" : "outline"}>
+                {l.label}
+              </ButtonLink>
+            ))}
+          </div>
+        </div>
+      </section>
 
-      <div className="mt-12 flex flex-wrap gap-4">
-        {content.about.links.map((l) => (
-          <Link
-            key={l.href}
-            href={l.href}
-            className={
-              l.href === "/how-it-works" || l.href === "/pricing"
-                ? "inline-flex rounded-lg bg-earth-800 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-earth-900"
-                : "inline-flex rounded-lg border border-earth-300 bg-white px-5 py-2.5 text-sm font-semibold text-earth-900 shadow-sm transition hover:border-earth-400 hover:bg-earth-50"
-            }
-          >
-            {l.label}
-          </Link>
-        ))}
-      </div>
+      <section className="mx-auto max-w-content px-6 py-14 sm:px-8">
+        <div className="grid gap-6 md:grid-cols-2">
+          <Card>
+            <CardBody>
+              <p className="text-xs font-semibold uppercase tracking-wide text-earth-500">Dignity</p>
+              <h2 className="mt-2 text-xl font-semibold text-earth-900">Honour with intention</h2>
+              <p className="mt-3 text-sm leading-relaxed text-earth-700">
+                A memorial should feel calm, beautiful, and easy to share — without visual noise.
+              </p>
+            </CardBody>
+          </Card>
+          <Card className="bg-calm-500/5">
+            <CardBody>
+              <p className="text-xs font-semibold uppercase tracking-wide text-calm-700">Support</p>
+              <h2 className="mt-2 text-xl font-semibold text-earth-900">Grief was never meant alone</h2>
+              <p className="mt-3 text-sm leading-relaxed text-earth-700">
+                We’re building pathways to pastoral care, prayer, and grief resources for families in loss.
+              </p>
+            </CardBody>
+          </Card>
+        </div>
+      </section>
     </main>
   );
 }
