@@ -1,4 +1,4 @@
-import { submitGuestbookEntry } from "@/lib/ilm-community-actions";
+import { submitGuestbookFromForm } from "@/lib/ilm-community-actions";
 
 export function GuestbookPanel({
   slug,
@@ -35,7 +35,8 @@ export function GuestbookPanel({
       </ul>
 
       {showForm ? (
-        <form action={submitGuestbookEntry.bind(null, slug)} className="mt-10 space-y-4 max-w-xl">
+        <form action={submitGuestbookFromForm} className="mt-10 space-y-4 max-w-xl">
+          <input type="hidden" name="__ilmSlug" value={slug} />
           <div>
             <label htmlFor="gb-name" className="block text-sm font-medium text-earth-800">
               Your name

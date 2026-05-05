@@ -1,4 +1,4 @@
-import { submitPrayer } from "@/lib/ilm-community-actions";
+import { submitPrayerFromForm } from "@/lib/ilm-community-actions";
 
 export function PrayerPanel({
   slug,
@@ -38,7 +38,8 @@ export function PrayerPanel({
       </ul>
 
       {showForm ? (
-        <form action={submitPrayer.bind(null, slug)} className="mt-10 space-y-4 max-w-xl">
+        <form action={submitPrayerFromForm} className="mt-10 space-y-4 max-w-xl">
+          <input type="hidden" name="__ilmSlug" value={slug} />
           <div>
             <label htmlFor="pr-name" className="block text-sm font-medium text-earth-800">
               Your name

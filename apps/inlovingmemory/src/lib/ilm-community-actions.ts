@@ -59,6 +59,14 @@ export async function submitGuestbookEntry(slug: string, formData: FormData) {
   redirect(`/memorial/${slug}?guestbook=sent`);
 }
 
+/** Standalone-safe: do not use `.bind()` on server actions. Slug is passed via hidden `__ilmSlug`. */
+export async function submitGuestbookFromForm(formData: FormData) {
+  const raw = formData.get("__ilmSlug");
+  const slug = typeof raw === "string" ? raw.trim() : "";
+  if (!slug) redirect("/?guestbook=invalid");
+  return submitGuestbookEntry(slug, formData);
+}
+
 export async function submitPrayer(slug: string, formData: FormData) {
   const memorial = await prisma.ilmMemorial.findUnique({
     where: { slug },
@@ -96,4 +104,12 @@ export async function submitPrayer(slug: string, formData: FormData) {
 
   revalidatePath(`/memorial/${slug}`);
   redirect(`/memorial/${slug}?prayer=sent`);
+}
+
+/** Standalone-safe: hidden `__ilmSlug` replaces `.bind(null, slug)`. */
+export async function submitPrayerFromForm(formData: FormData) {
+  const raw = formData.get("__ilmSlug");
+  const slug = typeof raw === "string" ? raw.trim() : "";
+  if (!slug) redirect("/?prayer=invalid");
+  return submitPrayer(slug, formData);
 }

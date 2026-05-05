@@ -2,7 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { DeleteMemorialForm } from "@/app/dashboard/memorials/delete-memorial-form";
 import { MemorialForm, buildMemorialDefaults } from "@/app/dashboard/memorials/memorial-form";
-import { updateMemorial } from "@/app/dashboard/memorials/actions";
+import { updateMemorialFromForm } from "@/app/dashboard/memorials/actions";
 import { getIlmSession } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 
@@ -48,7 +48,7 @@ export default async function EditMemorialPage({ params }: { params: { id: strin
         </Link>
       </p>
       <div className="mt-10">
-        <MemorialForm action={updateMemorial.bind(null, memorial.id)} defaults={defaults} />
+        <MemorialForm action={updateMemorialFromForm} defaults={defaults} memorialIdForEdit={memorial.id} />
       </div>
       <div className="mt-16 border-t border-earth-200 pt-10">
         <h2 className="text-lg font-semibold text-earth-900">Danger zone</h2>

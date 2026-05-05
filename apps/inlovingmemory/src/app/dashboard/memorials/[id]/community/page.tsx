@@ -1,7 +1,10 @@
 import { IlmSubmissionStatus } from "@prisma/client";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { setGuestbookStatus, setPrayerStatus } from "@/app/dashboard/memorials/[id]/community/actions";
+import {
+  setGuestbookStatusFromForm,
+  setPrayerStatusFromForm,
+} from "@/app/dashboard/memorials/[id]/community/actions";
 import { getIlmSession } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 
@@ -91,14 +94,10 @@ export default async function MemorialCommunityPage({ params }: { params: { id: 
                     )}
                   </p>
                   <div className="mt-4 flex flex-wrap gap-2">
-                    <form
-                      action={setGuestbookStatus.bind(
-                        null,
-                        memorial.id,
-                        e.id,
-                        IlmSubmissionStatus.APPROVED,
-                      )}
-                    >
+                    <form action={setGuestbookStatusFromForm}>
+                      <input type="hidden" name="__memorialId" value={memorial.id} />
+                      <input type="hidden" name="__guestbookEntryId" value={e.id} />
+                      <input type="hidden" name="__status" value={IlmSubmissionStatus.APPROVED} />
                       <button
                         type="submit"
                         className="rounded-lg bg-earth-800 px-3 py-1.5 text-sm font-medium text-white hover:bg-earth-900"
@@ -106,14 +105,10 @@ export default async function MemorialCommunityPage({ params }: { params: { id: 
                         Approve
                       </button>
                     </form>
-                    <form
-                      action={setGuestbookStatus.bind(
-                        null,
-                        memorial.id,
-                        e.id,
-                        IlmSubmissionStatus.REJECTED,
-                      )}
-                    >
+                    <form action={setGuestbookStatusFromForm}>
+                      <input type="hidden" name="__memorialId" value={memorial.id} />
+                      <input type="hidden" name="__guestbookEntryId" value={e.id} />
+                      <input type="hidden" name="__status" value={IlmSubmissionStatus.REJECTED} />
                       <button
                         type="submit"
                         className="rounded-lg border border-red-200 bg-white px-3 py-1.5 text-sm font-medium text-red-900 hover:bg-red-50"
@@ -155,9 +150,10 @@ export default async function MemorialCommunityPage({ params }: { params: { id: 
                     )}
                   </p>
                   <div className="mt-4 flex flex-wrap gap-2">
-                    <form
-                      action={setPrayerStatus.bind(null, memorial.id, p.id, IlmSubmissionStatus.APPROVED)}
-                    >
+                    <form action={setPrayerStatusFromForm}>
+                      <input type="hidden" name="__memorialId" value={memorial.id} />
+                      <input type="hidden" name="__prayerId" value={p.id} />
+                      <input type="hidden" name="__status" value={IlmSubmissionStatus.APPROVED} />
                       <button
                         type="submit"
                         className="rounded-lg bg-calm-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-calm-500"
@@ -165,9 +161,10 @@ export default async function MemorialCommunityPage({ params }: { params: { id: 
                         Approve
                       </button>
                     </form>
-                    <form
-                      action={setPrayerStatus.bind(null, memorial.id, p.id, IlmSubmissionStatus.REJECTED)}
-                    >
+                    <form action={setPrayerStatusFromForm}>
+                      <input type="hidden" name="__memorialId" value={memorial.id} />
+                      <input type="hidden" name="__prayerId" value={p.id} />
+                      <input type="hidden" name="__status" value={IlmSubmissionStatus.REJECTED} />
                       <button
                         type="submit"
                         className="rounded-lg border border-red-200 bg-white px-3 py-1.5 text-sm font-medium text-red-900 hover:bg-red-50"

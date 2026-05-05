@@ -24,6 +24,36 @@ async function requireKeeperForMemorial(memorialId: string) {
   return memorial;
 }
 
+function parseSubmissionStatus(v: FormDataEntryValue | null): IlmSubmissionStatus | null {
+  if (typeof v !== "string") return null;
+  if (v === IlmSubmissionStatus.APPROVED || v === "APPROVED") return IlmSubmissionStatus.APPROVED;
+  if (v === IlmSubmissionStatus.REJECTED || v === "REJECTED") return IlmSubmissionStatus.REJECTED;
+  return null;
+}
+
+function formText(formData: FormData, key: string): string {
+  const v = formData.get(key);
+  return typeof v === "string" ? v.trim() : "";
+}
+
+/** Standalone-safe: pass `__memorialId`, `__guestbookEntryId`, `__status`. */
+export async function setGuestbookStatusFromForm(formData: FormData) {
+  const memorialId = formText(formData, "__memorialId");
+  const entryId = formText(formData, "__guestbookEntryId");
+  const status = parseSubmissionStatus(formData.get("__status"));
+  if (!memorialId || !entryId || !status) redirect("/dashboard?error=invalid");
+  return setGuestbookStatus(memorialId, entryId, status);
+}
+
+/** Standalone-safe: pass `__memorialId`, `__prayerId`, `__status`. */
+export async function setPrayerStatusFromForm(formData: FormData) {
+  const memorialId = formText(formData, "__memorialId");
+  const prayerId = formText(formData, "__prayerId");
+  const status = parseSubmissionStatus(formData.get("__status"));
+  if (!memorialId || !prayerId || !status) redirect("/dashboard?error=invalid");
+  return setPrayerStatus(memorialId, prayerId, status);
+}
+
 export async function setGuestbookStatus(memorialId: string, entryId: string, status: IlmSubmissionStatus) {
   const memorial = await requireKeeperForMemorial(memorialId);
 

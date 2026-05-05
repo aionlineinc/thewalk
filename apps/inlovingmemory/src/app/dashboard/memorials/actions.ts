@@ -78,6 +78,16 @@ export async function createMemorial(formData: FormData) {
 
 const updateSchema = memorialBodySchema;
 
+/** Used by the edit form — do not use `.bind()` on server actions (breaks Next standalone bundles). */
+export async function updateMemorialFromForm(formData: FormData) {
+  const rawId = formData.get("__memorialId");
+  const memorialId = typeof rawId === "string" ? rawId.trim() : "";
+  if (!memorialId) {
+    redirect("/dashboard?error=invalid");
+  }
+  return updateMemorial(memorialId, formData);
+}
+
 export async function updateMemorial(memorialId: string, formData: FormData) {
   const userId = await requireKeeperSession();
 
@@ -127,6 +137,14 @@ export async function updateMemorial(memorialId: string, formData: FormData) {
   revalidatePath("/directory");
   revalidatePath(`/memorial/${memorial.slug}`);
   redirect(`/memorial/${memorial.slug}`);
+}
+
+/** Standalone-safe: hidden `__memorialId` replaces `.bind(null, id)`. */
+export async function deleteMemorialFromForm(formData: FormData) {
+  const rawId = formData.get("__memorialId");
+  const memorialId = typeof rawId === "string" ? rawId.trim() : "";
+  if (!memorialId) redirect("/dashboard?error=invalid");
+  return deleteMemorial(memorialId);
 }
 
 export async function deleteMemorial(memorialId: string) {

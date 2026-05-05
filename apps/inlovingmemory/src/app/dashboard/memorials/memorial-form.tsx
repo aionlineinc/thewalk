@@ -46,12 +46,16 @@ export function buildMemorialDefaults(row: {
 export function MemorialForm({
   action,
   defaults,
+  memorialIdForEdit,
 }: {
   action: (formData: FormData) => void;
   defaults: MemorialFormDefaults;
+  /** When set, posts hidden `__memorialId` so the server action does not rely on `.bind()`. */
+  memorialIdForEdit?: string;
 }) {
   return (
     <form action={action} className="space-y-8">
+      {memorialIdForEdit ? <input type="hidden" name="__memorialId" value={memorialIdForEdit} /> : null}
       <div>
         <label htmlFor="displayName" className="block text-sm font-medium text-earth-800">
           Display name
