@@ -4,8 +4,10 @@ import type { Metadata } from "next";
 import { headers } from "next/headers";
 import { notFound } from "next/navigation";
 import { GuestbookPanel } from "@/components/memorial/guestbook-panel";
+import { MemorialCtaRow } from "@/components/memorial/memorial-cta-row";
 import { MemorialHero } from "@/components/memorial/memorial-hero";
 import { MemorialPhotoGallery } from "@/components/memorial/memorial-photo-gallery";
+import { MemorialSectionNav } from "@/components/memorial/memorial-section-nav";
 import { PrayerPanel } from "@/components/memorial/prayer-panel";
 import { MemorialShareBar } from "@/components/memorial/share-bar";
 import { getIlmSession } from "@/lib/auth";
@@ -161,105 +163,149 @@ export default async function MemorialPage({ params, searchParams }: PageProps) 
   const showCommunityForms = isPublic;
 
   return (
-    <main className="mx-auto max-w-3xl px-6 py-12 sm:px-8 sm:py-16">
+    <main className="pb-20">
       {isKeeper && !isPublic ? (
-        <p className="mb-8 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-950">
-          You are viewing a non-public page as the page keeper.
-        </p>
+        <div className="mx-auto max-w-3xl px-6 pt-10 sm:px-8">
+          <p className="rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-950">
+            You are viewing a non-public page as the page keeper.
+          </p>
+        </div>
       ) : null}
 
-      <MemorialHero
-        displayName={memorial.displayName}
-        kindLabel={memorial.kind === "LIVING_LEGACY" ? "Living legacy" : "In loving memory"}
-        bannerUrl={bannerUrl}
-        profileUrl={profileUrl}
-      />
+      <section className="border-b border-earth-200/80 bg-white pt-10">
+        <div className="mx-auto max-w-3xl px-6 pb-10 sm:px-8">
+          <MemorialHero
+            displayName={memorial.displayName}
+            kindLabel={memorial.kind === "LIVING_LEGACY" ? "Living legacy" : "In loving memory"}
+            bannerUrl={bannerUrl}
+            profileUrl={profileUrl}
+          />
 
-      <div className="border-b border-earth-200 pb-10">
-        {lifeSpan}
-        {isKeeper ? (
-          <div className={`flex flex-wrap gap-4 text-sm ${lifeSpan ? "mt-8" : "mt-2"}`}>
-            <Link
-              className="font-medium text-earth-800 underline-offset-4 hover:underline"
-              href={`/dashboard/memorials/${memorial.id}/edit`}
-            >
-              Edit details
-            </Link>
-            <Link
-              className="font-medium text-earth-800 underline-offset-4 hover:underline"
-              href={`/dashboard/memorials/${memorial.id}/media`}
-            >
-              Photos
-            </Link>
-            <Link
-              className="font-medium text-calm-600 underline-offset-4 hover:underline"
-              href={`/dashboard/memorials/${memorial.id}/community`}
-            >
-              Moderate guest book & prayer
-              {(pendingGuestbook > 0 || pendingPrayers > 0) && (
-                <span className="ml-1.5 rounded-full bg-calm-600 px-2 py-0.5 text-xs text-white">
-                  {pendingGuestbook + pendingPrayers}
-                </span>
-              )}
-            </Link>
+          <div className="border-b border-earth-200 pb-8">
+            {lifeSpan}
+            {isKeeper ? (
+              <div className={`flex flex-wrap gap-4 text-sm ${lifeSpan ? "mt-8" : "mt-2"}`}>
+                <Link
+                  className="font-medium text-earth-800 underline-offset-4 hover:underline"
+                  href={`/dashboard/memorials/${memorial.id}/edit`}
+                >
+                  Edit details
+                </Link>
+                <Link
+                  className="font-medium text-earth-800 underline-offset-4 hover:underline"
+                  href={`/dashboard/memorials/${memorial.id}/media`}
+                >
+                  Photos
+                </Link>
+                <Link
+                  className="font-medium text-calm-600 underline-offset-4 hover:underline"
+                  href={`/dashboard/memorials/${memorial.id}/community`}
+                >
+                  Moderate guest book & prayer
+                  {(pendingGuestbook > 0 || pendingPrayers > 0) && (
+                    <span className="ml-1.5 rounded-full bg-calm-600 px-2 py-0.5 text-xs text-white">
+                      {pendingGuestbook + pendingPrayers}
+                    </span>
+                  )}
+                </Link>
+              </div>
+            ) : null}
           </div>
-        ) : null}
-      </div>
+        </div>
+      </section>
+
+      <MemorialCtaRow shareUrl={shareUrl} showContribute={showCommunityForms} />
+
+      <MemorialSectionNav />
 
       {gbSent === "sent" ? (
-        <p className="mt-8 rounded-lg border border-earth-200 bg-earth-50 px-4 py-3 text-sm text-earth-800" role="status">
-          Thank you — your message was received and will appear after the page keeper approves it.
-        </p>
+        <div className="mx-auto mt-8 max-w-3xl px-6 sm:px-8">
+          <p className="rounded-lg border border-earth-200 bg-earth-50 px-4 py-3 text-sm text-earth-800" role="status">
+            Thank you — your message was received and will appear after the page keeper approves it.
+          </p>
+        </div>
       ) : null}
       {gbSent === "invalid" ? (
-        <p className="mt-8 text-sm text-red-800" role="alert">
-          Please check your name and message, then try again.
-        </p>
+        <div className="mx-auto mt-8 max-w-3xl px-6 sm:px-8">
+          <p className="text-sm text-red-800" role="alert">
+            Please check your name and message, then try again.
+          </p>
+        </div>
       ) : null}
 
       {prSent === "sent" ? (
-        <p className="mt-8 rounded-lg border border-calm-500/30 bg-calm-500/10 px-4 py-3 text-sm text-earth-800" role="status">
-          Thank you — your prayer was received and will appear after moderation.
-        </p>
+        <div className="mx-auto mt-8 max-w-3xl px-6 sm:px-8">
+          <p
+            className="rounded-lg border border-calm-500/30 bg-calm-500/10 px-4 py-3 text-sm text-earth-800"
+            role="status"
+          >
+            Thank you — your prayer was received and will appear after moderation.
+          </p>
+        </div>
       ) : null}
       {prSent === "invalid" ? (
-        <p className="mt-8 text-sm text-red-800" role="alert">
-          Please check your prayer and name, then try again.
-        </p>
+        <div className="mx-auto mt-8 max-w-3xl px-6 sm:px-8">
+          <p className="text-sm text-red-800" role="alert">
+            Please check your prayer and name, then try again.
+          </p>
+        </div>
       ) : null}
 
-      <article className="mt-12 space-y-4">
+      <article id="story" className="mx-auto mt-12 max-w-3xl px-6 sm:px-8">
         <h2 className="sr-only">Life story</h2>
-        <div className="max-w-none text-lg leading-relaxed text-earth-800">
-          <p className="whitespace-pre-wrap">{memorial.biography?.trim() ? memorial.biography : "—"}</p>
+        <div className="rounded-2xl border border-earth-200 bg-white/80 px-6 py-6 shadow-sm">
+          <div className="max-w-none text-base leading-relaxed text-earth-800 sm:text-lg">
+            <p className="whitespace-pre-wrap">{memorial.biography?.trim() ? memorial.biography : "—"}</p>
+          </div>
         </div>
       </article>
 
-      <div className="mt-12">
+      <section id="service" className="mx-auto mt-12 max-w-3xl px-6 sm:px-8" aria-labelledby="service-heading">
+        <h2 id="service-heading" className="text-xl font-semibold tracking-tight text-earth-900">
+          Order of service
+        </h2>
+        <p className="mt-2 text-sm text-earth-600">
+          Service details and program content will appear here. (Design scaffold — wiring comes next.)
+        </p>
+        <div className="mt-6 rounded-2xl border border-earth-200 bg-earth-50/40 px-6 py-5 shadow-sm">
+          <p className="text-sm font-semibold text-earth-900">Funeral service location</p>
+          <p className="mt-2 text-sm text-earth-700">Coming soon</p>
+        </div>
+      </section>
+
+      <section id="gallery" className="mx-auto mt-12 max-w-3xl px-6 sm:px-8">
         <MemorialPhotoGallery photos={galleryPhotos} />
-      </div>
+      </section>
 
       {shareUrl ? (
-        <section className="mt-12 border-t border-earth-200 pt-10">
-          <h2 className="text-lg font-semibold text-earth-900">Share</h2>
+        <section className="mx-auto mt-12 max-w-3xl px-6 sm:px-8" aria-labelledby="share-heading">
+          <h2 id="share-heading" className="text-xl font-semibold tracking-tight text-earth-900">
+            Share
+          </h2>
           <p className="mt-2 text-sm text-earth-600">Invite others to visit this page.</p>
-          <div className="mt-4">
+          <div className="mt-4 rounded-2xl border border-earth-200 bg-white/80 px-6 py-5 shadow-sm">
             <MemorialShareBar shareUrl={shareUrl} />
           </div>
         </section>
       ) : null}
 
-      <GuestbookPanel slug={memorial.slug} showForm={showCommunityForms} entries={guestbookApproved} />
+      <section id="guestbook" className="mx-auto max-w-3xl px-6 sm:px-8">
+        <GuestbookPanel slug={memorial.slug} showForm={showCommunityForms} entries={guestbookApproved} />
+      </section>
 
-      <PrayerPanel slug={memorial.slug} showForm={showCommunityForms} prayers={prayersApproved} />
+      <section id="prayer" className="mx-auto max-w-3xl px-6 sm:px-8">
+        <PrayerPanel slug={memorial.slug} showForm={showCommunityForms} prayers={prayersApproved} />
+      </section>
 
       {!isKeeper && isPublic ? (
-        <p className="mt-12 border-t border-earth-200 pt-8 text-center text-xs text-earth-500">
-          Hosted with care on inLovingMemory ·{" "}
-          <Link href="/" className="underline underline-offset-2 hover:text-earth-700">
-            Learn more
-          </Link>
-        </p>
+        <div className="mx-auto max-w-3xl px-6 sm:px-8">
+          <p className="mt-12 border-t border-earth-200 pt-8 text-center text-xs text-earth-500">
+            Hosted with care on inLovingMemory ·{" "}
+            <Link href="/" className="underline underline-offset-2 hover:text-earth-700">
+              Learn more
+            </Link>
+          </p>
+        </div>
       ) : null}
     </main>
   );
