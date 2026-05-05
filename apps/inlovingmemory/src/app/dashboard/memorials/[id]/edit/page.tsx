@@ -33,7 +33,13 @@ export default async function EditMemorialPage({ params }: { params: { id: strin
       <p className="mt-3 max-w-2xl text-earth-700">
         Changes apply immediately on the public page (subject to privacy settings).
       </p>
-      <p className="mt-4">
+      <p className="mt-4 flex flex-wrap gap-x-6 gap-y-2">
+        <Link
+          href={`/dashboard/memorials/${memorial.id}/media`}
+          className="text-sm font-medium text-earth-800 underline-offset-4 hover:underline"
+        >
+          Photos & banner →
+        </Link>
         <Link
           href={`/dashboard/memorials/${memorial.id}/community`}
           className="text-sm font-medium text-calm-600 underline-offset-4 hover:underline"

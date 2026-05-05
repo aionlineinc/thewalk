@@ -50,6 +50,13 @@ Optional runtime/build: `GIT_COMMIT` for `/api/health` (`docker build --build-ar
 | `NEXTAUTH_URL` | **Required in production.** Canonical public URL of this app, e.g. `https://ilm.thewalk.org` or `https://inlovingmemory.cloud`. |
 | `AUTH_COOKIE_DOMAIN` | Optional. While ILM is on a subdomain of `thewalk.org`, set `.thewalk.org` if you want session cookies shared with the apex site. When ILM runs only on its own apex domain, **omit** this so cookies stay on that host. |
 | `NEXT_PUBLIC_THEWALK_ORIGIN` | Optional. Marketing/auth site for “Create account” links (default `https://thewalk.org`). |
+| `ILM_S3_BUCKET` | S3 **bucket** name (R2: create bucket in Cloudflare). |
+| `ILM_S3_ENDPOINT` | S3 API **endpoint** (R2: `https://$ACCOUNT_ID.r2.cloudflarestorage.com` from the Cloudflare dashboard). |
+| `ILM_S3_REGION` | Region string (R2 often `auto`). |
+| `ILM_S3_ACCESS_KEY_ID` / `ILM_S3_SECRET_ACCESS_KEY` | API credentials with write access to the bucket. |
+| `ILM_S3_PUBLIC_BASE_URL` | **HTTPS URL prefix** where objects are readable publicly (R2 custom domain or `r2.dev` public URL), no trailing slash. |
+
+**Photo uploads** use presigned PUTs. The browser must be allowed to `PUT` to the bucket: configure **CORS** on the bucket (e.g. allow your ILM origin, `PUT`, `GET`, `HEAD`, and `Content-Type` header). Without `ILM_S3_*`, the **Photos** page explains that storage is not configured.
 
 **`NO_SECRET` in logs:** The ILM container has no `AUTH_SECRET` / `NEXTAUTH_SECRET`, or they were only set at build time. Set them on the **runtime** service in Dokploy (same value as the main app) plus **`NEXTAUTH_URL`**, then redeploy. The app reads these with runtime-safe lookups so Docker-injected secrets are visible after deploy.
 

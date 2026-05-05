@@ -1,12 +1,19 @@
-import { IlmSubmissionStatus } from "@prisma/client";
+import { IlmMediaKind, IlmSubmissionStatus } from "@prisma/client";
 import Link from "next/link";
 import type { Metadata } from "next";
 import { headers } from "next/headers";
 import { notFound } from "next/navigation";
 import { GuestbookPanel } from "@/components/memorial/guestbook-panel";
+import { MemorialHero } from "@/components/memorial/memorial-hero";
+import { MemorialPhotoGallery } from "@/components/memorial/memorial-photo-gallery";
 import { PrayerPanel } from "@/components/memorial/prayer-panel";
 import { MemorialShareBar } from "@/components/memorial/share-bar";
 import { getIlmSession } from "@/lib/auth";
+import {
+  ILM_MEDIA_TITLE_BANNER,
+  ILM_MEDIA_TITLE_PROFILE,
+  isGalleryPhotoTitle,
+} from "@/lib/ilm-media-slots";
 import { getMemorialAbsoluteUrl } from "@/lib/ilm-public-url";
 import { prisma } from "@/lib/prisma";
 
@@ -72,7 +79,7 @@ export default async function MemorialPage({ params, searchParams }: PageProps) 
   const gbSent = oneParam(searchParams.guestbook);
   const prSent = oneParam(searchParams.prayer);
 
-  const [guestbookApproved, prayersApproved, pendingGuestbook, pendingPrayers] = await Promise.all([
+  const [guestbookApproved, prayersApproved, pendingGuestbook, pendingPrayers, photoRows] = await Promise.all([
     prisma.ilmGuestbookEntry.findMany({
       where: { memorialId: memorial.id, status: IlmSubmissionStatus.APPROVED },
       orderBy: { createdAt: "desc" },
@@ -95,7 +102,20 @@ export default async function MemorialPage({ params, searchParams }: PageProps) 
           where: { memorialId: memorial.id, status: IlmSubmissionStatus.PENDING },
         })
       : Promise.resolve(0),
+    prisma.ilmMedia.findMany({
+      where: {
+        memorialId: memorial.id,
+        kind: IlmMediaKind.PHOTO,
+        status: IlmSubmissionStatus.APPROVED,
+      },
+      orderBy: { createdAt: "asc" },
+      select: { id: true, storageUrl: true, title: true },
+    }),
   ]);
+
+  const profileUrl = photoRows.find((p) => p.title === ILM_MEDIA_TITLE_PROFILE)?.storageUrl ?? null;
+  const bannerUrl = photoRows.find((p) => p.title === ILM_MEDIA_TITLE_BANNER)?.storageUrl ?? null;
+  const galleryPhotos = photoRows.filter((p) => isGalleryPhotoTitle(p.title));
 
   const headerList = headers();
   const host = headerList.get("x-forwarded-host") ?? headerList.get("host");
@@ -148,21 +168,28 @@ export default async function MemorialPage({ params, searchParams }: PageProps) 
         </p>
       ) : null}
 
-      <header className="border-b border-earth-200 pb-10">
-        <p className="text-xs font-semibold uppercase tracking-[0.28em] text-earth-500">
-          {memorial.kind === "LIVING_LEGACY" ? "Living legacy" : "In loving memory"}
-        </p>
-        <h1 className="mt-4 text-4xl font-semibold tracking-tight text-earth-900 sm:text-5xl">
-          {memorial.displayName}
-        </h1>
+      <MemorialHero
+        displayName={memorial.displayName}
+        kindLabel={memorial.kind === "LIVING_LEGACY" ? "Living legacy" : "In loving memory"}
+        bannerUrl={bannerUrl}
+        profileUrl={profileUrl}
+      />
+
+      <div className="border-b border-earth-200 pb-10">
         {lifeSpan}
         {isKeeper ? (
-          <div className="mt-8 flex flex-wrap gap-4 text-sm">
+          <div className={`flex flex-wrap gap-4 text-sm ${lifeSpan ? "mt-8" : "mt-2"}`}>
             <Link
               className="font-medium text-earth-800 underline-offset-4 hover:underline"
               href={`/dashboard/memorials/${memorial.id}/edit`}
             >
-              Edit memorial
+              Edit details
+            </Link>
+            <Link
+              className="font-medium text-earth-800 underline-offset-4 hover:underline"
+              href={`/dashboard/memorials/${memorial.id}/media`}
+            >
+              Photos
             </Link>
             <Link
               className="font-medium text-calm-600 underline-offset-4 hover:underline"
@@ -177,7 +204,7 @@ export default async function MemorialPage({ params, searchParams }: PageProps) 
             </Link>
           </div>
         ) : null}
-      </header>
+      </div>
 
       {gbSent === "sent" ? (
         <p className="mt-8 rounded-lg border border-earth-200 bg-earth-50 px-4 py-3 text-sm text-earth-800" role="status">
@@ -207,6 +234,10 @@ export default async function MemorialPage({ params, searchParams }: PageProps) 
           <p className="whitespace-pre-wrap">{memorial.biography?.trim() ? memorial.biography : "—"}</p>
         </div>
       </article>
+
+      <div className="mt-12">
+        <MemorialPhotoGallery photos={galleryPhotos} />
+      </div>
 
       {shareUrl ? (
         <section className="mt-12 border-t border-earth-200 pt-10">
