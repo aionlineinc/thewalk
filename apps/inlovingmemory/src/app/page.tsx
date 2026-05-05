@@ -1,9 +1,8 @@
 import Link from "next/link";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth";
+import { getIlmSession } from "@/lib/auth";
 
 export default async function IlmHomePage() {
-  const session = await getServerSession(authOptions);
+  const session = await getIlmSession();
 
   return (
     <main className="mx-auto flex min-h-screen max-w-content flex-col px-6 pb-24 pt-20 sm:px-8">

@@ -1,10 +1,9 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getServerSession } from "next-auth";
 import { DeleteMemorialForm } from "@/app/dashboard/memorials/delete-memorial-form";
 import { MemorialForm, buildMemorialDefaults } from "@/app/dashboard/memorials/memorial-form";
 import { updateMemorial } from "@/app/dashboard/memorials/actions";
-import { authOptions } from "@/lib/auth";
+import { getIlmSession } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 
 export const metadata = {
@@ -12,7 +11,7 @@ export const metadata = {
 };
 
 export default async function EditMemorialPage({ params }: { params: { id: string } }) {
-  const session = await getServerSession(authOptions);
+  const session = await getIlmSession();
   const userId = session?.user && "id" in session.user ? (session.user as { id: string }).id : undefined;
 
   const memorial = await prisma.ilmMemorial.findUnique({

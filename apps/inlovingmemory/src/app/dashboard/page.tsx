@@ -1,6 +1,5 @@
 import Link from "next/link";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth";
+import { getIlmSession } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 
 export const metadata = {
@@ -8,7 +7,7 @@ export const metadata = {
 };
 
 export default async function DashboardPage() {
-  const session = await getServerSession(authOptions);
+  const session = await getIlmSession();
   const userId = session?.user && "id" in session.user ? (session.user as { id: string }).id : "";
 
   const memorials = await prisma.ilmMemorial.findMany({

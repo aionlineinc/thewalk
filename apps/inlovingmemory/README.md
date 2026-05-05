@@ -51,6 +51,6 @@ Optional runtime/build: `GIT_COMMIT` for `/api/health` (`docker build --build-ar
 | `AUTH_COOKIE_DOMAIN` | Optional. While ILM is on a subdomain of `thewalk.org`, set `.thewalk.org` if you want session cookies shared with the apex site. When ILM runs only on its own apex domain, **omit** this so cookies stay on that host. |
 | `NEXT_PUBLIC_THEWALK_ORIGIN` | Optional. Marketing/auth site for “Create account” links (default `https://thewalk.org`). |
 
-**`NO_SECRET` in logs:** The ILM container has no `AUTH_SECRET` / `NEXTAUTH_SECRET`. Add the same `AUTH_SECRET` as the main site (and `NEXTAUTH_URL`) to this service’s environment in Dokploy, then redeploy.
+**`NO_SECRET` in logs:** The ILM container has no `AUTH_SECRET` / `NEXTAUTH_SECRET`, or they were only set at build time. Set them on the **runtime** service in Dokploy (same value as the main app) plus **`NEXTAUTH_URL`**, then redeploy. The app reads these with runtime-safe lookups so Docker-injected secrets are visible after deploy.
 
 Point your ILM hostname at this service. On the **main** theWalk deployment, set `ILM_APP_URL` to that same public URL for admin sidebar links.

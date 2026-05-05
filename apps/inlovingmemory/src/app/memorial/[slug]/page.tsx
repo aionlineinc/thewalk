@@ -1,7 +1,6 @@
-import { getServerSession } from "next-auth";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { authOptions } from "@/lib/auth";
+import { getIlmSession } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 
 export const dynamic = "force-dynamic";
@@ -28,7 +27,7 @@ export default async function MemorialPage({ params }: { params: { slug: string 
 
   if (!memorial) notFound();
 
-  const session = await getServerSession(authOptions);
+  const session = await getIlmSession();
   const userId = session?.user && "id" in session.user ? (session.user as { id: string }).id : undefined;
   const isKeeper = userId === memorial.pageKeeperId;
   const isPublic = memorial.privacyLevel === "PUBLIC";

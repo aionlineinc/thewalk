@@ -5,7 +5,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { getServerSession } from "next-auth";
 import { z } from "zod";
-import { authOptions } from "@/lib/auth";
+import { getAuthOptions } from "@/lib/auth";
 import { allocateUniqueSlug } from "@/lib/ilm-slug";
 import { prisma } from "@/lib/prisma";
 
@@ -25,7 +25,7 @@ const memorialBodySchema = z.object({
 });
 
 async function requireKeeperSession() {
-  const session = await getServerSession(authOptions);
+  const session = await getServerSession(getAuthOptions());
   const userId = session?.user && "id" in session.user ? (session.user as { id: string }).id : undefined;
   if (!userId) redirect("/sign-in");
   return userId;

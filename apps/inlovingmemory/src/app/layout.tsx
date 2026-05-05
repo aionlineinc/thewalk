@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
-import { getServerSession } from "next-auth";
 import { IlmHeader } from "@/components/ilm-header";
 import { SessionProvider } from "@/components/session-provider";
-import { authOptions } from "@/lib/auth";
+import { getIlmSession } from "@/lib/auth";
 import "./globals.css";
 
 const ilmBase =
@@ -16,7 +15,7 @@ export const metadata: Metadata = {
 };
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
-  const session = await getServerSession(authOptions);
+  const session = await getIlmSession();
 
   return (
     <html lang="en">
