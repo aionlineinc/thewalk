@@ -16,6 +16,12 @@ export default async function IlmHomePage() {
       </p>
       <div className="mt-12 flex flex-wrap gap-4">
         <Link
+          href="/how-it-works"
+          className="inline-flex rounded-lg border border-earth-300 bg-white px-5 py-2.5 text-sm font-semibold text-earth-900 shadow-sm transition hover:border-earth-400 hover:bg-earth-50"
+        >
+          How it works
+        </Link>
+        <Link
           href="/directory"
           className="inline-flex rounded-lg border border-earth-300 bg-white px-5 py-2.5 text-sm font-semibold text-earth-900 shadow-sm transition hover:border-earth-400 hover:bg-earth-50"
         >
@@ -53,6 +59,20 @@ export default async function IlmHomePage() {
           </span>
         </li>
       </ul>
+      <div className="mt-14 flex flex-wrap gap-x-6 gap-y-3 text-sm">
+        <Link className="font-medium text-earth-800 underline-offset-4 hover:underline" href="/about">
+          About
+        </Link>
+        <Link className="font-medium text-earth-800 underline-offset-4 hover:underline" href="/pricing">
+          Pricing
+        </Link>
+        <Link className="font-medium text-earth-800 underline-offset-4 hover:underline" href="/faq">
+          FAQ
+        </Link>
+        <Link className="font-medium text-earth-800 underline-offset-4 hover:underline" href="/resources">
+          Resources
+        </Link>
+      </div>
       <p className="mt-14 text-xs text-earth-500">
         Accounts use the same sign-in as theWalk.org — register there if you need a new account.
       </p>

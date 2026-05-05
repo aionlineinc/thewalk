@@ -10,6 +10,9 @@ export function IlmHeader({ session }: { session: Session | null }) {
           inLovingMemory
         </Link>
         <nav className="flex flex-wrap items-center gap-6 text-sm" aria-label="Primary">
+          <Link className="font-medium text-earth-800 transition hover:text-earth-950" href="/how-it-works">
+            How it works
+          </Link>
           <Link className="font-medium text-earth-800 transition hover:text-earth-950" href="/directory">
             Find a memorial
           </Link>
@@ -21,9 +24,14 @@ export function IlmHeader({ session }: { session: Session | null }) {
               <SignOutButton />
             </>
           ) : (
-            <Link className="font-medium text-earth-800 transition hover:text-earth-950" href="/sign-in">
-              Sign in
-            </Link>
+            <>
+              <Link className="font-medium text-earth-800 transition hover:text-earth-950" href="/pricing">
+                Pricing
+              </Link>
+              <Link className="font-medium text-earth-800 transition hover:text-earth-950" href="/sign-in">
+                Sign in
+              </Link>
+            </>
           )}
         </nav>
       </div>
