@@ -1,7 +1,8 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { DeleteMemorialForm } from "@/app/dashboard/memorials/delete-memorial-form";
-import { MemorialForm, buildMemorialDefaults } from "@/app/dashboard/memorials/memorial-form";
+import { MemorialForm } from "@/app/dashboard/memorials/memorial-form";
+import { buildMemorialDefaults } from "@/app/dashboard/memorials/memorial-form-defaults";
 import { updateMemorialFromForm } from "@/app/dashboard/memorials/actions";
 import { getIlmSession } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
