@@ -9,7 +9,10 @@ export function IlmHeader({ session }: { session: Session | null }) {
         <Link href="/" className="text-sm font-semibold tracking-tight text-earth-900">
           inLovingMemory
         </Link>
-        <nav className="flex items-center gap-6 text-sm" aria-label="Account">
+        <nav className="flex flex-wrap items-center gap-6 text-sm" aria-label="Primary">
+          <Link className="font-medium text-earth-800 transition hover:text-earth-950" href="/directory">
+            Find a memorial
+          </Link>
           {session?.user ? (
             <>
               <Link className="font-medium text-earth-800 transition hover:text-earth-950" href="/dashboard">

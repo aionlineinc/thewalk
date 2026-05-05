@@ -33,6 +33,14 @@ export default async function EditMemorialPage({ params }: { params: { id: strin
       <p className="mt-3 max-w-2xl text-earth-700">
         Changes apply immediately on the public page (subject to privacy settings).
       </p>
+      <p className="mt-4">
+        <Link
+          href={`/dashboard/memorials/${memorial.id}/community`}
+          className="text-sm font-medium text-calm-600 underline-offset-4 hover:underline"
+        >
+          Moderate guest book & prayer wall →
+        </Link>
+      </p>
       <div className="mt-10">
         <MemorialForm action={updateMemorial.bind(null, memorial.id)} defaults={defaults} />
       </div>

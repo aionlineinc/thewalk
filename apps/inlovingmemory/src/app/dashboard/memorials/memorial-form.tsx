@@ -10,6 +10,8 @@ export type MemorialFormDefaults = {
   deathDate: string;
   privacyLevel: IlmPrivacyLevel;
   slug: string;
+  hideFromDirectory: boolean;
+  hideFromSearchEngines: boolean;
 };
 
 function isoDateForInput(d: Date | null | undefined) {
@@ -25,6 +27,8 @@ export function buildMemorialDefaults(row: {
   deathDate: Date | null;
   privacyLevel: IlmPrivacyLevel;
   slug: string;
+  hideFromDirectory: boolean;
+  hideFromSearchEngines: boolean;
 }): MemorialFormDefaults {
   return {
     displayName: row.displayName,
@@ -34,6 +38,8 @@ export function buildMemorialDefaults(row: {
     deathDate: isoDateForInput(row.deathDate),
     privacyLevel: row.privacyLevel,
     slug: row.slug,
+    hideFromDirectory: row.hideFromDirectory,
+    hideFromSearchEngines: row.hideFromSearchEngines,
   };
 }
 
@@ -132,6 +138,30 @@ export function MemorialForm({
           <option value="INVITE_ONLY">Invite only</option>
         </select>
       </div>
+
+      <fieldset className="space-y-4 rounded-xl border border-earth-200 bg-earth-50/40 px-4 py-5">
+        <legend className="text-sm font-medium text-earth-800">Visibility</legend>
+        <label className="flex cursor-pointer items-start gap-3 text-sm text-earth-700">
+          <input
+            type="checkbox"
+            name="hideFromDirectory"
+            defaultChecked={defaults.hideFromDirectory}
+            className="mt-1 rounded border-earth-300 text-earth-800 focus:ring-earth-500"
+          />
+          <span>
+            Hide from public directory — direct link to this page still works for people you share it with.
+          </span>
+        </label>
+        <label className="flex cursor-pointer items-start gap-3 text-sm text-earth-700">
+          <input
+            type="checkbox"
+            name="hideFromSearchEngines"
+            defaultChecked={defaults.hideFromSearchEngines}
+            className="mt-1 rounded border-earth-300 text-earth-800 focus:ring-earth-500"
+          />
+          <span>Ask search engines not to index this page (robots noindex).</span>
+        </label>
+      </fieldset>
 
       <div className="flex flex-wrap items-center gap-4 border-t border-earth-200 pt-8">
         <button

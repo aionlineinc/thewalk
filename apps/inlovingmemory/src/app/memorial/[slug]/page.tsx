@@ -1,20 +1,56 @@
+import { IlmSubmissionStatus } from "@prisma/client";
 import Link from "next/link";
+import type { Metadata } from "next";
+import { headers } from "next/headers";
 import { notFound } from "next/navigation";
+import { GuestbookPanel } from "@/components/memorial/guestbook-panel";
+import { PrayerPanel } from "@/components/memorial/prayer-panel";
+import { MemorialShareBar } from "@/components/memorial/share-bar";
 import { getIlmSession } from "@/lib/auth";
+import { getMemorialAbsoluteUrl } from "@/lib/ilm-public-url";
 import { prisma } from "@/lib/prisma";
 
 export const dynamic = "force-dynamic";
+
+type PageProps = {
+  params: { slug: string };
+  searchParams: Record<string, string | string[] | undefined>;
+};
+
+function oneParam(v: string | string[] | undefined) {
+  if (Array.isArray(v)) return v[0];
+  return v;
+}
 
 function formatLongDate(d: Date | null) {
   if (!d) return null;
   return new Intl.DateTimeFormat("en", { year: "numeric", month: "long", day: "numeric" }).format(d);
 }
 
-export default async function MemorialPage({ params }: { params: { slug: string } }) {
+export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
+  const memorial = await prisma.ilmMemorial.findUnique({
+    where: { slug: params.slug },
+    select: { displayName: true, biography: true, hideFromSearchEngines: true, privacyLevel: true },
+  });
+
+  if (!memorial) {
+    return { title: "Memorial · inLovingMemory" };
+  }
+
+  const desc = memorial.biography?.replace(/\s+/g, " ").trim().slice(0, 160) || undefined;
+  return {
+    title: `${memorial.displayName} · inLovingMemory`,
+    description: desc,
+    robots: memorial.hideFromSearchEngines || memorial.privacyLevel !== "PUBLIC" ? { index: false, follow: false } : undefined,
+  };
+}
+
+export default async function MemorialPage({ params, searchParams }: PageProps) {
   const memorial = await prisma.ilmMemorial.findUnique({
     where: { slug: params.slug },
     select: {
       id: true,
+      slug: true,
       displayName: true,
       kind: true,
       biography: true,
@@ -32,6 +68,44 @@ export default async function MemorialPage({ params }: { params: { slug: string 
   const isKeeper = userId === memorial.pageKeeperId;
   const isPublic = memorial.privacyLevel === "PUBLIC";
   const canView = isPublic || isKeeper;
+
+  const gbSent = oneParam(searchParams.guestbook);
+  const prSent = oneParam(searchParams.prayer);
+
+  const [guestbookApproved, prayersApproved, pendingGuestbook, pendingPrayers] = await Promise.all([
+    prisma.ilmGuestbookEntry.findMany({
+      where: { memorialId: memorial.id, status: IlmSubmissionStatus.APPROVED },
+      orderBy: { createdAt: "desc" },
+      select: { id: true, authorName: true, content: true, createdAt: true },
+      take: 50,
+    }),
+    prisma.ilmPrayer.findMany({
+      where: { memorialId: memorial.id, status: IlmSubmissionStatus.APPROVED },
+      orderBy: { createdAt: "desc" },
+      select: { id: true, authorName: true, content: true, createdAt: true },
+      take: 50,
+    }),
+    isKeeper
+      ? prisma.ilmGuestbookEntry.count({
+          where: { memorialId: memorial.id, status: IlmSubmissionStatus.PENDING },
+        })
+      : Promise.resolve(0),
+    isKeeper
+      ? prisma.ilmPrayer.count({
+          where: { memorialId: memorial.id, status: IlmSubmissionStatus.PENDING },
+        })
+      : Promise.resolve(0),
+  ]);
+
+  const headerList = headers();
+  const host = headerList.get("x-forwarded-host") ?? headerList.get("host");
+  const proto = headerList.get("x-forwarded-proto") ?? "https";
+  const inferredBase = host ? `${proto}://${host}` : "";
+
+  let shareUrl = getMemorialAbsoluteUrl(memorial.slug);
+  if (!shareUrl && inferredBase) {
+    shareUrl = `${inferredBase}/memorial/${memorial.slug}`;
+  }
 
   if (!canView) {
     return (
@@ -59,31 +133,100 @@ export default async function MemorialPage({ params }: { params: { slug: string 
   const death = formatLongDate(memorial.deathDate);
   const lifeSpan =
     birth || death ? (
-      <p className="mt-3 text-sm text-earth-600">
+      <p className="mt-4 text-base text-earth-600">
         {[birth, death].filter(Boolean).join(" — ")}
       </p>
     ) : null;
 
+  const showCommunityForms = isPublic;
+
   return (
-    <main className="mx-auto max-w-content px-6 py-16 sm:px-8">
+    <main className="mx-auto max-w-3xl px-6 py-12 sm:px-8 sm:py-16">
       {isKeeper && !isPublic ? (
-        <p className="rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-950">
+        <p className="mb-8 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-950">
           You are viewing a non-public page as the page keeper.
         </p>
       ) : null}
-      <p className="text-xs font-semibold uppercase tracking-[0.28em] text-earth-500">
-        {memorial.kind === "LIVING_LEGACY" ? "Living legacy" : "In loving memory"}
-      </p>
-      <h1 className="mt-4 text-4xl font-semibold tracking-tight text-earth-900">{memorial.displayName}</h1>
-      {lifeSpan}
-      <p className="mt-6 whitespace-pre-wrap text-earth-800">{memorial.biography ?? "—"}</p>
-      {isKeeper ? (
-        <p className="mt-12">
-          <Link
-            className="text-sm font-medium text-earth-800 underline-offset-4 hover:underline"
-            href={`/dashboard/memorials/${memorial.id}/edit`}
-          >
-            Edit this memorial
+
+      <header className="border-b border-earth-200 pb-10">
+        <p className="text-xs font-semibold uppercase tracking-[0.28em] text-earth-500">
+          {memorial.kind === "LIVING_LEGACY" ? "Living legacy" : "In loving memory"}
+        </p>
+        <h1 className="mt-4 text-4xl font-semibold tracking-tight text-earth-900 sm:text-5xl">
+          {memorial.displayName}
+        </h1>
+        {lifeSpan}
+        {isKeeper ? (
+          <div className="mt-8 flex flex-wrap gap-4 text-sm">
+            <Link
+              className="font-medium text-earth-800 underline-offset-4 hover:underline"
+              href={`/dashboard/memorials/${memorial.id}/edit`}
+            >
+              Edit memorial
+            </Link>
+            <Link
+              className="font-medium text-calm-600 underline-offset-4 hover:underline"
+              href={`/dashboard/memorials/${memorial.id}/community`}
+            >
+              Moderate guest book & prayer
+              {(pendingGuestbook > 0 || pendingPrayers > 0) && (
+                <span className="ml-1.5 rounded-full bg-calm-600 px-2 py-0.5 text-xs text-white">
+                  {pendingGuestbook + pendingPrayers}
+                </span>
+              )}
+            </Link>
+          </div>
+        ) : null}
+      </header>
+
+      {gbSent === "sent" ? (
+        <p className="mt-8 rounded-lg border border-earth-200 bg-earth-50 px-4 py-3 text-sm text-earth-800" role="status">
+          Thank you — your message was received and will appear after the page keeper approves it.
+        </p>
+      ) : null}
+      {gbSent === "invalid" ? (
+        <p className="mt-8 text-sm text-red-800" role="alert">
+          Please check your name and message, then try again.
+        </p>
+      ) : null}
+
+      {prSent === "sent" ? (
+        <p className="mt-8 rounded-lg border border-calm-500/30 bg-calm-500/10 px-4 py-3 text-sm text-earth-800" role="status">
+          Thank you — your prayer was received and will appear after moderation.
+        </p>
+      ) : null}
+      {prSent === "invalid" ? (
+        <p className="mt-8 text-sm text-red-800" role="alert">
+          Please check your prayer and name, then try again.
+        </p>
+      ) : null}
+
+      <article className="mt-12 space-y-4">
+        <h2 className="sr-only">Life story</h2>
+        <div className="max-w-none text-lg leading-relaxed text-earth-800">
+          <p className="whitespace-pre-wrap">{memorial.biography?.trim() ? memorial.biography : "—"}</p>
+        </div>
+      </article>
+
+      {shareUrl ? (
+        <section className="mt-12 border-t border-earth-200 pt-10">
+          <h2 className="text-lg font-semibold text-earth-900">Share</h2>
+          <p className="mt-2 text-sm text-earth-600">Invite others to visit this page.</p>
+          <div className="mt-4">
+            <MemorialShareBar shareUrl={shareUrl} />
+          </div>
+        </section>
+      ) : null}
+
+      <GuestbookPanel slug={memorial.slug} showForm={showCommunityForms} entries={guestbookApproved} />
+
+      <PrayerPanel slug={memorial.slug} showForm={showCommunityForms} prayers={prayersApproved} />
+
+      {!isKeeper && isPublic ? (
+        <p className="mt-12 border-t border-earth-200 pt-8 text-center text-xs text-earth-500">
+          Hosted with care on inLovingMemory ·{" "}
+          <Link href="/" className="underline underline-offset-2 hover:text-earth-700">
+            Learn more
           </Link>
         </p>
       ) : null}

@@ -50,6 +50,8 @@ export async function createMemorial(formData: FormData) {
   const { displayName, kind, biography, privacyLevel } = parsed.data;
   const birthDate = parseOptionalDate(formData.get("birthDate"));
   const deathDate = parseOptionalDate(formData.get("deathDate"));
+  const hideFromDirectory = formData.get("hideFromDirectory") === "on";
+  const hideFromSearchEngines = formData.get("hideFromSearchEngines") === "on";
 
   const slug = await allocateUniqueSlug(displayName);
 
@@ -62,11 +64,14 @@ export async function createMemorial(formData: FormData) {
       birthDate: birthDate ?? null,
       deathDate: deathDate ?? null,
       privacyLevel,
+      hideFromDirectory,
+      hideFromSearchEngines,
       pageKeeperId: userId,
     },
   });
 
   revalidatePath("/dashboard");
+  revalidatePath("/directory");
   revalidatePath(`/memorial/${slug}`);
   redirect(`/memorial/${slug}`);
 }
@@ -101,6 +106,8 @@ export async function updateMemorial(memorialId: string, formData: FormData) {
   const { displayName, kind, biography, privacyLevel } = parsed.data;
   const birthDate = parseOptionalDate(formData.get("birthDate"));
   const deathDate = parseOptionalDate(formData.get("deathDate"));
+  const hideFromDirectory = formData.get("hideFromDirectory") === "on";
+  const hideFromSearchEngines = formData.get("hideFromSearchEngines") === "on";
 
   await prisma.ilmMemorial.update({
     where: { id: memorialId },
@@ -111,10 +118,13 @@ export async function updateMemorial(memorialId: string, formData: FormData) {
       birthDate: birthDate ?? null,
       deathDate: deathDate ?? null,
       privacyLevel,
+      hideFromDirectory,
+      hideFromSearchEngines,
     },
   });
 
   revalidatePath("/dashboard");
+  revalidatePath("/directory");
   revalidatePath(`/memorial/${memorial.slug}`);
   redirect(`/memorial/${memorial.slug}`);
 }
@@ -134,6 +144,7 @@ export async function deleteMemorial(memorialId: string) {
   await prisma.ilmMemorial.delete({ where: { id: memorialId } });
 
   revalidatePath("/dashboard");
+  revalidatePath("/directory");
   revalidatePath(`/memorial/${memorial.slug}`);
   redirect("/dashboard");
 }

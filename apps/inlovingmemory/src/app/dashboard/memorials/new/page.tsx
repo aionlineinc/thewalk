@@ -15,6 +15,8 @@ const emptyDefaults = {
   deathDate: "",
   privacyLevel: IlmPrivacyLevel.PUBLIC,
   slug: "(assigned when you save)",
+  hideFromDirectory: false,
+  hideFromSearchEngines: false,
 };
 
 export default function NewMemorialPage() {

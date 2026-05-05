@@ -66,6 +66,9 @@ export default async function DashboardPage() {
                 <Link className="font-medium text-earth-800 underline-offset-4 hover:underline" href={`/dashboard/memorials/${m.id}/edit`}>
                   Edit
                 </Link>
+                <Link className="font-medium text-calm-600 underline-offset-4 hover:underline" href={`/dashboard/memorials/${m.id}/community`}>
+                  Community
+                </Link>
               </div>
             </li>
           ))}
