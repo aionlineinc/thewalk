@@ -54,7 +54,7 @@ export default async function MemorialCommunityPage({ params }: { params: { id: 
   }
 
   return (
-    <main className="mx-auto max-w-content px-6 py-12 sm:px-8">
+    <main className="ilm-container py-12">
       <Link
         href="/dashboard"
         className="text-sm font-medium text-earth-800 underline-offset-4 hover:underline"

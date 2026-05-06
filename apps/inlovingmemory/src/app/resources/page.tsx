@@ -9,7 +9,7 @@ export const metadata = {
 export default async function ResourcesPage() {
   const content = await getIlmMarketingContent();
   return (
-    <main className="mx-auto max-w-3xl px-6 py-16 sm:px-8">
+    <main className="ilm-container py-16">
       <p className="text-xs font-semibold uppercase tracking-[0.28em] text-earth-500">Resources</p>
       <h1 className="mt-4 text-3xl font-semibold tracking-tight text-earth-900">{content.resources.title}</h1>
       <p className="mt-6 max-w-2xl text-lg leading-relaxed text-earth-800">{content.resources.intro}</p>

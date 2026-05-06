@@ -131,7 +131,7 @@ export default async function MemorialPage({ params, searchParams }: PageProps) 
 
   if (!canView) {
     return (
-      <main className="mx-auto max-w-content px-6 py-16 sm:px-8">
+      <main className="ilm-prose py-16">
         <h1 className="text-2xl font-semibold tracking-tight text-earth-900">This page is not public</h1>
         <p className="mt-4 max-w-xl text-earth-700">
           {memorial.privacyLevel === "PASSWORD"
@@ -165,7 +165,7 @@ export default async function MemorialPage({ params, searchParams }: PageProps) 
   return (
     <main className="pb-20">
       {isKeeper && !isPublic ? (
-        <div className="mx-auto max-w-3xl px-6 pt-10 sm:px-8">
+        <div className="ilm-prose pt-10">
           <p className="rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-950">
             You are viewing a non-public page as the page keeper.
           </p>
@@ -173,7 +173,7 @@ export default async function MemorialPage({ params, searchParams }: PageProps) 
       ) : null}
 
       <section className="border-b border-earth-200/80 bg-white pt-10">
-        <div className="mx-auto max-w-3xl px-6 pb-10 sm:px-8">
+        <div className="ilm-prose pb-10">
           <MemorialHero
             displayName={memorial.displayName}
             kindLabel={memorial.kind === "LIVING_LEGACY" ? "Living legacy" : "In loving memory"}
@@ -219,14 +219,14 @@ export default async function MemorialPage({ params, searchParams }: PageProps) 
       <MemorialSectionNav />
 
       {gbSent === "sent" ? (
-        <div className="mx-auto mt-8 max-w-3xl px-6 sm:px-8">
+        <div className="ilm-prose mt-8">
           <p className="rounded-lg border border-earth-200 bg-earth-50 px-4 py-3 text-sm text-earth-800" role="status">
             Thank you — your message was received and will appear after the page keeper approves it.
           </p>
         </div>
       ) : null}
       {gbSent === "invalid" ? (
-        <div className="mx-auto mt-8 max-w-3xl px-6 sm:px-8">
+        <div className="ilm-prose mt-8">
           <p className="text-sm text-red-800" role="alert">
             Please check your name and message, then try again.
           </p>
@@ -234,7 +234,7 @@ export default async function MemorialPage({ params, searchParams }: PageProps) 
       ) : null}
 
       {prSent === "sent" ? (
-        <div className="mx-auto mt-8 max-w-3xl px-6 sm:px-8">
+        <div className="ilm-prose mt-8">
           <p
             className="rounded-lg border border-calm-500/30 bg-calm-500/10 px-4 py-3 text-sm text-earth-800"
             role="status"
@@ -244,14 +244,14 @@ export default async function MemorialPage({ params, searchParams }: PageProps) 
         </div>
       ) : null}
       {prSent === "invalid" ? (
-        <div className="mx-auto mt-8 max-w-3xl px-6 sm:px-8">
+        <div className="ilm-prose mt-8">
           <p className="text-sm text-red-800" role="alert">
             Please check your prayer and name, then try again.
           </p>
         </div>
       ) : null}
 
-      <article id="story" className="mx-auto mt-12 max-w-3xl px-6 sm:px-8">
+      <article id="story" className="ilm-prose mt-12">
         <h2 className="sr-only">Life story</h2>
         <div className="rounded-2xl border border-earth-200 bg-white/80 px-6 py-6 shadow-sm">
           <div className="max-w-none text-base leading-relaxed text-earth-800 sm:text-lg">
@@ -260,7 +260,7 @@ export default async function MemorialPage({ params, searchParams }: PageProps) 
         </div>
       </article>
 
-      <section id="service" className="mx-auto mt-12 max-w-3xl px-6 sm:px-8" aria-labelledby="service-heading">
+      <section id="service" className="ilm-prose mt-12" aria-labelledby="service-heading">
         <h2 id="service-heading" className="text-xl font-semibold tracking-tight text-earth-900">
           Order of service
         </h2>
@@ -273,12 +273,12 @@ export default async function MemorialPage({ params, searchParams }: PageProps) 
         </div>
       </section>
 
-      <section id="gallery" className="mx-auto mt-12 max-w-3xl px-6 sm:px-8">
+      <section id="gallery" className="ilm-prose mt-12">
         <MemorialPhotoGallery photos={galleryPhotos} />
       </section>
 
       {shareUrl ? (
-        <section className="mx-auto mt-12 max-w-3xl px-6 sm:px-8" aria-labelledby="share-heading">
+        <section className="ilm-prose mt-12" aria-labelledby="share-heading">
           <h2 id="share-heading" className="text-xl font-semibold tracking-tight text-earth-900">
             Share
           </h2>
@@ -289,16 +289,16 @@ export default async function MemorialPage({ params, searchParams }: PageProps) 
         </section>
       ) : null}
 
-      <section id="guestbook" className="mx-auto max-w-3xl px-6 sm:px-8">
+      <section id="guestbook" className="ilm-prose">
         <GuestbookPanel slug={memorial.slug} showForm={showCommunityForms} entries={guestbookApproved} />
       </section>
 
-      <section id="prayer" className="mx-auto max-w-3xl px-6 sm:px-8">
+      <section id="prayer" className="ilm-prose">
         <PrayerPanel slug={memorial.slug} showForm={showCommunityForms} prayers={prayersApproved} />
       </section>
 
       {!isKeeper && isPublic ? (
-        <div className="mx-auto max-w-3xl px-6 sm:px-8">
+        <div className="ilm-prose">
           <p className="mt-12 border-t border-earth-200 pt-8 text-center text-xs text-earth-500">
             Hosted with care on inLovingMemory ·{" "}
             <Link href="/" className="underline underline-offset-2 hover:text-earth-700">

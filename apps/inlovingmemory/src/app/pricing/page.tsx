@@ -12,7 +12,7 @@ export default async function PricingPage() {
   return (
     <main>
       <section className="border-b border-earth-200/80 bg-earth-50/30">
-        <div className="mx-auto max-w-content px-6 py-16 sm:px-8">
+        <div className="ilm-container py-16">
           <p className="text-xs font-semibold uppercase tracking-[0.28em] text-earth-500">Pricing</p>
           <h1 className="mt-4 text-3xl font-semibold tracking-tight text-earth-900">{content.pricing.title}</h1>
           <p className="mt-6 max-w-2xl text-lg leading-relaxed text-earth-800">{content.pricing.intro}</p>
@@ -27,7 +27,7 @@ export default async function PricingPage() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-content px-6 py-14 sm:px-8">
+      <section className="ilm-container py-14">
         <div className="grid gap-6 md:grid-cols-3">
           {content.pricing.tiers.map((t) => (
             <Card

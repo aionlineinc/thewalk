@@ -23,7 +23,7 @@ export default async function DashboardPage() {
   });
 
   return (
-    <main className="mx-auto max-w-content px-6 py-12 sm:px-8">
+    <main className="ilm-container py-12">
       <div className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <h1 className="text-3xl font-semibold tracking-tight text-earth-900">Your memorials</h1>
