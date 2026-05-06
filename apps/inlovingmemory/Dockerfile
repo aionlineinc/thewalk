@@ -43,6 +43,7 @@ RUN addgroup --system --gid 1001 nodejs \
 # Next standalone trace (workspace layout keeps server under apps/inlovingmemory/)
 COPY --from=builder /app/apps/inlovingmemory/.next/standalone ./
 COPY --from=builder /app/apps/inlovingmemory/.next/static ./apps/inlovingmemory/.next/static
+COPY --from=builder /app/apps/inlovingmemory/public ./apps/inlovingmemory/public
 
 # Same DB as theWalk — share migrations (safe if main app also runs migrate deploy)
 COPY --from=builder /app/prisma ./prisma
