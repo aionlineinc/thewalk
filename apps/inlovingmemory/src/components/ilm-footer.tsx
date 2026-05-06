@@ -3,7 +3,7 @@ import Link from "next/link";
 export function IlmFooter() {
   return (
     <footer className="border-t border-earth-200/80 bg-earth-50/40">
-      <div className="mx-auto max-w-content px-6 py-10 sm:px-8">
+      <div className="ilm-container py-10">
         <div className="flex flex-col gap-8 sm:flex-row sm:items-start sm:justify-between">
           <div>
             <p className="text-sm font-semibold tracking-tight text-earth-900">inLovingMemory</p>
