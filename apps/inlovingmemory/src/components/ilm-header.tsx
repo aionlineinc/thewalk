@@ -4,18 +4,19 @@ import { SignOutButton } from "@/components/sign-out-button";
 
 export function IlmHeader({ session }: { session: Session | null }) {
   return (
-    <header className="border-b border-earth-200/80 bg-earth-50/40 backdrop-blur-sm">
-      <div className="mx-auto flex max-w-content items-center justify-between gap-4 px-6 py-4 sm:px-8">
-        <Link href="/" className="text-sm font-semibold tracking-tight text-earth-900">
-          inLovingMemory
-        </Link>
-        <nav className="flex flex-wrap items-center gap-6 text-sm" aria-label="Primary">
-          <Link className="font-medium text-earth-800 transition hover:text-earth-950" href="/how-it-works">
-            How it works
+    <header className="fixed inset-x-0 top-6 z-50 sm:top-7">
+      <div className="mx-auto max-w-content px-4 sm:px-6">
+        <div className="flex items-center justify-between gap-4 rounded-full border border-earth-200 bg-white/90 px-5 py-3 shadow-sm backdrop-blur supports-[backdrop-filter]:bg-white/75">
+          <Link href="/" className="text-sm font-semibold tracking-tight text-earth-900">
+            inLovingMemory
           </Link>
-          <Link className="font-medium text-earth-800 transition hover:text-earth-950" href="/directory">
-            Find a memorial
-          </Link>
+          <nav className="flex flex-wrap items-center gap-5 text-sm" aria-label="Primary">
+            <Link className="font-medium text-earth-800 transition hover:text-earth-950" href="/how-it-works">
+              How it works
+            </Link>
+            <Link className="font-medium text-earth-800 transition hover:text-earth-950" href="/directory">
+              Find a memorial
+            </Link>
           {session?.user ? (
             <>
               <Link className="font-medium text-earth-800 transition hover:text-earth-950" href="/dashboard">
@@ -33,7 +34,8 @@ export function IlmHeader({ session }: { session: Session | null }) {
               </Link>
             </>
           )}
-        </nav>
+          </nav>
+        </div>
       </div>
     </header>
   );

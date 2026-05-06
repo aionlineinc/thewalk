@@ -1,7 +1,11 @@
+import Image from "next/image";
 import { getIlmSession } from "@/lib/auth";
 import { getIlmMarketingContent } from "@/lib/cms/ilm-content";
-import { ButtonLink } from "@/components/ui/button";
-import { Card, CardBody, CardDescription, CardTitle } from "@/components/ui/card";
+import { Card, CardDescription, CardTitle } from "@/components/ui/card";
+import { IlmJourneyCards } from "@/components/ilm-journey-cards";
+import { IlmTestimonialsCarousel } from "@/components/ilm-testimonials-carousel";
+import { AppPillLink } from "@/components/ui/AppPillLink";
+import { AppHeadingDisplay, AppLeadOnDark } from "@/components/ui/Typography";
 
 export default async function IlmHomePage() {
   const session = await getIlmSession();
@@ -9,105 +13,90 @@ export default async function IlmHomePage() {
 
   return (
     <main>
-      <section className="border-b border-earth-200/80 bg-earth-50/30">
-        <div className="mx-auto max-w-content px-6 py-16 sm:px-8 sm:py-20">
-          <p className="text-xs font-semibold uppercase tracking-[0.28em] text-earth-500">theWalk Ministries</p>
-          <h1 className="mt-6 text-4xl font-semibold tracking-tight text-earth-900 sm:text-5xl">
+      <section
+        id="ilm-hero"
+        className="relative flex h-[90vh] min-h-[620px] flex-col items-center justify-center p-2 font-sans tracking-tight md:p-4"
+        aria-labelledby="ilm-hero-title"
+      >
+        <div className="absolute inset-2 overflow-hidden rounded-[20px] md:inset-4">
+          <div className="absolute inset-0">
+            <Image
+              src="/ilm-hero.svg"
+              alt=""
+              fill
+              priority
+              className="object-cover"
+              sizes="(max-width: 768px) 100vw, min(100vw, 1280px)"
+            />
+          </div>
+          <div className="absolute inset-0 bg-gradient-to-t from-[#111111] via-black/45 to-black/20" aria-hidden />
+          <div className="absolute bottom-0 right-0 h-full w-full bg-calm-500/20 mix-blend-overlay" aria-hidden />
+        </div>
+
+        <div className="relative z-10 mx-auto mt-12 flex max-w-4xl flex-col items-center px-4 text-center">
+          <AppHeadingDisplay variant="home" id="ilm-hero-title" className="mb-6">
             {content.heroTitle}
-          </h1>
-          <p className="mt-6 max-w-2xl text-lg leading-relaxed text-earth-800">{content.heroBody}</p>
-          <div className="mt-10 flex flex-wrap gap-4">
-            {content.heroLinks.map((l) => (
-              <ButtonLink key={l.href} href={l.href} variant="outline">
-                {l.label}
-              </ButtonLink>
-            ))}
-            {session?.user ? (
-              <ButtonLink href="/dashboard" variant="primary">
-                Your memorials
-              </ButtonLink>
-            ) : (
-              <ButtonLink href="/sign-in" variant="primary">
-                Page keeper sign in
-              </ButtonLink>
-            )}
+          </AppHeadingDisplay>
+          <AppLeadOnDark id="ilm-hero-description" className="mx-auto mb-10 max-w-2xl">
+            {content.heroBody}
+          </AppLeadOnDark>
+
+          <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
+            <AppPillLink href="/how-it-works" variant="primary">
+              Get Started
+              <svg className="ml-1 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden>
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+            </AppPillLink>
+            <AppPillLink href="/directory" variant="ghostOnDark">
+              Find a memorial
+            </AppPillLink>
           </div>
-        </div>
-      </section>
 
-      <section className="mx-auto max-w-content px-6 py-14 sm:px-8 sm:py-18" aria-labelledby="ilm-features">
-        <h2 id="ilm-features" className="text-2xl font-semibold tracking-tight text-earth-900">
-          Create an online memorial in minutes
-        </h2>
-        <p className="mt-3 max-w-2xl text-earth-700">
-          Simple, modern, and designed to help you celebrate a life story with dignity.
-        </p>
-
-        <div className="mt-10 grid gap-6 md:grid-cols-3">
-          <Card>
-            <CardBody>
-              <p className="text-xs font-semibold uppercase tracking-wide text-earth-500">Create</p>
-              <CardTitle className="mt-2">A beautiful memorial page</CardTitle>
-              <CardDescription>
-                Start with the essentials — name, story, and photos — and expand over time.
-              </CardDescription>
-            </CardBody>
-          </Card>
-          <Card>
-            <CardBody>
-              <p className="text-xs font-semibold uppercase tracking-wide text-earth-500">Add</p>
-              <CardTitle className="mt-2">Memories and prayers</CardTitle>
-              <CardDescription>
-                Invite others to contribute. You stay in control with moderation and privacy settings.
-              </CardDescription>
-            </CardBody>
-          </Card>
-          <Card>
-            <CardBody>
-              <p className="text-xs font-semibold uppercase tracking-wide text-earth-500">Share</p>
-              <CardTitle className="mt-2">A lasting legacy</CardTitle>
-              <CardDescription>
-                Share a single link that’s easy for family and friends to access — anywhere.
-              </CardDescription>
-            </CardBody>
-          </Card>
-        </div>
-      </section>
-
-      <section className="border-y border-earth-200/70 bg-white/70">
-        <div className="mx-auto max-w-content px-6 py-14 sm:px-8">
-          <h2 className="text-2xl font-semibold tracking-tight text-earth-900">Loved by families</h2>
-          <p className="mt-3 max-w-2xl text-earth-700">
-            A simple experience that helps people focus on what matters most.
+          <p className="mt-10 text-xs text-white/70">
+            {session?.user ? "Welcome back — manage your memorials in the dashboard." : "Page keepers can sign in to manage memorials."}
           </p>
-          <div className="mt-10 grid gap-6 md:grid-cols-3">
-            {[
-              {
-                quote:
-                  "A beautifully presented tribute page. Easy to share and update as family memories come in.",
-                name: "Marissa G",
-              },
-              {
-                quote:
-                  "Very easy to create a memorial page. Thank you for providing a place to remember.",
-                name: "Menard P",
-              },
-              {
-                quote:
-                  "Wonderful to share our memories with others. It reached many people and will last.",
-                name: "Lisa D",
-              },
-            ].map((t) => (
-              <Card key={t.name} className="bg-white">
-                <CardBody>
-                  <p className="text-sm leading-relaxed text-earth-800">“{t.quote}”</p>
-                  <p className="mt-4 text-xs font-semibold uppercase tracking-wide text-earth-500">{t.name}</p>
-                </CardBody>
-              </Card>
-            ))}
+        </div>
+      </section>
+
+      <IlmJourneyCards />
+
+      <section className="bg-white" aria-labelledby="ilm-assistance-heading">
+        <div className="container mx-auto max-w-6xl px-4 py-16 md:px-8 md:py-20">
+          <div className="grid gap-10 md:grid-cols-2 md:gap-12 lg:gap-16 md:items-center">
+            <div className="relative h-[400px] w-full overflow-hidden rounded-2xl bg-earth-50/80 ring-1 ring-earth-200/60">
+              <Image
+                src="/ilm-journey-remember.svg"
+                alt="Soft horizon illustration suggesting remembrance and a life story shared online."
+                fill
+                className="object-cover"
+                sizes="(max-width: 768px) 100vw, min(50vw, 640px)"
+              />
+            </div>
+            <div>
+              <h2
+                id="ilm-assistance-heading"
+                className="text-3xl font-medium tracking-tight text-neutral-950 md:text-4xl lg:text-[35px] lg:leading-[1.1]"
+              >
+                Get assistance with your memorial page
+              </h2>
+              <p className="mt-5 max-w-2xl text-[15px] font-light leading-relaxed text-neutral-500 md:text-lg md:leading-relaxed">
+                Our support team offers expert guidance and personalized support to help you create a lasting digital legacy.
+              </p>
+              <div className="mt-10">
+                <AppPillLink href="/how-it-works" variant="primary">
+                  Get assistance
+                  <svg className="ml-1 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden>
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </AppPillLink>
+              </div>
+            </div>
           </div>
         </div>
       </section>
+
+      <IlmTestimonialsCarousel />
 
       <section className="mx-auto max-w-content px-6 py-14 sm:px-8">
         <div className="grid gap-10 md:grid-cols-2 md:items-start">
@@ -121,16 +110,19 @@ export default async function IlmHomePage() {
               legacy preservation.
             </p>
             <div className="mt-8 flex flex-wrap gap-4">
-              <ButtonLink href="/resources" variant="outline">
+              <AppPillLink href="/resources" variant="primary">
                 Learn more
-              </ButtonLink>
-              <ButtonLink href="/directory" variant="primary">
+                <svg className="ml-1 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden>
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </AppPillLink>
+              <AppPillLink href="/directory" variant="ghostOnDark" className="border-earth-200 bg-white text-earth-900 hover:bg-earth-100">
                 View memorials
-              </ButtonLink>
+              </AppPillLink>
             </div>
           </div>
           <Card className="bg-earth-50/60">
-            <CardBody>
+            <div className="px-8 py-8 md:px-10 md:py-10">
               <CardTitle>What you can do today</CardTitle>
               <CardDescription>
                 Create memorial pages, share photos, and collect guestbook messages and prayers with moderation.
@@ -140,7 +132,7 @@ export default async function IlmHomePage() {
                 <li>• Keeper dashboard for edits, photos, and moderation</li>
                 <li>• Shareable pages with clean typography</li>
               </ul>
-            </CardBody>
+            </div>
           </Card>
         </div>
       </section>

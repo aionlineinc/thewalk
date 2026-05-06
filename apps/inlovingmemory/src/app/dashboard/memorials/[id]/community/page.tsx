@@ -141,7 +141,7 @@ export default async function MemorialCommunityPage({ params }: { params: { id: 
                     <p className="text-xs text-earth-500">{p.authorEmail}</p>
                   ) : null}
                   {p.notifyAuthor ? (
-                    <p className="mt-1 text-xs text-calm-600">Open to follow-up from page keeper</p>
+                    <p className="mt-1 text-xs text-calm-500">Open to follow-up from page keeper</p>
                   ) : null}
                   <p className="mt-3 whitespace-pre-wrap text-sm text-earth-800">{p.content}</p>
                   <p className="mt-3 text-xs text-earth-500">
@@ -156,7 +156,7 @@ export default async function MemorialCommunityPage({ params }: { params: { id: 
                       <input type="hidden" name="__status" value={IlmSubmissionStatus.APPROVED} />
                       <button
                         type="submit"
-                        className="rounded-lg bg-calm-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-calm-500"
+                        className="rounded-lg bg-calm-500 px-3 py-1.5 text-sm font-medium text-white hover:bg-calm-400"
                       >
                         Approve
                       </button>

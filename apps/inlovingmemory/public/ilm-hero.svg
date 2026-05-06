@@ -1,0 +1,33 @@
+<svg width="1600" height="900" viewBox="0 0 1600 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="900" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0B2236"/>
+      <stop offset="0.55" stop-color="#1E4B73"/>
+      <stop offset="1" stop-color="#FAF8F5"/>
+    </linearGradient>
+    <linearGradient id="mist" x1="0" y1="0" x2="1600" y2="0" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FAF8F5" stop-opacity="0.05"/>
+      <stop offset="0.5" stop-color="#FAF8F5" stop-opacity="0.18"/>
+      <stop offset="1" stop-color="#FAF8F5" stop-opacity="0.06"/>
+    </linearGradient>
+    <filter id="blur" x="-40" y="-40" width="1680" height="980" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feGaussianBlur stdDeviation="18"/>
+    </filter>
+  </defs>
+
+  <rect width="1600" height="900" fill="url(#sky)"/>
+
+  <!-- Soft cloud bands -->
+  <g filter="url(#blur)" opacity="0.9">
+    <path d="M-40 210C180 140 340 170 520 210C700 250 860 310 1040 290C1220 270 1400 190 1640 240V420H-40V210Z" fill="url(#mist)"/>
+    <path d="M-40 360C180 300 350 330 520 360C690 390 870 430 1040 420C1210 410 1400 350 1640 380V520H-40V360Z" fill="url(#mist)"/>
+  </g>
+
+  <!-- Horizon / hills -->
+  <path d="M0 620C220 560 380 590 560 630C740 670 930 720 1120 700C1310 680 1450 630 1600 650V900H0V620Z" fill="#3E362F" fill-opacity="0.22"/>
+  <path d="M0 690C220 650 400 680 580 710C760 740 980 790 1180 770C1380 750 1480 710 1600 730V900H0V690Z" fill="#3E362F" fill-opacity="0.14"/>
+
+  <!-- Subtle light path -->
+  <path d="M770 900C820 770 845 700 890 640C940 570 1030 520 1120 495C1210 470 1320 470 1440 495V900H770Z" fill="#FAF8F5" fill-opacity="0.10"/>
+</svg>
+

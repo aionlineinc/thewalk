@@ -34,7 +34,7 @@ export default async function PricingPage() {
               key={t.name}
               className={
                 t.name === "Premium"
-                  ? "border-calm-600/25 bg-calm-500/5"
+                  ? "border-calm-500/25 bg-calm-400/5"
                   : t.name === "Generations"
                     ? "bg-earth-50/40"
                     : undefined

@@ -20,7 +20,7 @@ export default async function ResourcesPage() {
             key={c.title}
             className={
               idx === 1
-                ? "rounded-2xl border border-calm-600/25 bg-calm-500/5 px-6 py-5 shadow-sm"
+                ? "rounded-2xl border border-calm-500/25 bg-calm-400/5 px-6 py-5 shadow-sm"
                 : "rounded-2xl border border-earth-200 bg-white/80 px-6 py-5 shadow-sm"
             }
           >

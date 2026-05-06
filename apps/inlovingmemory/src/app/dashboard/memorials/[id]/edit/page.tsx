@@ -43,7 +43,7 @@ export default async function EditMemorialPage({ params }: { params: { id: strin
         </Link>
         <Link
           href={`/dashboard/memorials/${memorial.id}/community`}
-          className="text-sm font-medium text-calm-600 underline-offset-4 hover:underline"
+          className="text-sm font-medium text-calm-500 underline-offset-4 hover:underline"
         >
           Moderate guest book & prayer wall →
         </Link>

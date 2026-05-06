@@ -1,5 +1,29 @@
+import path from "node:path";
+import os from "node:os";
+
+/**
+ * iCloud / cloud-synced project roots corrupt `.next` (missing chunks like `./135.js`).
+ * Only `next dev` should write its cache outside the repo — never `next build` / `next start`
+ * (Docker and production rely on in-repo `.next`).
+ *
+ * Opt out: USE_LOCAL_NEXT_CACHE=0
+ */
+function devDistDir() {
+  if (process.env.USE_LOCAL_NEXT_CACHE === "0") return undefined;
+  const isDevServer = process.argv.includes("dev");
+  if (!isDevServer) return undefined;
+
+  const home = os.homedir();
+  return process.platform === "darwin"
+    ? path.join(home, "Library", "Caches", "thewalk-ilm-next")
+    : path.join(os.tmpdir(), "thewalk-ilm-next");
+}
+
+const localDevDist = devDistDir();
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  ...(localDevDist ? { distDir: localDevDist } : {}),
   reactStrictMode: true,
   poweredByHeader: false,
   compress: true,

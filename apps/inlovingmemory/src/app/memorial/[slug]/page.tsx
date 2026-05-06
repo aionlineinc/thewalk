@@ -198,12 +198,12 @@ export default async function MemorialPage({ params, searchParams }: PageProps) 
                   Photos
                 </Link>
                 <Link
-                  className="font-medium text-calm-600 underline-offset-4 hover:underline"
+                  className="font-medium text-calm-500 underline-offset-4 hover:underline"
                   href={`/dashboard/memorials/${memorial.id}/community`}
                 >
                   Moderate guest book & prayer
                   {(pendingGuestbook > 0 || pendingPrayers > 0) && (
-                    <span className="ml-1.5 rounded-full bg-calm-600 px-2 py-0.5 text-xs text-white">
+                    <span className="ml-1.5 rounded-full bg-calm-500 px-2 py-0.5 text-xs text-white">
                       {pendingGuestbook + pendingPrayers}
                     </span>
                   )}

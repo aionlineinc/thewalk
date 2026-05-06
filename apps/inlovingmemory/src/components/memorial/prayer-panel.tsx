@@ -83,7 +83,7 @@ export function PrayerPanel({
             <input
               type="checkbox"
               name="notifyAuthor"
-              className="mt-1 rounded border-earth-300 text-calm-600 focus:ring-calm-500"
+              className="mt-1 rounded border-earth-300 text-calm-500 focus:ring-calm-500"
             />
             <span>
               I’m open to the page keeper reaching out with pastoral encouragement (uses your email if provided).
@@ -91,7 +91,7 @@ export function PrayerPanel({
           </label>
           <button
             type="submit"
-            className="rounded-lg bg-calm-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-calm-500"
+            className="rounded-lg bg-calm-500 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-calm-400"
           >
             Share prayer
           </button>

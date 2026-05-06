@@ -3,13 +3,48 @@
 @tailwind utilities;
 
 :root {
+  --font-outfit: "Outfit", ui-sans-serif, system-ui, sans-serif;
+  --font-roboto-mono: "Roboto Mono", ui-monospace, monospace;
   --background: #faf8f5;
   --foreground: #3e362f;
-  --muted: #6b6560;
-  --accent: #4a6fa5;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
+}
+
+@layer base {
+  :where(a:not([data-button-link])) {
+    @apply text-calm-500 transition-colors hover:text-calm-600;
+  }
+  :where(a:not([data-button-link]):focus-visible) {
+    @apply rounded-sm outline outline-2 outline-offset-2 outline-earth-900;
+  }
+}
+
+/* Copied from theWalk (local to ILM; safe to diverge later). */
+@layer components {
+  .app-heading-display-home {
+    @apply text-5xl font-normal leading-[1.1] tracking-tight text-white drop-shadow-md md:text-[70px];
+  }
+  .app-heading-display-about {
+    @apply text-4xl font-normal leading-[1.1] tracking-tight text-white drop-shadow-sm md:text-5xl lg:text-[70px];
+  }
+  .app-lead-on-dark {
+    @apply text-lg font-light leading-relaxed text-white/90;
+  }
+  .app-heading-section {
+    @apply text-3xl font-medium tracking-tight text-gray-900 md:text-5xl;
+  }
+  .app-lead {
+    @apply mx-auto max-w-2xl text-base font-light leading-relaxed text-gray-500 md:text-lg;
+  }
+
+  .app-pill-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-full bg-calm-500 px-8 py-3.5 text-lg font-medium text-white shadow-lg shadow-calm-700/30 transition-all hover:bg-calm-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white;
+  }
+  .app-pill-ghost-dark {
+    @apply inline-flex items-center justify-center rounded-full border border-white/30 bg-transparent px-8 py-3.5 text-lg font-medium text-white transition-all hover:bg-white/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white;
+  }
 }

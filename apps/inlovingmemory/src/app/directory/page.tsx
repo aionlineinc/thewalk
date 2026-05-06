@@ -95,7 +95,7 @@ export default async function DirectoryPage({
                 <p className="text-xs font-semibold uppercase tracking-wide text-earth-500">
                   {m.kind === IlmMemorialKind.LIVING_LEGACY ? "Living legacy" : "Memorial"}
                 </p>
-                <h2 className="mt-2 text-xl font-semibold text-earth-900 group-hover:text-calm-600">
+                <h2 className="mt-2 text-xl font-semibold text-earth-900 group-hover:text-calm-500">
                   {m.displayName}
                 </h2>
                 {excerpt(m.biography) ? (

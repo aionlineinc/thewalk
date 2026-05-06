@@ -1,9 +1,22 @@
 import type { Metadata } from "next";
+import { Outfit, Roboto_Mono } from "next/font/google";
 import { IlmHeader } from "@/components/ilm-header";
 import { IlmFooter } from "@/components/ilm-footer";
 import { SessionProvider } from "@/components/session-provider";
 import { getIlmSession } from "@/lib/auth";
 import "./globals.css";
+
+const outfit = Outfit({
+  subsets: ["latin"],
+  variable: "--font-outfit",
+  display: "swap",
+});
+
+const robotoMono = Roboto_Mono({
+  subsets: ["latin"],
+  variable: "--font-roboto-mono",
+  display: "swap",
+});
 
 const ilmBase =
   process.env.NEXT_PUBLIC_ILM_URL?.trim() ||
@@ -34,8 +47,8 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const session = await getIlmSession();
 
   return (
-    <html lang="en">
-      <body className="min-h-screen antialiased">
+    <html lang="en" className={`${outfit.variable} ${robotoMono.variable} h-full antialiased`}>
+      <body className="min-h-screen font-sans antialiased">
         <SessionProvider session={session}>
           <IlmHeader session={session} />
           <div className="min-h-[calc(100vh-64px)]">{children}</div>
