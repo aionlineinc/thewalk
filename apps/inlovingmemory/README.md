@@ -58,6 +58,38 @@ Optional runtime/build: `GIT_COMMIT` for `/api/health` (`docker build --build-ar
 
 **Photo uploads** use presigned PUTs. The browser must be allowed to `PUT` to the bucket: configure **CORS** on the bucket (e.g. allow your ILM origin, `PUT`, `GET`, `HEAD`, and `Content-Type` header). Without `ILM_S3_*`, the **Photos** page explains that storage is not configured.
 
+### Cloudflare R2 setup
+
+**Env vars for R2:**
+
+| Variable | Value |
+|---|---|
+| `ILM_S3_ENDPOINT` | `https://<ACCOUNT_ID>.r2.cloudflarestorage.com` |
+| `ILM_S3_REGION` | `auto` |
+| `ILM_S3_BUCKET` | your R2 bucket name |
+| `ILM_S3_ACCESS_KEY_ID` | R2 API token ID (create in Cloudflare → R2 → Manage API tokens) |
+| `ILM_S3_SECRET_ACCESS_KEY` | R2 API token secret |
+| `ILM_S3_PUBLIC_BASE_URL` | Custom domain or `https://pub-<hash>.r2.dev` (enable public access on the bucket first) |
+
+**R2 CORS** — in the Cloudflare dashboard go to **R2 → your bucket → Settings → CORS Policy** and paste:
+
+```json
+[
+  {
+    "AllowedOrigins": ["https://your-ilm-domain.com", "http://localhost:3001"],
+    "AllowedMethods": ["GET", "PUT", "HEAD"],
+    "AllowedHeaders": ["*"],
+    "MaxAgeSeconds": 3600
+  }
+]
+```
+
+Replace `https://your-ilm-domain.com` with your actual ILM deployment URL. For local dev only, `http://localhost:3001` is sufficient.
+
+**R2 public access** — on the bucket's **Settings** page enable **"Allow Public Access"** (or connect a custom domain). Copy the `r2.dev` subdomain URL (or your custom domain) as `ILM_S3_PUBLIC_BASE_URL`.
+
+---
+
 ### Wasabi CORS configuration
 
 In the Wasabi console, go to your bucket → **Settings** → **CORS Configuration** and add:
