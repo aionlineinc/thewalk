@@ -75,22 +75,25 @@ export default async function IlmHomePage() {
         <div className="relative container mx-auto max-w-6xl px-4 py-20 md:px-8 md:py-28">
           <div className="grid gap-10 md:grid-cols-2 md:gap-12 lg:gap-16 md:items-center">
             <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.28em] text-amber-400/70">Support</p>
+              <p className="text-xs font-semibold uppercase tracking-[0.28em] text-amber-400/70">You are not alone</p>
               <h2
                 id="ilm-assistance-heading"
                 className="mt-4 text-3xl font-medium tracking-tight text-white md:text-4xl lg:text-[38px] lg:leading-[1.1]"
               >
-                Get assistance with your memorial page
+                Grief support, prayer, and pastoral care — in one place
               </h2>
               <p className="mt-5 max-w-xl text-[15px] font-light leading-relaxed text-white/65 md:text-lg md:leading-relaxed">
-                Our support team offers expert guidance and personalized support to help you create a lasting digital legacy.
+                inLovingMemory connects families to grief counselling, the prayer of a community, and the pastoral care of theWalk Ministries — from the day of the service through every season that follows.
               </p>
-              <div className="mt-10">
-                <AppPillLink href="/how-it-works" variant="primary">
-                  Get assistance
+              <div className="mt-10 flex flex-wrap gap-4">
+                <AppPillLink href="/resources" variant="primary">
+                  Find support
                   <svg className="ml-1 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden>
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                   </svg>
+                </AppPillLink>
+                <AppPillLink href="/how-it-works" variant="ghostOnDark">
+                  How it works
                 </AppPillLink>
               </div>
             </div>
@@ -113,13 +116,12 @@ export default async function IlmHomePage() {
       <section className="ilm-container py-14">
         <div className="grid gap-10 md:grid-cols-2 md:items-start">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.28em] text-earth-500">For business</p>
+            <p className="text-xs font-semibold uppercase tracking-[0.28em] text-earth-500">For organisations</p>
             <h2 className="mt-4 text-2xl font-semibold tracking-tight text-earth-900">
-              Funeral homes and ministries
+              Funeral homes &amp; ministries
             </h2>
             <p className="mt-4 text-earth-700">
-              We’re building tailored flows for organisations that serve families every day — from service details to
-              legacy preservation.
+              Purpose-built tools for organisations that serve families — from digital service programs and QR code access on the day, to long-term memorial hosting for the years ahead.
             </p>
             <div className="mt-8 flex flex-wrap gap-4">
               <AppPillLink href="/resources" variant="primary">
@@ -137,12 +139,13 @@ export default async function IlmHomePage() {
             <div className="px-8 py-8 md:px-10 md:py-10">
               <CardTitle>What you can do today</CardTitle>
               <CardDescription>
-                Create memorial pages, share photos, and collect guestbook messages and prayers with moderation.
+                Begin with the service essentials — then grow into a full, lasting memorial.
               </CardDescription>
               <ul className="mt-5 space-y-2 text-sm text-earth-700">
-                <li>• Public directory or unlisted memorials</li>
-                <li>• Keeper dashboard for edits, photos, and moderation</li>
-                <li>• Shareable pages with clean typography</li>
+                <li>• Service details, order of service &amp; digital program</li>
+                <li>• Public or unlisted memorial pages</li>
+                <li>• Guestbook &amp; prayer wall with keeper moderation</li>
+                <li>• Shareable QR code for service attendees</li>
               </ul>
             </div>
           </Card>

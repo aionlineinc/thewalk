@@ -6,16 +6,16 @@ const AUTO_MS = 6500;
 
 const ILM_TESTIMONIALS = [
   {
-    quote: "A beautifully presented tribute page. Easy to share and update as family memories come in.",
-    body: "Marissa G",
+    quote: "The prayer wall meant everything. Family from across the world offered their love — and we could see every one.",
+    body: "Marissa G — page keeper",
   },
   {
-    quote: "Very easy to create a memorial page. Thank you for providing a place to remember.",
-    body: "Menard P",
+    quote: "We set up the page before the service. Scanning the QR code at the funeral was the most meaningful moment for our family.",
+    body: "Menard P — page keeper",
   },
   {
-    quote: "Wonderful to share our memories with others. It reached many people and will last.",
-    body: "Lisa D",
+    quote: "It started as a tribute for the service and became somewhere we return to even now, years later. His story is still growing.",
+    body: "Lisa D — page keeper",
   },
 ] as const;
 

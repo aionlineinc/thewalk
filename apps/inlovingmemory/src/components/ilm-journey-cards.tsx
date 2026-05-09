@@ -44,27 +44,27 @@ function sequentialCardTs(raw: number): CardT {
 const STEPS = [
   {
     num: 1,
-    title: "Remember",
-    copy: "A calm place for a life story, photos, and moments that matter.",
+    title: "Honor the service",
+    copy: "A tribute page ready before the day — service details, digital program, and a QR code for every attendee.",
     href: "/how-it-works",
     image: "https://images.unsplash.com/photo-1474649107449-ea4f014b7e9f?w=800&q=80",
-    alt: "Warm candlelight — remembrance",
+    alt: "Warm candlelight — service",
   },
   {
     num: 2,
-    title: "Gather",
-    copy: "Invite family and friends to share memories and prayers — with moderation.",
+    title: "Gather together",
+    copy: "Loved ones near and far contribute memories, photos, and prayers — gently moderated by the page keeper.",
     href: "/directory",
     image: "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=800&q=80",
-    alt: "Family together — community",
+    alt: "Family together — gathering",
   },
   {
     num: 3,
-    title: "Preserve",
-    copy: "Build something lasting for the generations that follow.",
-    href: "/pricing",
+    title: "Walk through grief",
+    copy: "Access grief counselling, a community prayer wall, and pastoral care from theWalk — you were never meant to carry this alone.",
+    href: "/resources",
     image: "https://images.unsplash.com/photo-1501854140801-50d01698950b?w=800&q=80",
-    alt: "Open landscape — legacy",
+    alt: "Open landscape — walking together",
   },
 ] as const;
 

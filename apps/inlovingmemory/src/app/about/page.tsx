@@ -31,19 +31,19 @@ export default async function AboutPage() {
         <div className="grid gap-6 md:grid-cols-2">
           <Card>
             <CardBody>
-              <p className="text-xs font-semibold uppercase tracking-wide text-earth-500">Dignity</p>
-              <h2 className="mt-2 text-xl font-semibold text-earth-900">Honour with intention</h2>
+              <p className="text-xs font-semibold uppercase tracking-wide text-earth-500">The service</p>
+              <h2 className="mt-2 text-xl font-semibold text-earth-900">Honor the moment</h2>
               <p className="mt-3 text-sm leading-relaxed text-earth-700">
-                A memorial should feel calm, beautiful, and easy to share — without visual noise.
+                A memorial page ready before the day — service details, a digital program, and a gathering place for family who couldn’t be there in person.
               </p>
             </CardBody>
           </Card>
           <Card className="bg-calm-500/5">
             <CardBody>
-              <p className="text-xs font-semibold uppercase tracking-wide text-calm-700">Support</p>
-              <h2 className="mt-2 text-xl font-semibold text-earth-900">Grief was never meant alone</h2>
+              <p className="text-xs font-semibold uppercase tracking-wide text-calm-700">The community</p>
+              <h2 className="mt-2 text-xl font-semibold text-earth-900">You were never meant to grieve alone</h2>
               <p className="mt-3 text-sm leading-relaxed text-earth-700">
-                We’re building pathways to pastoral care, prayer, and grief resources for families in loss.
+                Grief counselling, prayer, and pastoral care from theWalk Ministries — alongside a memorial that grows with your family through every season.
               </p>
             </CardBody>
           </Card>

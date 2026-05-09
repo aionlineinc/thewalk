@@ -13,90 +13,152 @@ export type IlmMarketingContent = {
 };
 
 export const ilmMarketingDefault: IlmMarketingContent = {
-  tagline: "More than a memorial — a living legacy",
-  heroTitle: "More than a memorial — a living legacy",
+  tagline: "More than a memorial — a living legacy.",
+
+  heroTitle: "When their walk ends, their story lives on",
+
   heroBody:
-    "Every life tells a story worth preserving. Create a beautiful space to honour those who have passed — and protect what matters most for the generations that follow.",
+    "From the moment of loss through every season of grief — inLovingMemory gives families a beautiful place to honor the service, gather memories, and find care and community along the way. Because grief was never meant to be faced alone.",
+
   heroLinks: [
     { label: "How it works", href: "/how-it-works" },
     { label: "Find a memorial", href: "/directory" },
   ],
+
   about: {
-    title: "More than a memorial",
+    title: "More than a memorial platform",
     body:
-      "inLovingMemory was born from the conviction that every life deserves to be honoured with dignity, remembered with love, and preserved with intention.",
+      "inLovingMemory was born out of theWalk Ministries' conviction that every life deserves to be honoured with dignity, remembered with love, and preserved with intention. We are a community of remembrance, grief support, and generational legacy. Powered by theWalk Ministries Int'l, we connect the bereaved to pastoral care, grief counselling, prayer, and community — because grief was never meant to be faced alone. This is where the end of one walk becomes the foundation of another.",
     links: [
       { label: "How it works", href: "/how-it-works" },
       { label: "View pricing", href: "/pricing" },
     ],
   },
+
   howItWorks: {
-    title: "Memory becomes legacy",
-    intro: "Create a page in minutes, invite others to contribute, and keep the story accessible with dignity.",
+    title: "From the service to forever — and with you every step",
+    intro:
+      "Set up a memorial before the service. Share it on the day. Then let it grow into something lasting — while we walk alongside you through every season of grief.",
     steps: [
-      { title: "Create your memorial", body: "Add basic details, a photo, and a life story. Start simple — expand later." },
-      { title: "Personalise and share", body: "Upload photos and invite memories and prayers (moderated by the page keeper)." },
-      { title: "Honour the service", body: "Share service details and a digital program that’s easy to access from a QR code." },
-      { title: "Preserve the legacy", body: "Unlock private family storage for letters, documents, and keepsakes." },
+      {
+        title: "Create your page",
+        body: "Add a name, photo, life story, and service details in minutes. Free to start — ready to share before the day.",
+      },
+      {
+        title: "Share at the service",
+        body: "A digital program accessible via QR code. Family near and far can follow along, leave tributes, and feel present.",
+      },
+      {
+        title: "Gather their memories",
+        body: "Family and friends contribute photos, stories, and prayers — all held for your review before they appear.",
+      },
+      {
+        title: "Preserve the legacy",
+        body: "After the service, the story lives on. Unlock a private family vault for letters, documents, and keepsakes passed to the next generation.",
+      },
+      {
+        title: "Connect to support",
+        body: "Request grief counselling, join a prayer group, or connect with a pastoral care minister from theWalk — all from within your memorial.",
+      },
     ],
     links: [
       { label: "View pricing", href: "/pricing" },
       { label: "Page keeper sign in", href: "/sign-in" },
     ],
   },
+
   pricing: {
-    title: "Simple tiers",
-    intro: "Begin with a beautiful memorial. Upgrade when you need more privacy, media, and long-term preservation.",
+    title: "Free to start. Built to last.",
+    intro:
+      "Create a memorial at no cost — ready for the service. Upgrade when your family needs more: richer media, grief counselling, and a private legacy vault.",
     tiers: [
       {
         name: "Basic",
-        summary: "Free to start",
-        bullets: ["Public memorial page", "Guest book & prayer wall (moderated)", "Starter photo gallery"],
+        summary: "Free — for the service and beyond",
+        bullets: [
+          "Public or unlisted memorial page",
+          "Service details & digital program",
+          "Prayer wall on every page",
+          "Guestbook & tributes (moderated)",
+          "Starter photo gallery",
+        ],
       },
       {
         name: "Premium",
-        summary: "For families",
-        bullets: ["More photos & richer layouts", "Advanced privacy (coming)", "Service program tools (coming)"],
+        summary: "Full care for families",
+        bullets: [
+          "Unlimited photos, video & audio",
+          "Digital funeral pamphlet & QR code",
+          "AI obituary assistant",
+          "Grief counselling sessions included",
+          "Grief resource library",
+          "Multiple page keepers",
+        ],
       },
       {
         name: "Generations",
-        summary: "Private family vault",
-        bullets: ["Private storage for documents & letters", "Family roles & guardians (coming)", "Legacy timeline tools (coming)"],
+        summary: "A private family vault",
+        bullets: [
+          "Secure storage for documents & letters",
+          "Time-locked messages to loved ones",
+          "Private family tree (GEDCOM import)",
+          "Faith & legacy narrative",
+          "Guardian designation for the future",
+        ],
       },
     ],
   },
+
   faq: {
     title: "Common questions",
-    intro: "Start simple. You can upgrade and expand later without losing anything.",
+    intro: "Start simply. You can expand, upgrade, and deepen at any pace — nothing is ever lost.",
     items: [
       {
-        q: "Who can create and manage a memorial?",
-        a: "A page keeper signs in using the same account system as theWalk. The page keeper controls privacy settings, photos, and moderation.",
+        q: "Can I use this for the funeral service itself?",
+        a: "Yes — that's exactly what it's built for. Add service details, order of service, and a digital program before the day. Share a QR code so attendees can access everything from their phones.",
       },
       {
-        q: "Do guest book messages and prayers appear immediately?",
-        a: "No. Submissions are held for moderation so the page keeper can approve what appears on the public page.",
+        q: "Is it only for people who have passed?",
+        a: "No. You can also create a Living Legacy page — for someone still living who wants to begin capturing their story and sharing it with family now.",
       },
       {
-        q: "Can I hide a memorial from the directory?",
-        a: "Yes. You can keep a memorial public but not listed. The direct link still works for anyone you share it with.",
+        q: "Is grief counselling available?",
+        a: "Yes. Premium members can request grief counselling sessions matched by specialisation, timezone, and language. Basic counselling is included at no extra cost — extended or specialist sessions may be offered by the counsellor.",
+      },
+      {
+        q: "What is the prayer wall?",
+        a: "Every memorial — free or paid — includes a prayer wall. Visitors submit a prayer with their name and it appears publicly after the page keeper approves it. Families receive a weekly summary of how many people have prayed for them.",
+      },
+      {
+        q: "Who manages the memorial page?",
+        a: "A page keeper signs in using their theWalk account. They control privacy, approve all contributions, and can invite co-keepers to help. Premium members can assign multiple page keepers.",
+      },
+      {
+        q: "Can I keep it private?",
+        a: "Yes. You can hide the page from the public directory, share it only via a private link, or add a password so only family can access it. Premium adds full granular privacy by section.",
       },
     ],
   },
+
   resources: {
-    title: "You don’t have to carry grief alone",
-    intro: "We’re building guidance, prayers, and practical steps for families in loss — and a path to spiritual care.",
+    title: "You don't have to carry this alone",
+    intro:
+      "From planning the service to navigating grief long after — care, prayer, and practical guidance for families at every stage of loss.",
     cards: [
       {
-        title: "Grief support",
-        body: "Short readings, grounded encouragement, and next steps for the days when everything feels heavy.",
+        title: "Planning the service",
+        body: "A practical checklist for page keepers: setting up service details, generating a digital program, sharing with attendees, and managing the day.",
       },
       {
-        title: "Prayer & ministry",
-        body: "Invite others to pray through a memorial page. Page keepers moderate submissions before they appear.",
+        title: "Grief counselling",
+        body: "Request a session with a verified grief counsellor — matched to your type of loss, language, and availability. Included with Premium.",
+        cta: { label: "Learn more", href: "/pricing" },
+      },
+      {
+        title: "Prayer & pastoral care",
+        body: "Every memorial includes a prayer wall. Our ministry team at theWalk can be assigned to walk alongside your family through the season of loss.",
         cta: { label: "Find a memorial", href: "/directory" },
       },
     ],
   },
 };
-
