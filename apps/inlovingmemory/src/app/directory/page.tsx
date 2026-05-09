@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import type { Prisma } from "@prisma/client";
 import { IlmMemorialKind, IlmPrivacyLevel, IlmEventKind } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 
@@ -151,8 +152,7 @@ export default async function DirectoryPage({
   const hasFilters = Object.keys(currentParams).length > 0;
 
   /* build where */
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const where: any = {
+  const where: Prisma.IlmMemorialWhereInput = {
     privacyLevel: IlmPrivacyLevel.PUBLIC,
     hideFromDirectory: false,
   };
@@ -191,14 +191,18 @@ export default async function DirectoryPage({
   /* funeral filter */
   const fw = funeralTiming ? funeralWindow(funeralTiming) : null;
   if (fw || (funeralTiming === "custom" && (funeralFrom || funeralTo))) {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    where.events = { some: { kind: IlmEventKind.FUNERAL, startsAt: {} as any } };
-    if (fw) {
-      where.events.some.startsAt = { gte: fw.gte, lte: fw.lte };
-    } else if (funeralTiming === "custom") {
-      if (funeralFrom) where.events.some.startsAt.gte = funeralFrom;
-      if (funeralTo) where.events.some.startsAt.lte = funeralTo;
-    }
+    const startsAt: Prisma.DateTimeNullableFilter = fw
+      ? { gte: fw.gte, lte: fw.lte }
+      : {
+          ...(funeralFrom ? { gte: funeralFrom } : {}),
+          ...(funeralTo ? { lte: funeralTo } : {}),
+        };
+    where.events = {
+      some: {
+        kind: IlmEventKind.FUNERAL,
+        startsAt,
+      },
+    };
   }
 
   /* sort */
