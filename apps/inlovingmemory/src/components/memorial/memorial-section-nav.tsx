@@ -32,7 +32,7 @@ export function MemorialSectionNav({
       aria-label="Memorial sections"
       className="sticky top-0 z-30 border-b border-earth-200/80 bg-white/95 backdrop-blur"
     >
-      <div className="mx-auto max-w-3xl px-4 sm:px-6 md:px-8">
+      <div className="mx-auto max-w-6xl px-4 sm:px-6 md:px-8">
         <div className="flex gap-1 py-2">
           <Link
             href={`/memorial/${slug}`}

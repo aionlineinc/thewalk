@@ -21,7 +21,7 @@ export function MemorialCtaRow({ shareUrl, showContribute, primaryColor, accentC
 
   return (
     <>
-      <div className="mx-auto mt-8 max-w-3xl px-6 sm:px-8">
+      <div className="mx-auto mt-8 max-w-6xl px-4 sm:px-6 md:px-8">
         <div className="flex flex-wrap gap-3">
           {shareUrl ? (
             <Button

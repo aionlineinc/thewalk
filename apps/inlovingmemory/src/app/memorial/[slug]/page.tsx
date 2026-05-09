@@ -201,7 +201,7 @@ export default async function MemorialPage({ params, searchParams }: PageProps) 
 
   if (!canView) {
     return (
-      <main className="ilm-prose py-16">
+      <main className="ilm-container py-16">
         <h1 className="text-2xl font-semibold tracking-tight text-earth-900">
           This page is not public
         </h1>
@@ -230,7 +230,7 @@ export default async function MemorialPage({ params, searchParams }: PageProps) 
   return (
     <main className="pb-20">
       {isKeeper && !isPublic ? (
-        <div className="ilm-prose pt-10">
+        <div className="ilm-container pt-10">
           <p className="rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-950">
             You are viewing a non-public page as the page keeper.
           </p>
@@ -239,7 +239,7 @@ export default async function MemorialPage({ params, searchParams }: PageProps) 
 
       {/* Hero */}
       <section className="border-b border-earth-200/80 bg-white pt-10">
-        <div className="ilm-prose pb-6">
+        <div className="ilm-container pb-6">
           <MemorialHero
             displayName={memorial.displayName}
             kindLabel={kindLabel}
@@ -289,7 +289,7 @@ export default async function MemorialPage({ params, searchParams }: PageProps) 
 
       {/* Flash messages */}
       {gbSent === "sent" ? (
-        <div className="ilm-prose mt-6">
+        <div className="ilm-container mt-6">
           <p
             className="rounded-lg border px-4 py-3 text-sm text-earth-800"
             style={{ borderColor: `${primaryColor}30`, backgroundColor: `${primaryColor}10` }}
@@ -300,14 +300,14 @@ export default async function MemorialPage({ params, searchParams }: PageProps) 
         </div>
       ) : null}
       {gbSent === "invalid" ? (
-        <div className="ilm-prose mt-6">
+        <div className="ilm-container mt-6">
           <p className="text-sm text-red-800" role="alert">
             Please check your name and message, then try again.
           </p>
         </div>
       ) : null}
       {prSent === "sent" ? (
-        <div className="ilm-prose mt-6">
+        <div className="ilm-container mt-6">
           <p
             className="rounded-lg border px-4 py-3 text-sm text-earth-800"
             style={{ borderColor: `${primaryColor}30`, backgroundColor: `${primaryColor}10` }}
@@ -318,7 +318,7 @@ export default async function MemorialPage({ params, searchParams }: PageProps) 
         </div>
       ) : null}
       {prSent === "invalid" ? (
-        <div className="ilm-prose mt-6">
+        <div className="ilm-container mt-6">
           <p className="text-sm text-red-800" role="alert">
             Please check your prayer and name, then try again.
           </p>
@@ -328,7 +328,7 @@ export default async function MemorialPage({ params, searchParams }: PageProps) 
       {/* ── Memorial tab ── */}
       {!isFuneralTab ? (
         <>
-          <article id="story" className="ilm-prose mt-10">
+          <article id="story" className="ilm-container mt-10">
             <div className="rounded-2xl border border-earth-200 bg-white/80 px-6 py-6 shadow-sm">
               <p className="whitespace-pre-wrap text-base leading-relaxed text-earth-800 sm:text-lg">
                 {memorial.biography?.trim() ? memorial.biography : "—"}
@@ -337,7 +337,7 @@ export default async function MemorialPage({ params, searchParams }: PageProps) 
           </article>
 
           {specialRequest ? (
-            <div className="ilm-prose">
+            <div className="ilm-container">
               <MemorialSpecialRequest
                 request={specialRequest}
                 displayName={memorial.displayName}
@@ -346,11 +346,11 @@ export default async function MemorialPage({ params, searchParams }: PageProps) 
             </div>
           ) : null}
 
-          <section id="gallery" className="ilm-prose mt-12">
+          <section id="gallery" className="ilm-container mt-12">
             <MemorialPhotoGallery photos={galleryPhotos} />
           </section>
 
-          <section id="prayer" className="ilm-prose mt-12">
+          <section id="prayer" className="ilm-container mt-12">
             <PrayerPanel
               slug={memorial.slug}
               showForm={showCommunityForms}
@@ -375,7 +375,7 @@ export default async function MemorialPage({ params, searchParams }: PageProps) 
             <MemorialEventInfo events={serviceEvents} />
           ) : null}
 
-          <section id="guestbook" className="ilm-prose mt-12">
+          <section id="guestbook" className="ilm-container mt-12">
             <GuestbookPanel
               slug={memorial.slug}
               showForm={showCommunityForms}
@@ -387,7 +387,7 @@ export default async function MemorialPage({ params, searchParams }: PageProps) 
       ) : null}
 
       {/* Share precious moments CTA (both tabs) */}
-      <div className="ilm-prose mt-12">
+      <div className="ilm-container mt-12">
         <MemorialCtaRow
           shareUrl={shareUrl}
           showContribute={showCommunityForms}
@@ -397,7 +397,7 @@ export default async function MemorialPage({ params, searchParams }: PageProps) 
       </div>
 
       {!isKeeper && isPublic ? (
-        <div className="ilm-prose">
+        <div className="ilm-container">
           <p className="mt-12 border-t border-earth-200 pt-8 text-center text-xs text-earth-500">
             Hosted with care on inLovingMemory ·{" "}
             <Link href="/" className="underline underline-offset-2 hover:text-earth-700">
