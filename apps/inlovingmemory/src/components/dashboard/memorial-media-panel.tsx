@@ -33,64 +33,83 @@ export function MemorialMediaPanel({
   const [caption, setCaption] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  const [uploaded, setUploaded] = useState(0);
+  const [totalFiles, setTotalFiles] = useState(0);
 
-  async function uploadFile(file: File) {
+  async function uploadOne(file: File, sharedCaption?: string) {
+    const pres = await fetch("/api/ilm/media/presign", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        memorialId,
+        slot,
+        fileName: file.name,
+        contentType: file.type,
+        byteSize: file.size,
+      }),
+    });
+    const presJson = (await pres.json()) as { error?: string; uploadUrl?: string; key?: string };
+    if (!pres.ok) throw new Error(presJson.error ?? "Could not start upload.");
+
+    const put = await fetch(presJson.uploadUrl!, {
+      method: "PUT",
+      headers: { "Content-Type": file.type },
+      body: file,
+    });
+    if (!put.ok) throw new Error("Upload to storage failed. Check bucket CORS and credentials.");
+
+    const complete = await fetch("/api/ilm/media/complete", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        memorialId,
+        key: presJson.key,
+        slot,
+        caption: slot === "gallery" ? sharedCaption?.trim() || undefined : undefined,
+        byteSize: file.size,
+      }),
+    });
+    const completeJson = (await complete.json()) as { error?: string };
+    if (!complete.ok) throw new Error(completeJson.error ?? "Could not save photo.");
+  }
+
+  async function handleFiles(files: FileList | null) {
+    if (!files || files.length === 0) return;
     setError(null);
-    if (!ALLOWED_TYPES.includes(file.type)) {
-      setError("Use JPEG, PNG, WebP, or GIF.");
+
+    const fileList = Array.from(files);
+
+    // Validate all files before starting
+    const invalid = fileList.find((f) => !ALLOWED_TYPES.includes(f.type));
+    if (invalid) {
+      setError("All files must be JPEG, PNG, WebP, or GIF.");
       return;
     }
+
+    const sharedCaption = slot === "gallery" ? caption : undefined;
     setBusy(true);
-    try {
-      const pres = await fetch("/api/ilm/media/presign", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          memorialId,
-          slot,
-          fileName: file.name,
-          contentType: file.type,
-          byteSize: file.size,
-        }),
-      });
-      const presJson = (await pres.json()) as { error?: string; uploadUrl?: string; key?: string };
-      if (!pres.ok) {
-        setError(presJson.error ?? "Could not start upload.");
-        return;
+    setTotalFiles(fileList.length);
+    setUploaded(0);
+
+    const errors: string[] = [];
+    for (let i = 0; i < fileList.length; i++) {
+      try {
+        await uploadOne(fileList[i], sharedCaption);
+        setUploaded((n) => n + 1);
+      } catch (e) {
+        errors.push(`${fileList[i].name}: ${e instanceof Error ? e.message : "Upload failed"}`);
       }
-      const put = await fetch(presJson.uploadUrl!, {
-        method: "PUT",
-        headers: { "Content-Type": file.type },
-        body: file,
-      });
-      if (!put.ok) {
-        setError("Upload to storage failed. Check bucket CORS and credentials.");
-        return;
-      }
-      const complete = await fetch("/api/ilm/media/complete", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          memorialId,
-          key: presJson.key,
-          slot,
-          caption: slot === "gallery" ? caption.trim() || undefined : undefined,
-          byteSize: file.size,
-        }),
-      });
-      const completeJson = (await complete.json()) as { error?: string };
-      if (!complete.ok) {
-        setError(completeJson.error ?? "Could not save photo.");
-        return;
-      }
-      setCaption("");
-      if (fileRef.current) fileRef.current.value = "";
-      router.refresh();
-    } catch {
-      setError("Something went wrong.");
-    } finally {
-      setBusy(false);
     }
+
+    setBusy(false);
+    setCaption("");
+    if (fileRef.current) fileRef.current.value = "";
+
+    if (errors.length > 0) {
+      setError(errors.join("\n"));
+    }
+
+    router.refresh();
   }
 
   async function deleteMedia(id: string) {
@@ -180,20 +199,25 @@ export function MemorialMediaPanel({
               ref={fileRef}
               type="file"
               accept={ALLOWED_TYPES.join(",")}
+              multiple={slot === "gallery"}
               disabled={busy}
               className="text-sm text-earth-800 file:mr-3 file:rounded-lg file:border-0 file:bg-earth-800 file:px-3 file:py-2 file:text-sm file:font-medium file:text-white hover:file:bg-earth-900"
-              onChange={(e) => {
-                const f = e.target.files?.[0];
-                if (f) void uploadFile(f);
-              }}
+              onChange={(e) => void handleFiles(e.target.files)}
             />
+            {slot === "gallery" ? (
+              <p className="mt-1.5 text-xs text-earth-500">You can select multiple photos at once for gallery uploads.</p>
+            ) : null}
           </div>
           {error ? (
-            <p className="text-sm text-red-800" role="alert">
+            <p className="whitespace-pre-wrap text-sm text-red-800" role="alert">
               {error}
             </p>
           ) : null}
-          {busy ? <p className="text-sm text-earth-500">Working…</p> : null}
+          {busy ? (
+            <p className="text-sm text-earth-500">
+              {totalFiles > 1 ? `Uploading ${uploaded} of ${totalFiles}…` : "Uploading…"}
+            </p>
+          ) : null}
         </div>
       </div>
 
