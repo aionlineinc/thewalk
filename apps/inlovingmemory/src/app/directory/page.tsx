@@ -281,7 +281,7 @@ export default async function DirectoryPage({
   return (
     <main className="pb-24">
       {/* Cinematic hero */}
-      <section className="relative flex h-[52vh] min-h-[400px] items-end p-2 md:p-4">
+      <section className="relative flex h-[58vh] min-h-[440px] items-end p-2 md:p-4">
         <div className="absolute inset-2 overflow-hidden rounded-[20px] md:inset-4">
           <Image
             src="https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=1920&q=85"
@@ -299,7 +299,7 @@ export default async function DirectoryPage({
           <h1 className="mt-3 text-4xl font-medium tracking-tight text-white md:text-[50px] md:leading-[1.1]">
             Find a memorial
           </h1>
-          <p className="mt-3 max-w-lg text-base font-light text-white/65">
+          <p className="mt-4 max-w-xl text-base font-light leading-relaxed text-white/70 md:text-lg">
             Public pages only. Page keepers can hide a memorial from this list while keeping the direct link available.
           </p>
         </div>
