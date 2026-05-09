@@ -1,7 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import type { Prisma } from "@prisma/client";
-import { IlmMemorialKind, IlmPrivacyLevel, IlmEventKind } from "@prisma/client";
+import { IlmMediaKind, IlmMemorialKind, IlmPrivacyLevel, IlmEventKind, IlmSubmissionStatus } from "@prisma/client";
+import { ILM_MEDIA_TITLE_PROFILE } from "@/lib/ilm-media-slots";
 import { prisma } from "@/lib/prisma";
 
 export const metadata = {
@@ -224,6 +225,15 @@ export default async function DirectoryPage({
       country: true,
       parish: true,
       updatedAt: true,
+      media: {
+        where: {
+          title: ILM_MEDIA_TITLE_PROFILE,
+          kind: IlmMediaKind.PHOTO,
+          status: IlmSubmissionStatus.APPROVED,
+        },
+        select: { storageUrl: true },
+        take: 1,
+      },
     },
   });
 
@@ -557,7 +567,16 @@ export default async function DirectoryPage({
                   className="group block overflow-hidden rounded-2xl border border-earth-200 bg-white shadow-sm transition hover:border-earth-300 hover:shadow-md"
                 >
                   <div className="relative h-36 overflow-hidden">
-                    <MemorialInitial name={m.displayName} />
+                    {m.media[0]?.storageUrl ? (
+                      <img
+                        src={m.media[0].storageUrl}
+                        alt=""
+                        className="h-full w-full object-cover"
+                        loading="lazy"
+                      />
+                    ) : (
+                      <MemorialInitial name={m.displayName} />
+                    )}
                   </div>
                   <div className="px-5 py-4">
                     <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-earth-400">

@@ -226,41 +226,53 @@ export function MemorialMediaPanel({
         {items.length === 0 ? (
           <p className="mt-4 text-sm text-earth-600">No photos yet.</p>
         ) : (
-          <ul className="mt-6 grid gap-6 sm:grid-cols-2">
-            {items.map((m) => (
-              <li
-                key={m.id}
-                className="flex gap-4 rounded-xl border border-earth-200 bg-white p-3 shadow-sm"
-              >
-                <img
-                  src={m.storageUrl}
-                  alt=""
-                  className="h-24 w-24 shrink-0 rounded-lg object-cover"
-                  loading="lazy"
-                />
-                <div className="min-w-0 flex-1">
-                  <p className="text-xs font-medium uppercase tracking-wide text-earth-500">
-                    {m.title === ILM_MEDIA_TITLE_PROFILE
-                      ? "Profile"
-                      : m.title === ILM_MEDIA_TITLE_BANNER
-                        ? "Banner"
-                        : "Gallery"}
-                  </p>
-                  {galleryCaption(m.title) ? (
-                    <p className="mt-1 text-sm text-earth-800">{galleryCaption(m.title)}</p>
-                  ) : null}
-                  <button
-                    type="button"
-                    disabled={busy}
-                    className="mt-3 text-sm font-medium text-red-800 underline-offset-4 hover:underline disabled:opacity-50"
-                    onClick={() => void deleteMedia(m.id)}
-                  >
-                    Remove
-                  </button>
+          <div className="mt-6 space-y-8">
+            {(
+              [
+                ["Banner", ILM_MEDIA_TITLE_BANNER],
+                ["Profile", ILM_MEDIA_TITLE_PROFILE],
+                ["Gallery", null],
+              ] as const
+            ).map(([label, slotTitle]) => {
+              const group = items.filter((m) =>
+                slotTitle ? m.title === slotTitle : m.title !== ILM_MEDIA_TITLE_BANNER && m.title !== ILM_MEDIA_TITLE_PROFILE,
+              );
+              if (group.length === 0) return null;
+              return (
+                <div key={label}>
+                  <h3 className="text-sm font-semibold uppercase tracking-wide text-earth-500">{label}</h3>
+                  <ul className="mt-3 grid gap-4 sm:grid-cols-2">
+                    {group.map((m) => (
+                      <li
+                        key={m.id}
+                        className="flex gap-4 rounded-xl border border-earth-200 bg-white p-3 shadow-sm"
+                      >
+                        <img
+                          src={m.storageUrl}
+                          alt=""
+                          className="h-24 w-24 shrink-0 rounded-lg object-cover"
+                          loading="lazy"
+                        />
+                        <div className="min-w-0 flex-1">
+                          {galleryCaption(m.title) ? (
+                            <p className="text-sm text-earth-800">{galleryCaption(m.title)}</p>
+                          ) : null}
+                          <button
+                            type="button"
+                            disabled={busy}
+                            className="mt-2 text-sm font-medium text-red-800 underline-offset-4 hover:underline disabled:opacity-50"
+                            onClick={() => void deleteMedia(m.id)}
+                          >
+                            Remove
+                          </button>
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
-              </li>
-            ))}
-          </ul>
+              );
+            })}
+          </div>
         )}
       </div>
     </div>
