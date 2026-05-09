@@ -19,6 +19,10 @@ const emptyDefaults = {
   hideFromSearchEngines: false,
   country: "",
   parish: "",
+  themePreset: "",
+  primaryColor: "",
+  accentColor: "",
+  tier: "BASIC",
 };
 
 export default function NewMemorialPage() {

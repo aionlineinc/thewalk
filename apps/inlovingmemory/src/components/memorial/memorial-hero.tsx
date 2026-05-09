@@ -3,11 +3,13 @@ export function MemorialHero({
   kindLabel,
   bannerUrl,
   profileUrl,
+  primaryColor,
 }: {
   displayName: string;
   kindLabel: string;
   bannerUrl: string | null;
   profileUrl: string | null;
+  primaryColor?: string;
 }) {
   return (
     <div className="mb-12">
@@ -45,7 +47,12 @@ export function MemorialHero({
         ) : null}
 
         <div className="min-w-0 flex-1">
-          <p className="text-xs font-semibold uppercase tracking-[0.28em] text-earth-500">{kindLabel}</p>
+          <p
+            className="text-xs font-semibold uppercase tracking-[0.28em]"
+            style={{ color: primaryColor || "#8c7b6d" }}
+          >
+            {kindLabel}
+          </p>
           <h1 className="mt-3 text-4xl font-semibold tracking-tight text-earth-900 sm:text-5xl">{displayName}</h1>
         </div>
       </div>

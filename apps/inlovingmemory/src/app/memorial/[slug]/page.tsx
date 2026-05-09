@@ -17,6 +17,7 @@ import {
   isGalleryPhotoTitle,
 } from "@/lib/ilm-media-slots";
 import { getMemorialAbsoluteUrl } from "@/lib/ilm-public-url";
+import { resolveTheme } from "@/lib/ilm-theme";
 import { prisma } from "@/lib/prisma";
 
 export const dynamic = "force-dynamic";
@@ -67,6 +68,9 @@ export default async function MemorialPage({ params, searchParams }: PageProps) 
       deathDate: true,
       privacyLevel: true,
       pageKeeperId: true,
+      themePreset: true,
+      primaryColor: true,
+      accentColor: true,
     },
   });
 
@@ -118,6 +122,10 @@ export default async function MemorialPage({ params, searchParams }: PageProps) 
   const profileUrl = photoRows.find((p) => p.title === ILM_MEDIA_TITLE_PROFILE)?.storageUrl ?? null;
   const bannerUrl = photoRows.find((p) => p.title === ILM_MEDIA_TITLE_BANNER)?.storageUrl ?? null;
   const galleryPhotos = photoRows.filter((p) => isGalleryPhotoTitle(p.title));
+
+  const theme = resolveTheme(memorial.themePreset, memorial.primaryColor, memorial.accentColor);
+  const primaryColor = theme.primary;
+  const accentColor = theme.accent;
 
   const headerList = headers();
   const host = headerList.get("x-forwarded-host") ?? headerList.get("host");
@@ -179,6 +187,7 @@ export default async function MemorialPage({ params, searchParams }: PageProps) 
             kindLabel={memorial.kind === "LIVING_LEGACY" ? "Living legacy" : "In loving memory"}
             bannerUrl={bannerUrl}
             profileUrl={profileUrl}
+            primaryColor={primaryColor}
           />
 
           <div className="border-b border-earth-200 pb-8">
@@ -198,12 +207,16 @@ export default async function MemorialPage({ params, searchParams }: PageProps) 
                   Photos
                 </Link>
                 <Link
-                  className="font-medium text-calm-500 underline-offset-4 hover:underline"
+                  className="font-medium underline-offset-4 hover:underline"
+                  style={{ color: primaryColor }}
                   href={`/dashboard/memorials/${memorial.id}/community`}
                 >
                   Moderate guest book & prayer
                   {(pendingGuestbook > 0 || pendingPrayers > 0) && (
-                    <span className="ml-1.5 rounded-full bg-calm-500 px-2 py-0.5 text-xs text-white">
+                    <span
+                      className="ml-1.5 rounded-full px-2 py-0.5 text-xs text-white"
+                      style={{ backgroundColor: primaryColor }}
+                    >
                       {pendingGuestbook + pendingPrayers}
                     </span>
                   )}
@@ -214,7 +227,7 @@ export default async function MemorialPage({ params, searchParams }: PageProps) 
         </div>
       </section>
 
-      <MemorialCtaRow shareUrl={shareUrl} showContribute={showCommunityForms} />
+      <MemorialCtaRow shareUrl={shareUrl} showContribute={showCommunityForms} primaryColor={primaryColor} accentColor={accentColor} />
 
       <MemorialSectionNav />
 
@@ -236,7 +249,8 @@ export default async function MemorialPage({ params, searchParams }: PageProps) 
       {prSent === "sent" ? (
         <div className="ilm-prose mt-8">
           <p
-            className="rounded-lg border border-calm-500/30 bg-calm-500/10 px-4 py-3 text-sm text-earth-800"
+            className="rounded-lg border px-4 py-3 text-sm text-earth-800"
+            style={{ borderColor: `${primaryColor}30`, backgroundColor: `${primaryColor}10` }}
             role="status"
           >
             Thank you — your prayer was received and will appear after moderation.
@@ -290,11 +304,11 @@ export default async function MemorialPage({ params, searchParams }: PageProps) 
       ) : null}
 
       <section id="guestbook" className="ilm-prose">
-        <GuestbookPanel slug={memorial.slug} showForm={showCommunityForms} entries={guestbookApproved} />
+        <GuestbookPanel slug={memorial.slug} showForm={showCommunityForms} entries={guestbookApproved} primaryColor={primaryColor} />
       </section>
 
       <section id="prayer" className="ilm-prose">
-        <PrayerPanel slug={memorial.slug} showForm={showCommunityForms} prayers={prayersApproved} />
+        <PrayerPanel slug={memorial.slug} showForm={showCommunityForms} prayers={prayersApproved} primaryColor={primaryColor} accentColor={accentColor} />
       </section>
 
       {!isKeeper && isPublic ? (

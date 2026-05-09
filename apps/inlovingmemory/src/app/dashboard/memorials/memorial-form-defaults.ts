@@ -8,10 +8,14 @@ export type MemorialFormDefaults = {
   deathDate: string;
   country: string;
   parish: string;
+  themePreset: string;
+  primaryColor: string;
+  accentColor: string;
   privacyLevel: IlmPrivacyLevel;
   slug: string;
   hideFromDirectory: boolean;
   hideFromSearchEngines: boolean;
+  tier: string;
 };
 
 function isoDateForInput(d: Date | null | undefined) {
@@ -27,7 +31,11 @@ export function buildMemorialDefaults(row: {
   deathDate: Date | null;
   country: string | null;
   parish: string | null;
+  themePreset: string | null;
+  primaryColor: string | null;
+  accentColor: string | null;
   privacyLevel: IlmPrivacyLevel;
+  tier: string;
   slug: string;
   hideFromDirectory: boolean;
   hideFromSearchEngines: boolean;
@@ -40,7 +48,11 @@ export function buildMemorialDefaults(row: {
     deathDate: isoDateForInput(row.deathDate),
     country: row.country ?? "",
     parish: row.parish ?? "",
+    themePreset: row.themePreset ?? "",
+    primaryColor: row.primaryColor ?? "",
+    accentColor: row.accentColor ?? "",
     privacyLevel: row.privacyLevel,
+    tier: row.tier,
     slug: row.slug,
     hideFromDirectory: row.hideFromDirectory,
     hideFromSearchEngines: row.hideFromSearchEngines,

@@ -4,10 +4,12 @@ export function GuestbookPanel({
   slug,
   showForm,
   entries,
+  primaryColor,
 }: {
   slug: string;
   showForm: boolean;
   entries: { id: string; authorName: string; content: string; createdAt: Date }[];
+  primaryColor?: string;
 }) {
   return (
     <section className="border-t border-earth-200 pt-12" aria-labelledby="guestbook-heading">

@@ -1,8 +1,11 @@
 "use client";
 
+import { THEME_PRESETS, THEME_PRESET_LABELS, type ThemePreset } from "@/lib/ilm-theme";
 import type { MemorialFormDefaults } from "@/app/dashboard/memorials/memorial-form-defaults";
 
 export type { MemorialFormDefaults } from "@/app/dashboard/memorials/memorial-form-defaults";
+
+const isPremium = (tier: string) => tier === "PREMIUM" || tier === "GENERATIONS";
 
 export function MemorialForm({
   action,
@@ -116,6 +119,79 @@ export function MemorialForm({
           />
         </div>
       </div>
+
+      {/* ── Theme ── */}
+      <fieldset className="space-y-5 rounded-xl border border-earth-200 bg-earth-50/40 px-4 py-5">
+        <legend className="text-sm font-medium text-earth-800">Page theme</legend>
+
+        <div>
+          <label htmlFor="themePreset" className="block text-sm font-medium text-earth-700">
+            Color palette
+          </label>
+          <select
+            id="themePreset"
+            name="themePreset"
+            defaultValue={defaults.themePreset}
+            className="mt-2 w-full max-w-xl rounded-lg border border-earth-200 bg-white px-3 py-2 text-earth-900 shadow-sm outline-none ring-earth-400/30 transition focus:border-earth-400 focus:ring-2"
+          >
+            <option value="">Amber (default)</option>
+            {(Object.keys(THEME_PRESETS) as ThemePreset[]).map((key) => (
+              <option key={key} value={key}>
+                {THEME_PRESET_LABELS[key]}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        {isPremium(defaults.tier) ? (
+          <div className="grid gap-4 sm:grid-cols-2">
+            <div>
+              <label htmlFor="primaryColor" className="block text-sm font-medium text-earth-700">
+                Primary color
+              </label>
+              <div className="mt-2 flex items-center gap-2">
+                <input
+                  id="primaryColor"
+                  name="primaryColor"
+                  type="color"
+                  defaultValue={defaults.primaryColor || THEME_PRESETS.amber.primary}
+                  className="h-9 w-12 cursor-pointer rounded border border-earth-200 bg-white p-0.5"
+                />
+                <input
+                  type="text"
+                  value={defaults.primaryColor || THEME_PRESETS.amber.primary}
+                  readOnly
+                  className="w-28 rounded-lg border border-earth-200 bg-earth-50 px-2 py-2 text-xs font-mono text-earth-600"
+                />
+              </div>
+            </div>
+            <div>
+              <label htmlFor="accentColor" className="block text-sm font-medium text-earth-700">
+                Accent color
+              </label>
+              <div className="mt-2 flex items-center gap-2">
+                <input
+                  id="accentColor"
+                  name="accentColor"
+                  type="color"
+                  defaultValue={defaults.accentColor || THEME_PRESETS.amber.accent}
+                  className="h-9 w-12 cursor-pointer rounded border border-earth-200 bg-white p-0.5"
+                />
+                <input
+                  type="text"
+                  value={defaults.accentColor || THEME_PRESETS.amber.accent}
+                  readOnly
+                  className="w-28 rounded-lg border border-earth-200 bg-earth-50 px-2 py-2 text-xs font-mono text-earth-600"
+                />
+              </div>
+            </div>
+          </div>
+        ) : (
+          <p className="text-xs text-earth-500">
+            Upgrade to Premium or Generations to pick custom colors for your page.
+          </p>
+        )}
+      </fieldset>
 
       <div>
         <span className="block text-sm font-medium text-earth-800">Privacy</span>

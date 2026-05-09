@@ -4,10 +4,14 @@ export function PrayerPanel({
   slug,
   showForm,
   prayers,
+  primaryColor,
+  accentColor,
 }: {
   slug: string;
   showForm: boolean;
   prayers: { id: string; authorName: string; content: string; createdAt: Date }[];
+  primaryColor?: string;
+  accentColor?: string;
 }) {
   return (
     <section className="border-t border-earth-200 pt-12" aria-labelledby="prayer-heading">
@@ -25,7 +29,12 @@ export function PrayerPanel({
           prayers.map((p) => (
             <li
               key={p.id}
-              className="rounded-xl border border-calm-500/20 bg-calm-500/5 px-5 py-4 shadow-sm"
+              className="rounded-xl border px-5 py-4 shadow-sm"
+              style={
+                primaryColor
+                  ? { borderColor: `${primaryColor}20`, backgroundColor: `${primaryColor}08` }
+                  : undefined
+              }
             >
               <p className="text-sm font-medium text-earth-900">{p.authorName}</p>
               <p className="mt-2 whitespace-pre-wrap text-earth-800">{p.content}</p>
@@ -91,7 +100,8 @@ export function PrayerPanel({
           </label>
           <button
             type="submit"
-            className="rounded-lg bg-calm-500 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-calm-400"
+            className="rounded-lg px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition"
+            style={{ backgroundColor: primaryColor || "#b8642a" }}
           >
             Share prayer
           </button>

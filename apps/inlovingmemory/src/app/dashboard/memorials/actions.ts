@@ -24,6 +24,9 @@ const memorialBodySchema = z.object({
   privacyLevel: z.nativeEnum(IlmPrivacyLevel),
   country: z.string().max(100).optional(),
   parish: z.string().max(100).optional(),
+  themePreset: z.string().max(50).optional(),
+  primaryColor: z.string().max(7).optional(),
+  accentColor: z.string().max(7).optional(),
 });
 
 async function requireKeeperSession() {
@@ -45,13 +48,16 @@ export async function createMemorial(formData: FormData) {
     privacyLevel: formData.get("privacyLevel"),
     country: (formData.get("country") as string) || undefined,
     parish: (formData.get("parish") as string) || undefined,
+    themePreset: (formData.get("themePreset") as string) || undefined,
+    primaryColor: (formData.get("primaryColor") as string) || undefined,
+    accentColor: (formData.get("accentColor") as string) || undefined,
   });
 
   if (!parsed.success) {
     redirect("/dashboard/memorials/new?error=validation");
   }
 
-  const { displayName, kind, biography, privacyLevel, country, parish } = parsed.data;
+  const { displayName, kind, biography, privacyLevel, country, parish, themePreset, primaryColor, accentColor } = parsed.data;
   const birthDate = parseOptionalDate(formData.get("birthDate"));
   const deathDate = parseOptionalDate(formData.get("deathDate"));
   const hideFromDirectory = formData.get("hideFromDirectory") === "on";
@@ -69,6 +75,9 @@ export async function createMemorial(formData: FormData) {
       deathDate: deathDate ?? null,
       country: country?.trim() || null,
       parish: parish?.trim() || null,
+      themePreset: themePreset?.trim() || null,
+      primaryColor: primaryColor?.trim() || null,
+      accentColor: accentColor?.trim() || null,
       privacyLevel,
       hideFromDirectory,
       hideFromSearchEngines,
@@ -115,13 +124,16 @@ export async function updateMemorial(memorialId: string, formData: FormData) {
     privacyLevel: formData.get("privacyLevel"),
     country: (formData.get("country") as string) || undefined,
     parish: (formData.get("parish") as string) || undefined,
+    themePreset: (formData.get("themePreset") as string) || undefined,
+    primaryColor: (formData.get("primaryColor") as string) || undefined,
+    accentColor: (formData.get("accentColor") as string) || undefined,
   });
 
   if (!parsed.success) {
     redirect(`/dashboard/memorials/${memorialId}/edit?error=validation`);
   }
 
-  const { displayName, kind, biography, privacyLevel, country, parish } = parsed.data;
+  const { displayName, kind, biography, privacyLevel, country, parish, themePreset, primaryColor, accentColor } = parsed.data;
   const birthDate = parseOptionalDate(formData.get("birthDate"));
   const deathDate = parseOptionalDate(formData.get("deathDate"));
   const hideFromDirectory = formData.get("hideFromDirectory") === "on";
@@ -137,6 +149,9 @@ export async function updateMemorial(memorialId: string, formData: FormData) {
       deathDate: deathDate ?? null,
       country: country?.trim() || null,
       parish: parish?.trim() || null,
+      themePreset: themePreset?.trim() || null,
+      primaryColor: primaryColor?.trim() || null,
+      accentColor: accentColor?.trim() || null,
       privacyLevel,
       hideFromDirectory,
       hideFromSearchEngines,

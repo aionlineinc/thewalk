@@ -7,11 +7,13 @@ import { Modal } from "@/components/ui/modal";
 type Props = {
   shareUrl?: string | null;
   showContribute: boolean;
+  primaryColor?: string;
+  accentColor?: string;
 };
 
 type Tab = "Photos" | "Story" | "Video" | "Audio";
 
-export function MemorialCtaRow({ shareUrl, showContribute }: Props) {
+export function MemorialCtaRow({ shareUrl, showContribute, primaryColor, accentColor }: Props) {
   const [open, setOpen] = useState(false);
   const [tab, setTab] = useState<Tab>("Photos");
 
@@ -39,11 +41,21 @@ export function MemorialCtaRow({ shareUrl, showContribute }: Props) {
           <Button type="button" variant="outline" onClick={() => (window.location.hash = "#guestbook")}>
             Share memories
           </Button>
-          <Button type="button" variant="secondary" onClick={() => (window.location.hash = "#prayer")}>
+          <Button
+            type="button"
+            variant="secondary"
+            onClick={() => (window.location.hash = "#prayer")}
+            style={primaryColor ? { backgroundColor: primaryColor } : undefined}
+          >
             Share prayer
           </Button>
           {showContribute ? (
-            <Button type="button" variant="primary" onClick={() => setOpen(true)}>
+            <Button
+              type="button"
+              variant="primary"
+              onClick={() => setOpen(true)}
+              style={primaryColor ? { backgroundColor: primaryColor } : undefined}
+            >
               Add photos / story
             </Button>
           ) : null}
