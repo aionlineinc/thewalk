@@ -12,7 +12,7 @@ export default async function PricingPage() {
   return (
     <main className="pb-24">
       {/* Cinematic hero */}
-      <section className="relative flex h-[58vh] min-h-[440px] items-end p-2 md:p-4">
+      <section className="relative flex h-[62vh] min-h-[480px] items-end p-2 md:p-4">
         <div className="absolute inset-2 overflow-hidden rounded-[20px] md:inset-4">
           <Image
             src="https://images.unsplash.com/photo-1501854140801-50d01698950b?w=1920&q=85"
@@ -25,7 +25,7 @@ export default async function PricingPage() {
           <div className="absolute inset-0 bg-gradient-to-t from-[#0d0806] via-black/55 to-black/20" aria-hidden />
           <div className="absolute inset-0 bg-[#7c4a1e]/15 mix-blend-overlay" aria-hidden />
         </div>
-        <div className="relative z-10 ilm-container pb-10 pt-28 md:pb-14">
+        <div className="relative z-10 ilm-container pb-12 pt-28 md:pb-16">
           <p className="text-xs font-semibold uppercase tracking-[0.28em] text-white/55">Pricing</p>
           <h1 className="mt-3 text-4xl font-medium tracking-tight text-white md:text-[50px] md:leading-[1.1]">
             {content.pricing.title}
