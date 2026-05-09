@@ -56,7 +56,7 @@ export function SignInForm() {
           type="email"
           autoComplete="email"
           required
-          className="mt-2 w-full rounded-lg border border-earth-200 bg-white px-3 py-2 text-earth-900 shadow-sm outline-none ring-earth-400/30 transition focus:border-earth-400 focus:ring-2"
+          className="mt-2 w-full rounded-xl border border-earth-200 bg-white px-4 py-3 text-earth-900 shadow-sm outline-none transition focus:border-calm-500 focus:ring-2 focus:ring-calm-500/20"
         />
       </div>
       <div>
@@ -70,7 +70,7 @@ export function SignInForm() {
           autoComplete="current-password"
           required
           minLength={8}
-          className="mt-2 w-full rounded-lg border border-earth-200 bg-white px-3 py-2 text-earth-900 shadow-sm outline-none ring-earth-400/30 transition focus:border-earth-400 focus:ring-2"
+          className="mt-2 w-full rounded-xl border border-earth-200 bg-white px-4 py-3 text-earth-900 shadow-sm outline-none transition focus:border-calm-500 focus:ring-2 focus:ring-calm-500/20"
         />
       </div>
       {error ? (
@@ -81,7 +81,7 @@ export function SignInForm() {
       <button
         type="submit"
         disabled={pending}
-        className="w-full rounded-lg bg-earth-800 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-earth-900 disabled:opacity-60"
+        className="w-full rounded-full bg-calm-500 px-4 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-calm-600 disabled:opacity-60"
       >
         {pending ? "Signing in…" : "Sign in"}
       </button>

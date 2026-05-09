@@ -21,16 +21,16 @@ export default async function IlmHomePage() {
         <div className="absolute inset-2 overflow-hidden rounded-[20px] md:inset-4">
           <div className="absolute inset-0">
             <Image
-              src="/ilm-hero.svg"
+              src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=1920&q=85"
               alt=""
               fill
               priority
-              className="object-cover"
-              sizes="(max-width: 768px) 100vw, min(100vw, 1280px)"
+              className="object-cover object-center"
+              sizes="(max-width: 768px) 100vw, 1920px"
             />
           </div>
-          <div className="absolute inset-0 bg-gradient-to-t from-[#111111] via-black/45 to-black/20" aria-hidden />
-          <div className="absolute bottom-0 right-0 h-full w-full bg-calm-500/20 mix-blend-overlay" aria-hidden />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#0d0806] via-black/55 to-black/25" aria-hidden />
+          <div className="absolute inset-0 bg-[#7c4a1e]/20 mix-blend-overlay" aria-hidden />
         </div>
 
         <div className="relative z-10 mx-auto mt-12 flex max-w-4xl flex-col items-center px-4 text-center">
@@ -61,26 +61,28 @@ export default async function IlmHomePage() {
 
       <IlmJourneyCards />
 
-      <section className="bg-white" aria-labelledby="ilm-assistance-heading">
-        <div className="container mx-auto max-w-6xl px-4 py-16 md:px-8 md:py-20">
+      <section className="relative overflow-hidden bg-[#0f0b08]" aria-labelledby="ilm-assistance-heading">
+        <div className="absolute inset-0">
+          <Image
+            src="https://images.unsplash.com/photo-1511895426328-dc8714191011?w=1600&q=80"
+            alt=""
+            fill
+            className="object-cover object-center opacity-35"
+            sizes="100vw"
+          />
+        </div>
+        <div className="absolute inset-0 bg-gradient-to-r from-[#0f0b08]/95 via-[#0f0b08]/70 to-transparent" aria-hidden />
+        <div className="relative container mx-auto max-w-6xl px-4 py-20 md:px-8 md:py-28">
           <div className="grid gap-10 md:grid-cols-2 md:gap-12 lg:gap-16 md:items-center">
-            <div className="relative h-[400px] w-full overflow-hidden rounded-2xl bg-earth-50/80 ring-1 ring-earth-200/60">
-              <Image
-                src="/ilm-journey-remember.svg"
-                alt="Soft horizon illustration suggesting remembrance and a life story shared online."
-                fill
-                className="object-cover"
-                sizes="(max-width: 768px) 100vw, min(50vw, 640px)"
-              />
-            </div>
             <div>
+              <p className="text-xs font-semibold uppercase tracking-[0.28em] text-amber-400/70">Support</p>
               <h2
                 id="ilm-assistance-heading"
-                className="text-3xl font-medium tracking-tight text-neutral-950 md:text-4xl lg:text-[35px] lg:leading-[1.1]"
+                className="mt-4 text-3xl font-medium tracking-tight text-white md:text-4xl lg:text-[38px] lg:leading-[1.1]"
               >
                 Get assistance with your memorial page
               </h2>
-              <p className="mt-5 max-w-2xl text-[15px] font-light leading-relaxed text-neutral-500 md:text-lg md:leading-relaxed">
+              <p className="mt-5 max-w-xl text-[15px] font-light leading-relaxed text-white/65 md:text-lg md:leading-relaxed">
                 Our support team offers expert guidance and personalized support to help you create a lasting digital legacy.
               </p>
               <div className="mt-10">
@@ -91,6 +93,16 @@ export default async function IlmHomePage() {
                   </svg>
                 </AppPillLink>
               </div>
+            </div>
+            <div className="relative hidden h-[420px] overflow-hidden rounded-2xl md:block ring-1 ring-white/10">
+              <Image
+                src="https://images.unsplash.com/photo-1511895426328-dc8714191011?w=900&q=80"
+                alt="Family together sharing memories."
+                fill
+                className="object-cover object-center"
+                sizes="min(50vw, 640px)"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" aria-hidden />
             </div>
           </div>
         </div>
