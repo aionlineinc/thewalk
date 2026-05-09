@@ -1,15 +1,18 @@
-import { IlmMediaKind, IlmSubmissionStatus } from "@prisma/client";
+import { IlmEventKind, IlmMediaKind, IlmSubmissionStatus } from "@prisma/client";
 import Link from "next/link";
 import type { Metadata } from "next";
 import { headers } from "next/headers";
 import { notFound } from "next/navigation";
 import { GuestbookPanel } from "@/components/memorial/guestbook-panel";
 import { MemorialCtaRow } from "@/components/memorial/memorial-cta-row";
+import { MemorialEventInfo } from "@/components/memorial/memorial-event-info";
 import { MemorialHero } from "@/components/memorial/memorial-hero";
+import { MemorialOrderOfService } from "@/components/memorial/memorial-order-of-service";
 import { MemorialPhotoGallery } from "@/components/memorial/memorial-photo-gallery";
 import { MemorialSectionNav } from "@/components/memorial/memorial-section-nav";
+import { MemorialSpecialRequest } from "@/components/memorial/memorial-special-request";
+import { MemorialVideos } from "@/components/memorial/memorial-videos";
 import { PrayerPanel } from "@/components/memorial/prayer-panel";
-import { MemorialShareBar } from "@/components/memorial/share-bar";
 import { getIlmSession } from "@/lib/auth";
 import {
   ILM_MEDIA_TITLE_BANNER,
@@ -32,11 +35,6 @@ function oneParam(v: string | string[] | undefined) {
   return v;
 }
 
-function formatLongDate(d: Date | null) {
-  if (!d) return null;
-  return new Intl.DateTimeFormat("en", { year: "numeric", month: "long", day: "numeric" }).format(d);
-}
-
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
   const memorial = await prisma.ilmMemorial.findUnique({
     where: { slug: params.slug },
@@ -51,7 +49,10 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   return {
     title: `${memorial.displayName} · inLovingMemory`,
     description: desc,
-    robots: memorial.hideFromSearchEngines || memorial.privacyLevel !== "PUBLIC" ? { index: false, follow: false } : undefined,
+    robots:
+      memorial.hideFromSearchEngines || memorial.privacyLevel !== "PUBLIC"
+        ? { index: false, follow: false }
+        : undefined,
   };
 }
 
@@ -77,15 +78,28 @@ export default async function MemorialPage({ params, searchParams }: PageProps) 
   if (!memorial) notFound();
 
   const session = await getIlmSession();
-  const userId = session?.user && "id" in session.user ? (session.user as { id: string }).id : undefined;
+  const userId =
+    session?.user && "id" in session.user ? (session.user as { id: string }).id : undefined;
   const isKeeper = userId === memorial.pageKeeperId;
   const isPublic = memorial.privacyLevel === "PUBLIC";
   const canView = isPublic || isKeeper;
 
+  const tab = oneParam(searchParams.tab) ?? "memorial";
+  const isFuneralTab = tab === "funeral-service";
+
   const gbSent = oneParam(searchParams.guestbook);
   const prSent = oneParam(searchParams.prayer);
 
-  const [guestbookApproved, prayersApproved, pendingGuestbook, pendingPrayers, photoRows] = await Promise.all([
+  const [
+    guestbookApproved,
+    prayersApproved,
+    pendingGuestbook,
+    pendingPrayers,
+    photoRows,
+    videoRows,
+    events,
+    pamphlets,
+  ] = await Promise.all([
     prisma.ilmGuestbookEntry.findMany({
       where: { memorialId: memorial.id, status: IlmSubmissionStatus.APPROVED },
       orderBy: { createdAt: "desc" },
@@ -117,10 +131,30 @@ export default async function MemorialPage({ params, searchParams }: PageProps) 
       orderBy: { createdAt: "asc" },
       select: { id: true, storageUrl: true, title: true },
     }),
+    prisma.ilmMedia.findMany({
+      where: {
+        memorialId: memorial.id,
+        kind: IlmMediaKind.VIDEO,
+        status: IlmSubmissionStatus.APPROVED,
+      },
+      orderBy: { createdAt: "asc" },
+      select: { id: true, storageUrl: true, title: true },
+    }),
+    prisma.ilmEvent.findMany({
+      where: { memorialId: memorial.id },
+      orderBy: { startsAt: "asc" },
+      select: { id: true, kind: true, title: true, startsAt: true, venue: true, notes: true, streamUrl: true },
+    }),
+    prisma.ilmPamphlet.findFirst({
+      where: { memorialId: memorial.id },
+      select: { id: true, pdfUrl: true },
+    }),
   ]);
 
-  const profileUrl = photoRows.find((p) => p.title === ILM_MEDIA_TITLE_PROFILE)?.storageUrl ?? null;
-  const bannerUrl = photoRows.find((p) => p.title === ILM_MEDIA_TITLE_BANNER)?.storageUrl ?? null;
+  const profileUrl =
+    photoRows.find((p) => p.title === ILM_MEDIA_TITLE_PROFILE)?.storageUrl ?? null;
+  const bannerUrl =
+    photoRows.find((p) => p.title === ILM_MEDIA_TITLE_BANNER)?.storageUrl ?? null;
   const galleryPhotos = photoRows.filter((p) => isGalleryPhotoTitle(p.title));
 
   const theme = resolveTheme(memorial.themePreset, memorial.primaryColor, memorial.accentColor);
@@ -137,10 +171,40 @@ export default async function MemorialPage({ params, searchParams }: PageProps) 
     shareUrl = `${inferredBase}/memorial/${memorial.slug}`;
   }
 
+  // Build video list: video media + event stream URLs
+  const videos = [
+    ...events
+      .filter((e) => e.streamUrl)
+      .map((e) => ({ id: `event-${e.id}`, url: e.streamUrl!, title: e.title })),
+    ...videoRows.map((v) => ({ id: v.id, url: v.storageUrl, title: v.title })),
+  ];
+
+  // Special request: first OTHER event with streamUrl
+  const specialEvent = events.find((e) => e.kind === IlmEventKind.OTHER && e.streamUrl);
+  const specialRequest = specialEvent
+    ? {
+        id: specialEvent.id,
+        tagline: specialEvent.notes,
+        video: specialEvent.streamUrl
+          ? { id: specialEvent.id, url: specialEvent.streamUrl, title: specialEvent.title }
+          : null,
+      }
+    : null;
+
+  // Service location events (FUNERAL + VISITATION)
+  const serviceEvents = events.filter(
+    (e) => e.kind === IlmEventKind.FUNERAL || e.kind === IlmEventKind.VISITATION,
+  );
+
+  // Videos for the funeral tab: exclude the special request event
+  const funeralVideos = videos.filter((v) => !specialEvent || v.id !== `event-${specialEvent.id}`);
+
   if (!canView) {
     return (
       <main className="ilm-prose py-16">
-        <h1 className="text-2xl font-semibold tracking-tight text-earth-900">This page is not public</h1>
+        <h1 className="text-2xl font-semibold tracking-tight text-earth-900">
+          This page is not public
+        </h1>
         <p className="mt-4 max-w-xl text-earth-700">
           {memorial.privacyLevel === "PASSWORD"
             ? "This memorial is password protected."
@@ -159,16 +223,9 @@ export default async function MemorialPage({ params, searchParams }: PageProps) 
     );
   }
 
-  const birth = formatLongDate(memorial.birthDate);
-  const death = formatLongDate(memorial.deathDate);
-  const lifeSpan =
-    birth || death ? (
-      <p className="mt-4 text-base text-earth-600">
-        {[birth, death].filter(Boolean).join(" — ")}
-      </p>
-    ) : null;
-
   const showCommunityForms = isPublic;
+  const kindLabel =
+    memorial.kind === "LIVING_LEGACY" ? "Living Legacy" : "In Loving Memory of";
 
   return (
     <main className="pb-20">
@@ -180,74 +237,77 @@ export default async function MemorialPage({ params, searchParams }: PageProps) 
         </div>
       ) : null}
 
+      {/* Hero */}
       <section className="border-b border-earth-200/80 bg-white pt-10">
-        <div className="ilm-prose pb-10">
+        <div className="ilm-prose pb-6">
           <MemorialHero
             displayName={memorial.displayName}
-            kindLabel={memorial.kind === "LIVING_LEGACY" ? "Living legacy" : "In loving memory"}
+            kindLabel={kindLabel}
             bannerUrl={bannerUrl}
             profileUrl={profileUrl}
             primaryColor={primaryColor}
+            birthDate={memorial.birthDate}
+            deathDate={memorial.deathDate}
           />
 
-          <div className="border-b border-earth-200 pb-8">
-            {lifeSpan}
-            {isKeeper ? (
-              <div className={`flex flex-wrap gap-4 text-sm ${lifeSpan ? "mt-8" : "mt-2"}`}>
-                <Link
-                  className="font-medium text-earth-800 underline-offset-4 hover:underline"
-                  href={`/dashboard/memorials/${memorial.id}/edit`}
-                >
-                  Edit details
-                </Link>
-                <Link
-                  className="font-medium text-earth-800 underline-offset-4 hover:underline"
-                  href={`/dashboard/memorials/${memorial.id}/media`}
-                >
-                  Photos
-                </Link>
-                <Link
-                  className="font-medium underline-offset-4 hover:underline"
-                  style={{ color: primaryColor }}
-                  href={`/dashboard/memorials/${memorial.id}/community`}
-                >
-                  Moderate guest book & prayer
-                  {(pendingGuestbook > 0 || pendingPrayers > 0) && (
-                    <span
-                      className="ml-1.5 rounded-full px-2 py-0.5 text-xs text-white"
-                      style={{ backgroundColor: primaryColor }}
-                    >
-                      {pendingGuestbook + pendingPrayers}
-                    </span>
-                  )}
-                </Link>
-              </div>
-            ) : null}
-          </div>
+          {isKeeper ? (
+            <div className="flex flex-wrap gap-4 border-t border-earth-200 pt-5 text-sm">
+              <Link
+                className="font-medium text-earth-800 underline-offset-4 hover:underline"
+                href={`/dashboard/memorials/${memorial.id}/edit`}
+              >
+                Edit details
+              </Link>
+              <Link
+                className="font-medium text-earth-800 underline-offset-4 hover:underline"
+                href={`/dashboard/memorials/${memorial.id}/media`}
+              >
+                Photos &amp; media
+              </Link>
+              <Link
+                className="font-medium underline-offset-4 hover:underline"
+                style={{ color: primaryColor }}
+                href={`/dashboard/memorials/${memorial.id}/community`}
+              >
+                Moderate guest book &amp; prayer
+                {(pendingGuestbook > 0 || pendingPrayers > 0) && (
+                  <span
+                    className="ml-1.5 rounded-full px-2 py-0.5 text-xs text-white"
+                    style={{ backgroundColor: primaryColor }}
+                  >
+                    {pendingGuestbook + pendingPrayers}
+                  </span>
+                )}
+              </Link>
+            </div>
+          ) : null}
         </div>
       </section>
 
-      <MemorialCtaRow shareUrl={shareUrl} showContribute={showCommunityForms} primaryColor={primaryColor} accentColor={accentColor} />
+      {/* Tab nav */}
+      <MemorialSectionNav slug={memorial.slug} activeTab={tab} primaryColor={primaryColor} />
 
-      <MemorialSectionNav />
-
+      {/* Flash messages */}
       {gbSent === "sent" ? (
-        <div className="ilm-prose mt-8">
-          <p className="rounded-lg border border-earth-200 bg-earth-50 px-4 py-3 text-sm text-earth-800" role="status">
+        <div className="ilm-prose mt-6">
+          <p
+            className="rounded-lg border px-4 py-3 text-sm text-earth-800"
+            style={{ borderColor: `${primaryColor}30`, backgroundColor: `${primaryColor}10` }}
+            role="status"
+          >
             Thank you — your message was received and will appear after the page keeper approves it.
           </p>
         </div>
       ) : null}
       {gbSent === "invalid" ? (
-        <div className="ilm-prose mt-8">
+        <div className="ilm-prose mt-6">
           <p className="text-sm text-red-800" role="alert">
             Please check your name and message, then try again.
           </p>
         </div>
       ) : null}
-
       {prSent === "sent" ? (
-        <div className="ilm-prose mt-8">
+        <div className="ilm-prose mt-6">
           <p
             className="rounded-lg border px-4 py-3 text-sm text-earth-800"
             style={{ borderColor: `${primaryColor}30`, backgroundColor: `${primaryColor}10` }}
@@ -258,58 +318,83 @@ export default async function MemorialPage({ params, searchParams }: PageProps) 
         </div>
       ) : null}
       {prSent === "invalid" ? (
-        <div className="ilm-prose mt-8">
+        <div className="ilm-prose mt-6">
           <p className="text-sm text-red-800" role="alert">
             Please check your prayer and name, then try again.
           </p>
         </div>
       ) : null}
 
-      <article id="story" className="ilm-prose mt-12">
-        <h2 className="sr-only">Life story</h2>
-        <div className="rounded-2xl border border-earth-200 bg-white/80 px-6 py-6 shadow-sm">
-          <div className="max-w-none text-base leading-relaxed text-earth-800 sm:text-lg">
-            <p className="whitespace-pre-wrap">{memorial.biography?.trim() ? memorial.biography : "—"}</p>
-          </div>
-        </div>
-      </article>
+      {/* ── Memorial tab ── */}
+      {!isFuneralTab ? (
+        <>
+          <article id="story" className="ilm-prose mt-10">
+            <div className="rounded-2xl border border-earth-200 bg-white/80 px-6 py-6 shadow-sm">
+              <p className="whitespace-pre-wrap text-base leading-relaxed text-earth-800 sm:text-lg">
+                {memorial.biography?.trim() ? memorial.biography : "—"}
+              </p>
+            </div>
+          </article>
 
-      <section id="service" className="ilm-prose mt-12" aria-labelledby="service-heading">
-        <h2 id="service-heading" className="text-xl font-semibold tracking-tight text-earth-900">
-          Order of service
-        </h2>
-        <p className="mt-2 text-sm text-earth-600">
-          Service details and program content will appear here. (Design scaffold — wiring comes next.)
-        </p>
-        <div className="mt-6 rounded-2xl border border-earth-200 bg-earth-50/40 px-6 py-5 shadow-sm">
-          <p className="text-sm font-semibold text-earth-900">Funeral service location</p>
-          <p className="mt-2 text-sm text-earth-700">Coming soon</p>
-        </div>
-      </section>
+          {specialRequest ? (
+            <div className="ilm-prose">
+              <MemorialSpecialRequest
+                request={specialRequest}
+                displayName={memorial.displayName}
+                primaryColor={primaryColor}
+              />
+            </div>
+          ) : null}
 
-      <section id="gallery" className="ilm-prose mt-12">
-        <MemorialPhotoGallery photos={galleryPhotos} />
-      </section>
+          <section id="gallery" className="ilm-prose mt-12">
+            <MemorialPhotoGallery photos={galleryPhotos} />
+          </section>
 
-      {shareUrl ? (
-        <section className="ilm-prose mt-12" aria-labelledby="share-heading">
-          <h2 id="share-heading" className="text-xl font-semibold tracking-tight text-earth-900">
-            Share
-          </h2>
-          <p className="mt-2 text-sm text-earth-600">Invite others to visit this page.</p>
-          <div className="mt-4 rounded-2xl border border-earth-200 bg-white/80 px-6 py-5 shadow-sm">
-            <MemorialShareBar shareUrl={shareUrl} />
-          </div>
-        </section>
+          <section id="prayer" className="ilm-prose mt-12">
+            <PrayerPanel
+              slug={memorial.slug}
+              showForm={showCommunityForms}
+              prayers={prayersApproved}
+              primaryColor={primaryColor}
+              accentColor={accentColor}
+            />
+          </section>
+        </>
       ) : null}
 
-      <section id="guestbook" className="ilm-prose">
-        <GuestbookPanel slug={memorial.slug} showForm={showCommunityForms} entries={guestbookApproved} primaryColor={primaryColor} />
-      </section>
+      {/* ── Funeral Service tab ── */}
+      {isFuneralTab ? (
+        <>
+          <MemorialOrderOfService pdfUrl={pamphlets?.pdfUrl} />
 
-      <section id="prayer" className="ilm-prose">
-        <PrayerPanel slug={memorial.slug} showForm={showCommunityForms} prayers={prayersApproved} primaryColor={primaryColor} accentColor={accentColor} />
-      </section>
+          {funeralVideos.length > 0 ? (
+            <MemorialVideos videos={funeralVideos} />
+          ) : null}
+
+          {serviceEvents.length > 0 ? (
+            <MemorialEventInfo events={serviceEvents} />
+          ) : null}
+
+          <section id="guestbook" className="ilm-prose mt-12">
+            <GuestbookPanel
+              slug={memorial.slug}
+              showForm={showCommunityForms}
+              entries={guestbookApproved}
+              primaryColor={primaryColor}
+            />
+          </section>
+        </>
+      ) : null}
+
+      {/* Share precious moments CTA (both tabs) */}
+      <div className="ilm-prose mt-12">
+        <MemorialCtaRow
+          shareUrl={shareUrl}
+          showContribute={showCommunityForms}
+          primaryColor={primaryColor}
+          accentColor={accentColor}
+        />
+      </div>
 
       {!isKeeper && isPublic ? (
         <div className="ilm-prose">

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Outfit, Roboto_Mono } from "next/font/google";
+import { Dancing_Script, Outfit, Roboto_Mono } from "next/font/google";
 import { IlmHeader } from "@/components/ilm-header";
 import { IlmFooter } from "@/components/ilm-footer";
 import { SessionProvider } from "@/components/session-provider";
@@ -15,6 +15,12 @@ const outfit = Outfit({
 const robotoMono = Roboto_Mono({
   subsets: ["latin"],
   variable: "--font-roboto-mono",
+  display: "swap",
+});
+
+const dancingScript = Dancing_Script({
+  subsets: ["latin"],
+  variable: "--font-dancing-script",
   display: "swap",
 });
 
@@ -47,7 +53,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const session = await getIlmSession();
 
   return (
-    <html lang="en" className={`${outfit.variable} ${robotoMono.variable} h-full antialiased`}>
+    <html lang="en" className={`${outfit.variable} ${robotoMono.variable} ${dancingScript.variable} h-full antialiased`}>
       <body className="min-h-screen font-sans antialiased">
         <SessionProvider session={session}>
           <IlmHeader session={session} />

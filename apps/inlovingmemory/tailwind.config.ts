@@ -42,6 +42,7 @@ const config: Config = {
       fontFamily: {
         sans: ["var(--font-outfit)", "ui-sans-serif", "system-ui", "sans-serif"],
         mono: ["var(--font-roboto-mono)", "ui-monospace", "monospace"],
+        script: ["var(--font-dancing-script)", "cursive"],
       },
     },
   },

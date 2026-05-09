@@ -6,7 +6,15 @@ export function IlmFooter() {
       <div className="ilm-container py-12 md:py-14">
         <div className="flex flex-col gap-8 sm:flex-row sm:items-start sm:justify-between">
           <div>
-            <p className="text-sm font-semibold tracking-tight text-white">inLovingMemory</p>
+            <img
+              src="/weblogo-w.png"
+              alt="inLovingMemory"
+              width={160}
+              height={44}
+              className="h-7 w-auto object-contain opacity-90"
+              loading="lazy"
+              decoding="async"
+            />
             <p className="mt-2 max-w-md text-sm leading-relaxed text-white/45">
               More than a memorial — a living legacy.
             </p>

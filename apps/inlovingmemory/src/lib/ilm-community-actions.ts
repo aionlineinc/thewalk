@@ -7,7 +7,9 @@ import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 
 const guestbookSchema = z.object({
-  authorName: z.string().trim().min(1, "Name is required").max(120),
+  firstName: z.string().trim().min(1, "First name is required").max(60).optional(),
+  lastName: z.string().trim().min(1, "Last name is required").max(60).optional(),
+  authorName: z.string().trim().min(1, "Name is required").max(120).optional(),
   authorEmail: z.preprocess(
     (v) => (v === "" || v == null || typeof v !== "string" ? undefined : v.trim()),
     z.string().email().max(320).optional(),
@@ -34,8 +36,18 @@ export async function submitGuestbookEntry(slug: string, formData: FormData) {
     redirect(`/memorial/${slug}?guestbook=closed`);
   }
 
+  const rawFirst = formData.get("firstName");
+  const rawLast = formData.get("lastName");
+  const rawName = formData.get("authorName");
+  const combinedName =
+    rawFirst || rawLast
+      ? `${String(rawFirst ?? "").trim()} ${String(rawLast ?? "").trim()}`.trim()
+      : rawName;
+
   const parsed = guestbookSchema.safeParse({
-    authorName: formData.get("authorName"),
+    firstName: rawFirst,
+    lastName: rawLast,
+    authorName: combinedName,
     authorEmail: formData.get("authorEmail"),
     content: formData.get("content"),
   });
@@ -44,11 +56,20 @@ export async function submitGuestbookEntry(slug: string, formData: FormData) {
     redirect(`/memorial/${slug}?guestbook=invalid`);
   }
 
+  const resolvedName =
+    parsed.data.firstName && parsed.data.lastName
+      ? `${parsed.data.firstName} ${parsed.data.lastName}`
+      : (parsed.data.authorName ?? "Anonymous");
+
+  if (!resolvedName) {
+    redirect(`/memorial/${slug}?guestbook=invalid`);
+  }
+
   const email = parsed.data.authorEmail?.trim();
   await prisma.ilmGuestbookEntry.create({
     data: {
       memorialId: memorial.id,
-      authorName: parsed.data.authorName,
+      authorName: resolvedName,
       authorEmail: email || null,
       content: parsed.data.content,
       status: IlmSubmissionStatus.PENDING,
