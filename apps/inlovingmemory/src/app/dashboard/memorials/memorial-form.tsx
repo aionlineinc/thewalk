@@ -86,6 +86,37 @@ export function MemorialForm({
         </div>
       </div>
 
+      <div className="grid gap-6 sm:grid-cols-2 sm:gap-8">
+        <div>
+          <label htmlFor="country" className="block text-sm font-medium text-earth-800">
+            Country
+          </label>
+          <input
+            id="country"
+            name="country"
+            type="text"
+            maxLength={100}
+            defaultValue={defaults.country}
+            placeholder="e.g. United States, Kenya"
+            className="mt-2 w-full rounded-lg border border-earth-200 bg-white px-3 py-2 text-earth-900 shadow-sm outline-none ring-earth-400/30 transition focus:border-earth-400 focus:ring-2"
+          />
+        </div>
+        <div>
+          <label htmlFor="parish" className="block text-sm font-medium text-earth-800">
+            Parish / community
+          </label>
+          <input
+            id="parish"
+            name="parish"
+            type="text"
+            maxLength={100}
+            defaultValue={defaults.parish}
+            placeholder="e.g. St. Mary's, Nairobi Chapel"
+            className="mt-2 w-full rounded-lg border border-earth-200 bg-white px-3 py-2 text-earth-900 shadow-sm outline-none ring-earth-400/30 transition focus:border-earth-400 focus:ring-2"
+          />
+        </div>
+      </div>
+
       <div>
         <span className="block text-sm font-medium text-earth-800">Privacy</span>
         <p className="mt-1 text-sm text-earth-600">

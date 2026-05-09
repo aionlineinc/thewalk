@@ -6,6 +6,8 @@ export type MemorialFormDefaults = {
   biography: string;
   birthDate: string;
   deathDate: string;
+  country: string;
+  parish: string;
   privacyLevel: IlmPrivacyLevel;
   slug: string;
   hideFromDirectory: boolean;
@@ -23,6 +25,8 @@ export function buildMemorialDefaults(row: {
   biography: string | null;
   birthDate: Date | null;
   deathDate: Date | null;
+  country: string | null;
+  parish: string | null;
   privacyLevel: IlmPrivacyLevel;
   slug: string;
   hideFromDirectory: boolean;
@@ -34,6 +38,8 @@ export function buildMemorialDefaults(row: {
     biography: row.biography ?? "",
     birthDate: isoDateForInput(row.birthDate),
     deathDate: isoDateForInput(row.deathDate),
+    country: row.country ?? "",
+    parish: row.parish ?? "",
     privacyLevel: row.privacyLevel,
     slug: row.slug,
     hideFromDirectory: row.hideFromDirectory,

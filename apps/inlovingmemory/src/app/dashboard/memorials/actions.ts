@@ -22,6 +22,8 @@ const memorialBodySchema = z.object({
   birthDate: z.string().optional(),
   deathDate: z.string().optional(),
   privacyLevel: z.nativeEnum(IlmPrivacyLevel),
+  country: z.string().max(100).optional(),
+  parish: z.string().max(100).optional(),
 });
 
 async function requireKeeperSession() {
@@ -41,13 +43,15 @@ export async function createMemorial(formData: FormData) {
     birthDate: (formData.get("birthDate") as string) || undefined,
     deathDate: (formData.get("deathDate") as string) || undefined,
     privacyLevel: formData.get("privacyLevel"),
+    country: (formData.get("country") as string) || undefined,
+    parish: (formData.get("parish") as string) || undefined,
   });
 
   if (!parsed.success) {
     redirect("/dashboard/memorials/new?error=validation");
   }
 
-  const { displayName, kind, biography, privacyLevel } = parsed.data;
+  const { displayName, kind, biography, privacyLevel, country, parish } = parsed.data;
   const birthDate = parseOptionalDate(formData.get("birthDate"));
   const deathDate = parseOptionalDate(formData.get("deathDate"));
   const hideFromDirectory = formData.get("hideFromDirectory") === "on";
@@ -63,6 +67,8 @@ export async function createMemorial(formData: FormData) {
       biography: biography?.trim() || null,
       birthDate: birthDate ?? null,
       deathDate: deathDate ?? null,
+      country: country?.trim() || null,
+      parish: parish?.trim() || null,
       privacyLevel,
       hideFromDirectory,
       hideFromSearchEngines,
@@ -107,13 +113,15 @@ export async function updateMemorial(memorialId: string, formData: FormData) {
     birthDate: (formData.get("birthDate") as string) || undefined,
     deathDate: (formData.get("deathDate") as string) || undefined,
     privacyLevel: formData.get("privacyLevel"),
+    country: (formData.get("country") as string) || undefined,
+    parish: (formData.get("parish") as string) || undefined,
   });
 
   if (!parsed.success) {
     redirect(`/dashboard/memorials/${memorialId}/edit?error=validation`);
   }
 
-  const { displayName, kind, biography, privacyLevel } = parsed.data;
+  const { displayName, kind, biography, privacyLevel, country, parish } = parsed.data;
   const birthDate = parseOptionalDate(formData.get("birthDate"));
   const deathDate = parseOptionalDate(formData.get("deathDate"));
   const hideFromDirectory = formData.get("hideFromDirectory") === "on";
@@ -127,6 +135,8 @@ export async function updateMemorial(memorialId: string, formData: FormData) {
       biography: biography?.trim() || null,
       birthDate: birthDate ?? null,
       deathDate: deathDate ?? null,
+      country: country?.trim() || null,
+      parish: parish?.trim() || null,
       privacyLevel,
       hideFromDirectory,
       hideFromSearchEngines,

@@ -226,6 +226,8 @@ model IlmMemorial {
   displayName String
   birthDate   DateTime?
   deathDate   DateTime?
+  country     String?
+  parish      String?
   biography   String?         @db.Text
   hideFromDirectory     Boolean @default(false)
   hideFromSearchEngines Boolean @default(false)

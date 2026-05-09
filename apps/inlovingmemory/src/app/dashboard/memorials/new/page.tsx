@@ -17,6 +17,8 @@ const emptyDefaults = {
   slug: "(assigned when you save)",
   hideFromDirectory: false,
   hideFromSearchEngines: false,
+  country: "",
+  parish: "",
 };
 
 export default function NewMemorialPage() {
