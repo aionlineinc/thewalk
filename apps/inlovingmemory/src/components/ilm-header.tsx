@@ -6,10 +6,10 @@ export function IlmHeader({ session }: { session: Session | null }) {
   return (
     <header className="fixed inset-x-0 top-6 z-50 sm:top-7">
       <div className="mx-auto max-w-6xl px-4 sm:px-6 md:px-8">
-        <div className="flex items-center justify-between gap-4 rounded-full border border-white/25 bg-white/85 px-5 py-3 shadow-lg shadow-black/5 backdrop-blur-lg">
+        <div className="flex items-center justify-between gap-4 rounded-full border border-earth-700 bg-earth-900/90 px-5 py-3 shadow-lg shadow-black/20 backdrop-blur-lg">
           <Link href="/" className="shrink-0">
             <img
-              src="/weblogo-b.png"
+              src="/weblogo-w.png"
               alt="inLovingMemory — Remember. Celebrate. Cherish."
               width={180}
               height={48}
@@ -19,25 +19,25 @@ export function IlmHeader({ session }: { session: Session | null }) {
             />
           </Link>
           <nav className="flex flex-wrap items-center gap-5 text-sm" aria-label="Primary">
-            <Link className="font-medium text-earth-900 transition hover:text-earth-950" href="/how-it-works">
+            <Link className="font-medium text-white/80 transition hover:text-white" href="/how-it-works">
               How it works
             </Link>
-            <Link className="font-medium text-earth-900 transition hover:text-earth-950" href="/directory">
+            <Link className="font-medium text-white/80 transition hover:text-white" href="/directory">
               Find a memorial
             </Link>
           {session?.user ? (
             <>
-              <Link className="font-medium text-earth-900 transition hover:text-earth-950" href="/dashboard">
+              <Link className="font-medium text-white/80 transition hover:text-white" href="/dashboard">
                 Dashboard
               </Link>
-              <SignOutButton />
+              <SignOutButton className="text-sm font-medium text-white/70 underline-offset-4 transition hover:text-white hover:underline" />
             </>
           ) : (
             <>
-              <Link className="font-medium text-earth-900 transition hover:text-earth-950" href="/pricing">
+              <Link className="font-medium text-white/80 transition hover:text-white" href="/pricing">
                 Pricing
               </Link>
-              <Link className="font-medium text-earth-900 transition hover:text-earth-950" href="/sign-in">
+              <Link className="font-medium text-white/80 transition hover:text-white" href="/sign-in">
                 Sign in
               </Link>
             </>
