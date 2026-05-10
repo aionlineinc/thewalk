@@ -51,4 +51,31 @@ body {
   .app-pill-ghost-dark {
     @apply inline-flex items-center justify-center rounded-full border border-white/30 bg-transparent px-8 py-3.5 text-lg font-medium text-white transition-all hover:bg-white/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white;
   }
+
+  /* Dashboard (mirrors thewalk admin card system with ILM palette) */
+  .dash-card {
+    @apply rounded-[1.35rem] border border-earth-200 bg-white;
+    box-shadow: 0 2px 40px -12px rgba(62, 54, 47, 0.08);
+  }
+  .dash-card-pad {
+    @apply dash-card p-6 sm:p-7;
+  }
+  .dash-page-title {
+    @apply text-3xl font-semibold tracking-tight text-earth-900 sm:text-4xl;
+  }
+  .dash-page-lead {
+    @apply mt-2 max-w-2xl text-sm leading-relaxed text-earth-500;
+  }
+  .dash-link {
+    @apply font-medium text-calm-500 underline-offset-4 transition-colors hover:text-calm-600 hover:underline;
+  }
+  .dash-link:focus-visible {
+    @apply rounded-sm outline outline-2 outline-offset-2 outline-calm-500/40;
+  }
+  .dash-btn-primary {
+    @apply inline-flex items-center justify-center rounded-xl bg-calm-500 px-5 py-3 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-calm-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-calm-500/50;
+  }
+  .dash-btn-ghost {
+    @apply inline-flex items-center justify-center rounded-xl border border-earth-200 bg-white px-5 py-3 text-sm font-semibold text-earth-900 transition-colors hover:bg-earth-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-earth-900/20;
+  }
 }

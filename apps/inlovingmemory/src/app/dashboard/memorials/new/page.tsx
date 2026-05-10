@@ -27,18 +27,18 @@ const emptyDefaults = {
 
 export default function NewMemorialPage() {
   return (
-    <main className="ilm-container py-12">
-      <Link href="/dashboard" className="text-sm font-medium text-earth-700 underline-offset-4 hover:underline">
+    <section className="w-full">
+      <Link href="/dashboard" className="dash-link text-sm">
         ← Dashboard
       </Link>
-      <h1 className="mt-6 text-3xl font-semibold tracking-tight text-earth-900">New memorial</h1>
-      <p className="mt-3 max-w-2xl text-earth-700">
-        Create a page for someone who has passed or a living legacy profile. The public link is generated when you
-        save.
+      <h1 className="dash-page-title mt-6">New memorial</h1>
+      <p className="dash-page-lead">
+        Create a page for someone who has passed or a living legacy profile. The public link is generated
+        when you save.
       </p>
-      <div className="mt-10">
+      <div className="dash-card-pad mt-10">
         <MemorialForm action={createMemorial} defaults={emptyDefaults} />
       </div>
-    </main>
+    </section>
   );
 }

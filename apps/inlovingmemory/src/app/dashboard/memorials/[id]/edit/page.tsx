@@ -26,38 +26,40 @@ export default async function EditMemorialPage({ params }: { params: { id: strin
   const defaults = buildMemorialDefaults(memorial);
 
   return (
-    <main className="ilm-container py-12">
-      <Link href="/dashboard" className="text-sm font-medium text-earth-700 underline-offset-4 hover:underline">
+    <section className="w-full">
+      <Link href="/dashboard" className="dash-link text-sm">
         ← Dashboard
       </Link>
-      <h1 className="mt-6 text-3xl font-semibold tracking-tight text-earth-900">Edit memorial</h1>
-      <p className="mt-3 max-w-2xl text-earth-700">
+      <h1 className="dash-page-title mt-6">Edit memorial</h1>
+      <p className="dash-page-lead">
         Changes apply immediately on the public page (subject to privacy settings).
       </p>
-      <p className="mt-4 flex flex-wrap gap-x-6 gap-y-2">
+      <p className="mt-4 flex flex-wrap gap-x-6 gap-y-2 text-sm">
         <Link
           href={`/dashboard/memorials/${memorial.id}/media`}
-          className="text-sm font-medium text-earth-800 underline-offset-4 hover:underline"
+          className="dash-link"
         >
-          Photos & banner →
+          Photos &amp; banner →
         </Link>
         <Link
           href={`/dashboard/memorials/${memorial.id}/community`}
-          className="text-sm font-medium text-calm-500 underline-offset-4 hover:underline"
+          className="dash-link"
         >
-          Moderate guest book & prayer wall →
+          Moderate guest book &amp; prayer wall →
         </Link>
       </p>
-      <div className="mt-10">
+      <div className="dash-card-pad mt-10">
         <MemorialForm action={updateMemorialFromForm} defaults={defaults} memorialIdForEdit={memorial.id} />
       </div>
       <div className="mt-16 border-t border-earth-200 pt-10">
         <h2 className="text-lg font-semibold text-earth-900">Danger zone</h2>
-        <p className="mt-2 max-w-xl text-sm text-earth-600">Removing a memorial deletes its page and related content.</p>
+        <p className="mt-2 max-w-xl text-sm text-earth-500">
+          Removing a memorial deletes its page and related content.
+        </p>
         <div className="mt-4">
           <DeleteMemorialForm memorialId={memorial.id} />
         </div>
       </div>
-    </main>
+    </section>
   );
 }

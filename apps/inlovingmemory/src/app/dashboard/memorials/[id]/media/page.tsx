@@ -39,32 +39,29 @@ export default async function MemorialMediaPage({ params }: { params: { id: stri
   const storageConfigured = getIlmStorageEnv().configured;
 
   return (
-    <main className="ilm-container py-12">
-      <Link href="/dashboard" className="text-sm font-medium text-earth-800 underline-offset-4 hover:underline">
+    <section className="w-full">
+      <Link href="/dashboard" className="dash-link text-sm">
         ← Dashboard
       </Link>
-      <h1 className="mt-6 text-3xl font-semibold tracking-tight text-earth-900">Photos</h1>
-      <p className="mt-2 text-earth-700">
+      <h1 className="dash-page-title mt-6">Photos</h1>
+      <p className="dash-page-lead">
         {memorial.displayName} · <span className="font-mono text-sm">/{memorial.slug}</span>
       </p>
-      <div className="mt-10">
+      <div className="dash-card-pad mt-10">
         <MemorialMediaPanel
           memorialId={memorial.id}
           storageConfigured={storageConfigured}
           items={memorial.media}
         />
       </div>
-      <p className="mt-12 flex flex-wrap gap-6 text-sm">
-        <Link className="font-medium text-earth-800 underline-offset-4 hover:underline" href={`/memorial/${memorial.slug}`}>
+      <p className="mt-10 flex flex-wrap gap-6 text-sm">
+        <Link className="dash-link" href={`/memorial/${memorial.slug}`}>
           View public page
         </Link>
-        <Link
-          className="font-medium text-earth-800 underline-offset-4 hover:underline"
-          href={`/dashboard/memorials/${memorial.id}/edit`}
-        >
+        <Link className="dash-link" href={`/dashboard/memorials/${memorial.id}/edit`}>
           Edit details
         </Link>
       </p>
-    </main>
+    </section>
   );
 }
