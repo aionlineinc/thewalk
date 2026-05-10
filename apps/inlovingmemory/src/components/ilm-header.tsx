@@ -6,7 +6,7 @@ export function IlmHeader({ session }: { session: Session | null }) {
   return (
     <header className="fixed inset-x-0 top-6 z-50 sm:top-7">
       <div className="mx-auto max-w-6xl px-4 sm:px-6 md:px-8">
-        <div className="flex items-center justify-between gap-4 rounded-full border border-earth-700 bg-earth-900/90 px-5 py-3 shadow-lg shadow-black/20 backdrop-blur-lg">
+        <div className="flex items-center justify-between gap-4 rounded-full bg-[#0d0906]/95 px-5 py-3 shadow-lg shadow-black/30 backdrop-blur-lg">
           <Link href="/" className="shrink-0">
             <img
               src="/weblogo-w.png"
