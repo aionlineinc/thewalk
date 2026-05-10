@@ -37,7 +37,7 @@ export function MemorialSpecialRequest({
   const embedUrl = request.video ? toEmbedUrl(request.video.url) : null;
 
   return (
-    <section className="ilm-prose mt-12 border-t border-earth-200 pt-10">
+    <section className="ilm-container mt-12 border-t border-earth-200 pt-10">
       <h2 className="text-xl font-semibold tracking-tight text-earth-900">Special Request</h2>
 
       {request.tagline ? (

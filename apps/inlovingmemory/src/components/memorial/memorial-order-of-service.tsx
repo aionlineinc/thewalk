@@ -1,6 +1,6 @@
 export function MemorialOrderOfService({ pdfUrl }: { pdfUrl: string | null | undefined }) {
   return (
-    <section className="ilm-prose mt-8">
+    <section className="ilm-container mt-8">
       <div className="flex items-center gap-4 rounded-2xl border border-earth-200 bg-white px-6 py-5 shadow-sm">
         <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-earth-100">
           <svg className="h-7 w-7 text-earth-600" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">

@@ -26,7 +26,7 @@ export function MemorialVideos({ videos }: { videos: VideoItem[] }) {
   if (videos.length === 0) return null;
 
   return (
-    <section className="ilm-prose mt-8 space-y-6">
+    <section className="ilm-container mt-8 space-y-6">
       {videos.map((v) => {
         const embedUrl = toEmbedUrl(v.url);
         if (!embedUrl) return null;

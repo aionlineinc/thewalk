@@ -18,7 +18,7 @@ export function MemorialEventInfo({ events }: { events: EventInfoItem[] }) {
   if (relevant.length === 0) return null;
 
   return (
-    <div className="ilm-prose mt-6">
+    <div className="ilm-container mt-6">
       <div className="flex flex-wrap gap-x-8 gap-y-2 rounded-2xl border border-earth-200 bg-white px-6 py-4 text-sm shadow-sm">
         {relevant.map((e) => (
           <div key={e.id}>
