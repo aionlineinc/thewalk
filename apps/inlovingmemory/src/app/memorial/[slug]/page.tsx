@@ -238,8 +238,22 @@ export default async function MemorialPage({ params, searchParams }: PageProps) 
       ) : null}
 
       {/* Hero */}
-      <section className="border-b border-earth-200/80 bg-white pt-10">
-        <div className="ilm-container pb-6">
+      <section className="relative flex h-[62vh] min-h-[480px] items-end p-2 md:p-4">
+        <div className="absolute inset-2 overflow-hidden rounded-[20px] md:inset-4">
+          {bannerUrl ? (
+            <img
+              src={bannerUrl}
+              alt=""
+              className="h-full w-full object-cover"
+              loading="eager"
+            />
+          ) : (
+            <div className="h-full w-full bg-gradient-to-br from-[#1a1008] via-[#0f0b08] to-[#0d0806]" />
+          )}
+          <div className="absolute inset-0 bg-gradient-to-t from-[#0d0806] via-black/55 to-black/20" aria-hidden />
+          <div className="absolute inset-0 bg-[#7c4a1e]/15 mix-blend-overlay" aria-hidden />
+        </div>
+        <div className="relative z-10 ilm-container pb-12 pt-28 md:pb-16">
           <MemorialHero
             displayName={memorial.displayName}
             kindLabel={kindLabel}
@@ -248,25 +262,25 @@ export default async function MemorialPage({ params, searchParams }: PageProps) 
             primaryColor={primaryColor}
             birthDate={memorial.birthDate}
             deathDate={memorial.deathDate}
+            dark
           />
 
           {isKeeper ? (
-            <div className="flex flex-wrap gap-4 border-t border-earth-200 pt-5 text-sm">
+            <div className="flex flex-wrap gap-4 border-t border-white/10 pt-5 text-sm">
               <Link
-                className="font-medium text-earth-800 underline-offset-4 hover:underline"
+                className="font-medium text-white/70 underline-offset-4 hover:text-white hover:underline"
                 href={`/dashboard/memorials/${memorial.id}/edit`}
               >
                 Edit details
               </Link>
               <Link
-                className="font-medium text-earth-800 underline-offset-4 hover:underline"
+                className="font-medium text-white/70 underline-offset-4 hover:text-white hover:underline"
                 href={`/dashboard/memorials/${memorial.id}/media`}
               >
                 Photos &amp; media
               </Link>
               <Link
-                className="font-medium underline-offset-4 hover:underline"
-                style={{ color: primaryColor }}
+                className="font-medium text-white/70 underline-offset-4 hover:text-white hover:underline"
                 href={`/dashboard/memorials/${memorial.id}/community`}
               >
                 Moderate guest book &amp; prayer
