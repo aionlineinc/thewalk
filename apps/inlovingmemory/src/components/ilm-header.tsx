@@ -9,7 +9,7 @@ export function IlmHeader({ session }: { session: Session | null }) {
         <div className="flex items-center justify-between gap-4 rounded-full border border-white/25 bg-white/85 px-5 py-3 shadow-lg shadow-black/5 backdrop-blur-lg">
           <Link href="/" className="shrink-0">
             <img
-              src="/weblogo.png"
+              src="/weblogo-b.png"
               alt="inLovingMemory — Remember. Celebrate. Cherish."
               width={180}
               height={48}
