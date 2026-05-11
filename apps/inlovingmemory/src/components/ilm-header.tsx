@@ -153,36 +153,78 @@ export function IlmHeader({ session }: { session: Session | null }) {
 
               {/* Mega menu panel */}
               <div
-                className={`absolute left-1/2 top-full z-30 w-[min(48rem,calc(100vw-2rem))] -translate-x-1/2 pt-3 transition-all duration-200 ${
-                  activeMenu ? "visible opacity-100 pointer-events-auto" : "invisible opacity-0 pointer-events-none"
+                className={`absolute left-1/2 top-full z-30 w-[min(48rem,calc(100vw-2rem))] -translate-x-1/2 pt-3 transition-all duration-300 origin-top ${
+                  activeMenu
+                    ? "visible translate-y-0 opacity-100 pointer-events-auto"
+                    : "invisible -translate-y-4 opacity-0 pointer-events-none"
                 }`}
               >
-                <div className="overflow-hidden rounded-2xl border border-white/10 bg-[#12100e] shadow-2xl shadow-black/50">
-                  {activeMenu === "services" && (
-                    <div className="grid gap-1 p-4 sm:grid-cols-2">
-                      <Link href="/services?category=flowers" onClick={() => setActiveMenu(null)} className="rounded-xl px-4 py-3 text-sm font-medium text-white/80 transition hover:bg-white/5 hover:text-white">Florists</Link>
-                      <Link href="/services?category=funeral-home" onClick={() => setActiveMenu(null)} className="rounded-xl px-4 py-3 text-sm font-medium text-white/80 transition hover:bg-white/5 hover:text-white">Funeral Homes</Link>
-                      <Link href="/services?category=church" onClick={() => setActiveMenu(null)} className="rounded-xl px-4 py-3 text-sm font-medium text-white/80 transition hover:bg-white/5 hover:text-white">Churches</Link>
-                      <Link href="/services?category=videographer" onClick={() => setActiveMenu(null)} className="rounded-xl px-4 py-3 text-sm font-medium text-white/80 transition hover:bg-white/5 hover:text-white">Videographers</Link>
-                      <Link href="/services?category=graphics" onClick={() => setActiveMenu(null)} className="rounded-xl px-4 py-3 text-sm font-medium text-white/80 transition hover:bg-white/5 hover:text-white">Graphics & Printing</Link>
-                      <Link href="/services?category=counsellor" onClick={() => setActiveMenu(null)} className="rounded-xl px-4 py-3 text-sm font-medium text-white/80 transition hover:bg-white/5 hover:text-white">Counsellors</Link>
-                      <Link href="/services?category=caregiver" onClick={() => setActiveMenu(null)} className="rounded-xl px-4 py-3 text-sm font-medium text-white/80 transition hover:bg-white/5 hover:text-white">Care Givers</Link>
-                      <Link href="/services?category=hospice" onClick={() => setActiveMenu(null)} className="rounded-xl px-4 py-3 text-sm font-medium text-white/80 transition hover:bg-white/5 hover:text-white">Hospice Services</Link>
-                      <div className="col-span-full mt-2 border-t border-white/10 pt-2">
-                        <Link href="/services" onClick={() => setActiveMenu(null)} className="block rounded-xl px-4 py-3 text-sm font-semibold text-calm-400 transition hover:bg-white/5">All services →</Link>
+                {activeMenu === "services" && (
+                  <div className="overflow-hidden rounded-3xl border border-gray-100 bg-white shadow-2xl">
+                    <div className="flex flex-col gap-8 px-6 py-6 md:flex-row lg:gap-12">
+                      <div className="relative flex min-h-[240px] w-full flex-col justify-end overflow-hidden rounded-2xl bg-earth-900 p-8 text-white md:w-[35%]">
+                        <div className="absolute inset-0 z-10 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+                        <img
+                          src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=400&q=80"
+                          alt=""
+                          className="absolute inset-0 h-full w-full object-cover"
+                          loading="lazy"
+                        />
+                        <div className="relative z-20">
+                          <p className="mb-2 text-[10px] font-medium uppercase tracking-widest text-white/80">Find the right support</p>
+                          <h3 className="text-xl font-medium leading-tight">Trusted providers<br />for every need</h3>
+                        </div>
+                      </div>
+                      <div className="flex-1 py-2 md:py-4">
+                        <h4 className="mb-4 text-[10px] font-bold uppercase tracking-widest text-gray-400">Services</h4>
+                        <div className="grid grid-cols-2 gap-1">
+                          <Link href="/services?category=flowers" onClick={() => setActiveMenu(null)} className="rounded-xl px-3 py-2.5 text-sm font-medium text-gray-700 transition hover:bg-gray-50 hover:text-calm-600">Florists</Link>
+                          <Link href="/services?category=funeral-home" onClick={() => setActiveMenu(null)} className="rounded-xl px-3 py-2.5 text-sm font-medium text-gray-700 transition hover:bg-gray-50 hover:text-calm-600">Funeral Homes</Link>
+                          <Link href="/services?category=church" onClick={() => setActiveMenu(null)} className="rounded-xl px-3 py-2.5 text-sm font-medium text-gray-700 transition hover:bg-gray-50 hover:text-calm-600">Churches</Link>
+                          <Link href="/services?category=videographer" onClick={() => setActiveMenu(null)} className="rounded-xl px-3 py-2.5 text-sm font-medium text-gray-700 transition hover:bg-gray-50 hover:text-calm-600">Videographers</Link>
+                          <Link href="/services?category=graphics" onClick={() => setActiveMenu(null)} className="rounded-xl px-3 py-2.5 text-sm font-medium text-gray-700 transition hover:bg-gray-50 hover:text-calm-600">Graphics &amp; Printing</Link>
+                          <Link href="/services?category=counsellor" onClick={() => setActiveMenu(null)} className="rounded-xl px-3 py-2.5 text-sm font-medium text-gray-700 transition hover:bg-gray-50 hover:text-calm-600">Counsellors</Link>
+                          <Link href="/services?category=caregiver" onClick={() => setActiveMenu(null)} className="rounded-xl px-3 py-2.5 text-sm font-medium text-gray-700 transition hover:bg-gray-50 hover:text-calm-600">Care Givers</Link>
+                          <Link href="/services?category=hospice" onClick={() => setActiveMenu(null)} className="rounded-xl px-3 py-2.5 text-sm font-medium text-gray-700 transition hover:bg-gray-50 hover:text-calm-600">Hospice Services</Link>
+                        </div>
+                        <div className="mt-4 border-t border-gray-100 pt-3">
+                          <Link href="/services" onClick={() => setActiveMenu(null)} className="text-sm font-semibold text-calm-500 transition hover:text-calm-600">All services →</Link>
+                        </div>
                       </div>
                     </div>
-                  )}
-                  {activeMenu === "more" && (
-                    <div className="grid gap-1 p-4 sm:grid-cols-2">
-                      <Link href="/about" onClick={() => setActiveMenu(null)} className="rounded-xl px-4 py-3 text-sm font-medium text-white/80 transition hover:bg-white/5 hover:text-white">About</Link>
-                      <Link href="/faq" onClick={() => setActiveMenu(null)} className="rounded-xl px-4 py-3 text-sm font-medium text-white/80 transition hover:bg-white/5 hover:text-white">FAQ</Link>
-                      <Link href="/resources" onClick={() => setActiveMenu(null)} className="rounded-xl px-4 py-3 text-sm font-medium text-white/80 transition hover:bg-white/5 hover:text-white">Resources</Link>
-                      <Link href="/pricing" onClick={() => setActiveMenu(null)} className="rounded-xl px-4 py-3 text-sm font-medium text-white/80 transition hover:bg-white/5 hover:text-white">Pricing</Link>
-                      <Link href="/services/register" onClick={() => setActiveMenu(null)} className="rounded-xl px-4 py-3 text-sm font-medium text-white/80 transition hover:bg-white/5 hover:text-white">Register as provider</Link>
+                  </div>
+                )}
+                {activeMenu === "more" && (
+                  <div className="overflow-hidden rounded-3xl border border-gray-100 bg-white shadow-2xl">
+                    <div className="flex flex-col gap-8 px-6 py-6 md:flex-row lg:gap-12">
+                      <div className="relative flex min-h-[240px] w-full flex-col justify-end overflow-hidden rounded-2xl bg-earth-900 p-8 text-white md:w-[35%]">
+                        <div className="absolute inset-0 z-10 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+                        <img
+                          src="https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=400&q=80"
+                          alt=""
+                          className="absolute inset-0 h-full w-full object-cover"
+                          loading="lazy"
+                        />
+                        <div className="relative z-20">
+                          <p className="mb-2 text-[10px] font-medium uppercase tracking-widest text-white/80">Learn & connect</p>
+                          <h3 className="text-xl font-medium leading-tight">Everything you need<br />to know</h3>
+                        </div>
+                      </div>
+                      <div className="flex-1 py-2 md:py-4">
+                        <h4 className="mb-4 text-[10px] font-bold uppercase tracking-widest text-gray-400">More</h4>
+                        <div className="grid grid-cols-2 gap-1">
+                          <Link href="/about" onClick={() => setActiveMenu(null)} className="rounded-xl px-3 py-2.5 text-sm font-medium text-gray-700 transition hover:bg-gray-50 hover:text-calm-600">About</Link>
+                          <Link href="/pricing" onClick={() => setActiveMenu(null)} className="rounded-xl px-3 py-2.5 text-sm font-medium text-gray-700 transition hover:bg-gray-50 hover:text-calm-600">Pricing</Link>
+                          <Link href="/faq" onClick={() => setActiveMenu(null)} className="rounded-xl px-3 py-2.5 text-sm font-medium text-gray-700 transition hover:bg-gray-50 hover:text-calm-600">FAQ</Link>
+                          <Link href="/resources" onClick={() => setActiveMenu(null)} className="rounded-xl px-3 py-2.5 text-sm font-medium text-gray-700 transition hover:bg-gray-50 hover:text-calm-600">Resources</Link>
+                        </div>
+                        <div className="mt-4 border-t border-gray-100 pt-3">
+                          <Link href="/services/register" onClick={() => setActiveMenu(null)} className="text-sm font-semibold text-calm-500 transition hover:text-calm-600">Register as provider →</Link>
+                        </div>
+                      </div>
                     </div>
-                  )}
-                </div>
+                  </div>
+                )}
               </div>
             </div>
 
