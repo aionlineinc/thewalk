@@ -116,50 +116,53 @@ export default async function AdminFuneralPage() {
 
       {/* Flowers & Donations */}
       <div className="dash-card-pad mt-10">
-        <h2 className="text-lg font-semibold text-earth-900">Add flower / donation link</h2>
+        <h2 className="text-lg font-semibold text-earth-900">Flowers &amp; donations</h2>
+        <p className="mt-1 text-sm text-earth-500">Add links to flower shops or donation pages. These appear on the funeral service tab of the selected memorial page.</p>
         <form action={addFlower} className="mt-4 grid gap-4 sm:grid-cols-2">
           <div>
-            <label className="block text-sm font-medium text-earth-700">Memorial</label>
+            <label className="block text-sm font-medium text-earth-700">Memorial page</label>
             <select name="memorialId" required className="mt-1.5 w-full rounded-lg border border-earth-200 bg-white px-3 py-2 text-sm">
-              <option value="">Select…</option>
+              <option value="">Select a memorial…</option>
               {memorials.map((m) => <option key={m.id} value={m.id}>{m.displayName}</option>)}
             </select>
           </div>
           <div>
-            <label className="block text-sm font-medium text-earth-700">Label</label>
+            <label className="block text-sm font-medium text-earth-700">Display name</label>
             <input name="label" required maxLength={200} placeholder="e.g. Bloom Florist" className="mt-1.5 w-full rounded-lg border border-earth-200 bg-white px-3 py-2 text-sm" />
           </div>
           <div>
-            <label className="block text-sm font-medium text-earth-700">Type</label>
+            <label className="block text-sm font-medium text-earth-700">Link type</label>
             <select name="kind" defaultValue="FLOWERS" className="mt-1.5 w-full rounded-lg border border-earth-200 bg-white px-3 py-2 text-sm">
+              <option value="FLOWERS">💐 Flowers (link to a florist)</option>
+              <option value="DONATION">💝 Donation (link to a charity or cause)</option>
               <option value="FLOWERS">Flowers</option>
               <option value="DONATION">Donation</option>
             </select>
           </div>
           <div>
-            <label className="block text-sm font-medium text-earth-700">URL</label>
-            <input name="url" type="url" maxLength={500} className="mt-1.5 w-full rounded-lg border border-earth-200 bg-white px-3 py-2 text-sm" />
+            <label className="block text-sm font-medium text-earth-700">Link URL</label>
+            <input name="url" type="url" maxLength={500} placeholder="https://www.bloomflorist.com/..." className="mt-1.5 w-full rounded-lg border border-earth-200 bg-white px-3 py-2 text-sm" />
           </div>
           <div className="sm:col-span-2">
-            <label className="block text-sm font-medium text-earth-700">Description (optional)</label>
+            <label className="block text-sm font-medium text-earth-700">Description <span className="font-normal text-earth-500">(optional — shown below the link on the memorial page)</span></label>
             <textarea name="description" rows={2} maxLength={500} className="mt-1.5 w-full rounded-lg border border-earth-200 bg-white px-3 py-2 text-sm" />
           </div>
           <div className="sm:col-span-2">
-            <button type="submit" className="rounded-lg bg-earth-800 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-earth-900">Add</button>
+            <button type="submit" className="rounded-lg bg-earth-800 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-earth-900">Add to memorial</button>
           </div>
         </form>
       </div>
 
       <div className="dash-card mt-6 overflow-hidden">
         <div className="border-b border-earth-100 bg-earth-50/50 px-6 py-3.5">
-          <p className="text-xs font-semibold uppercase tracking-[0.14em] text-earth-500">{flowers.length} flowers/donations</p>
+          <p className="text-xs font-semibold uppercase tracking-[0.14em] text-earth-500">{flowers.length} existing links</p>
         </div>
         <ul className="divide-y divide-earth-100">
           {flowers.map((f) => (
             <li key={f.id} className="flex items-center justify-between px-6 py-3">
               <div>
-                <p className="font-medium text-earth-900">{f.label}</p>
-                <p className="text-sm text-earth-500">{f.memorial.displayName} · {f.kind}</p>
+                <p className="font-medium text-earth-900">{f.label} <span className="text-xs font-normal text-earth-500">({f.kind === "DONATION" ? "Donation" : "Flowers"})</span></p>
+                <p className="text-sm text-earth-500">on {f.memorial.displayName}&apos;s memorial page</p>
               </div>
               <form action={removeFlower}>
                 <input type="hidden" name="id" value={f.id} />
