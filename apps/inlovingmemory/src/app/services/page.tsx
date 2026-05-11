@@ -45,6 +45,9 @@ export default async function ServicesDirectoryPage({
           <p className="mt-4 max-w-xl text-base font-light leading-relaxed text-white/70 md:text-lg">
             Trusted vendors for funeral flowers, videography, counselling, and more.
           </p>
+          <Link href="/services/register" className="mt-6 inline-flex rounded-full border border-white/30 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-white/10">
+            Register as a provider
+          </Link>
         </div>
       </section>
 
