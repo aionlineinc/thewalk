@@ -22,6 +22,7 @@ const emptyDefaults = {
   themePreset: "",
   primaryColor: "",
   accentColor: "",
+  bannerPreset: "",
   tier: "BASIC",
 };
 

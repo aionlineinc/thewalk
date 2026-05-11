@@ -21,6 +21,7 @@ export default async function MemorialMediaPage({ params }: { params: { id: stri
       displayName: true,
       slug: true,
       pageKeeperId: true,
+      tier: true,
       media: {
         where: {
           kind: IlmMediaKind.PHOTO,
@@ -52,6 +53,7 @@ export default async function MemorialMediaPage({ params }: { params: { id: stri
           memorialId={memorial.id}
           storageConfigured={storageConfigured}
           items={memorial.media}
+          tier={memorial.tier}
         />
       </div>
       <p className="mt-10 flex flex-wrap gap-6 text-sm">

@@ -231,6 +231,7 @@ model IlmMemorial {
   themePreset   String?
   primaryColor  String?
   accentColor   String?
+  bannerPreset  String?
   biography   String?         @db.Text
   hideFromDirectory     Boolean @default(false)
   hideFromSearchEngines Boolean @default(false)

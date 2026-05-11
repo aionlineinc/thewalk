@@ -21,6 +21,7 @@ import {
 } from "@/lib/ilm-media-slots";
 import { getMemorialAbsoluteUrl } from "@/lib/ilm-public-url";
 import { resolveTheme } from "@/lib/ilm-theme";
+import { BANNER_PRESETS } from "@/lib/ilm-banner-presets";
 import { prisma } from "@/lib/prisma";
 
 export const dynamic = "force-dynamic";
@@ -72,6 +73,7 @@ export default async function MemorialPage({ params, searchParams }: PageProps) 
       themePreset: true,
       primaryColor: true,
       accentColor: true,
+      bannerPreset: true,
     },
   });
 
@@ -153,8 +155,13 @@ export default async function MemorialPage({ params, searchParams }: PageProps) 
 
   const profileUrl =
     photoRows.find((p) => p.title === ILM_MEDIA_TITLE_PROFILE)?.storageUrl ?? null;
-  const bannerUrl =
+  const customBannerUrl =
     photoRows.find((p) => p.title === ILM_MEDIA_TITLE_BANNER)?.storageUrl ?? null;
+  const presetBannerUrl =
+    memorial.bannerPreset && BANNER_PRESETS[memorial.bannerPreset]
+      ? BANNER_PRESETS[memorial.bannerPreset].url
+      : null;
+  const bannerUrl = customBannerUrl || presetBannerUrl;
   const galleryPhotos = photoRows.filter((p) => isGalleryPhotoTitle(p.title));
 
   const theme = resolveTheme(memorial.themePreset, memorial.primaryColor, memorial.accentColor);

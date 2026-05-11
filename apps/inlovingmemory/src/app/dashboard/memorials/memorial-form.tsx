@@ -1,6 +1,8 @@
 "use client";
 
+import { useState } from "react";
 import { THEME_PRESETS, THEME_PRESET_LABELS, type ThemePreset } from "@/lib/ilm-theme";
+import { BANNER_PRESETS } from "@/lib/ilm-banner-presets";
 import type { MemorialFormDefaults } from "@/app/dashboard/memorials/memorial-form-defaults";
 
 export type { MemorialFormDefaults } from "@/app/dashboard/memorials/memorial-form-defaults";
@@ -17,6 +19,8 @@ export function MemorialForm({
   /** When set, posts hidden `__memorialId` so the server action does not rely on `.bind()`. */
   memorialIdForEdit?: string;
 }) {
+  const [bannerPreset, setBannerPreset] = useState(defaults.bannerPreset);
+
   return (
     <form action={action} className="space-y-8">
       {memorialIdForEdit ? <input type="hidden" name="__memorialId" value={memorialIdForEdit} /> : null}
@@ -191,6 +195,59 @@ export function MemorialForm({
             Upgrade to Premium or Generations to pick custom colors for your page.
           </p>
         )}
+      </fieldset>
+
+      {/* ── Banner preset ── */}
+      <fieldset className="space-y-4 rounded-xl border border-earth-200 bg-earth-50/40 px-4 py-5">
+        <legend className="text-sm font-medium text-earth-800">Banner image</legend>
+        <p className="text-sm text-earth-600">
+          Choose a banner for the top of your memorial page.
+          {isPremium(defaults.tier)
+            ? " You can also upload a custom banner in Photos & media."
+            : " Upgrade to Premium to upload a custom banner."}
+        </p>
+        <input type="hidden" name="bannerPreset" value={bannerPreset} />
+        <div className="grid grid-cols-3 gap-3">
+          <label
+            className={`cursor-pointer overflow-hidden rounded-xl border-2 transition ${
+              bannerPreset === "" ? "border-calm-500 shadow-md" : "border-transparent hover:border-earth-300"
+            }`}
+          >
+            <input
+              type="radio"
+              name="_bannerPreset_none"
+              checked={bannerPreset === ""}
+              onChange={() => setBannerPreset("")}
+              className="sr-only"
+            />
+            <div className="flex h-20 items-center justify-center bg-earth-100 text-xs font-medium text-earth-500">
+              None
+            </div>
+          </label>
+          {Object.entries(BANNER_PRESETS).map(([key, preset]) => (
+            <label
+              key={key}
+              className={`cursor-pointer overflow-hidden rounded-xl border-2 transition ${
+                bannerPreset === key ? "border-calm-500 shadow-md" : "border-transparent hover:border-earth-300"
+              }`}
+            >
+              <input
+                type="radio"
+                name="_bannerPreset"
+                checked={bannerPreset === key}
+                onChange={() => setBannerPreset(key)}
+                className="sr-only"
+              />
+              <img
+                src={preset.url}
+                alt={preset.label}
+                className="h-20 w-full object-cover"
+                loading="lazy"
+              />
+              <p className="truncate px-1.5 py-1 text-[10px] font-medium text-earth-600">{preset.label}</p>
+            </label>
+          ))}
+        </div>
       </fieldset>
 
       <div>

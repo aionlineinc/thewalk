@@ -22,10 +22,12 @@ export function MemorialMediaPanel({
   memorialId,
   storageConfigured,
   items,
+  tier,
 }: {
   memorialId: string;
   storageConfigured: boolean;
   items: MediaRow[];
+  tier?: string;
 }) {
   const router = useRouter();
   const fileRef = useRef<HTMLInputElement>(null);
@@ -163,20 +165,28 @@ export function MemorialMediaPanel({
                   ["profile", "Profile"],
                   ["banner", "Banner"],
                 ] as const
-              ).map(([value, label]) => (
-                <label key={value} className="flex cursor-pointer items-center gap-2 text-sm">
-                  <input
-                    type="radio"
-                    name="slot"
-                    value={value}
-                    checked={slot === value}
-                    onChange={() => setSlot(value)}
-                    className="border-earth-300 text-earth-800"
-                  />
-                  {label}
-                </label>
-              ))}
+              )
+                .filter(([value]) => value !== "banner" || tier !== "BASIC")
+                .map(([value, label]) => (
+                  <label key={value} className="flex cursor-pointer items-center gap-2 text-sm">
+                    <input
+                      type="radio"
+                      name="slot"
+                      value={value}
+                      checked={slot === value}
+                      onChange={() => setSlot(value)}
+                      className="border-earth-300 text-earth-800"
+                    />
+                    {label}
+                  </label>
+                ))}
             </div>
+            {tier === "BASIC" ? (
+              <p className="mt-2 text-xs text-earth-500">
+                Custom banner uploads are available on Premium and Generations plans. You can still pick a banner
+                preset in Edit details.
+              </p>
+            ) : null}
           </div>
 
           {slot === "gallery" ? (

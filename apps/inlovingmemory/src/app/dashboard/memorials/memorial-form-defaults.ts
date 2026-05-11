@@ -11,6 +11,7 @@ export type MemorialFormDefaults = {
   themePreset: string;
   primaryColor: string;
   accentColor: string;
+  bannerPreset: string;
   privacyLevel: IlmPrivacyLevel;
   slug: string;
   hideFromDirectory: boolean;
@@ -34,6 +35,7 @@ export function buildMemorialDefaults(row: {
   themePreset: string | null;
   primaryColor: string | null;
   accentColor: string | null;
+  bannerPreset: string | null;
   privacyLevel: IlmPrivacyLevel;
   tier: string;
   slug: string;
@@ -51,6 +53,7 @@ export function buildMemorialDefaults(row: {
     themePreset: row.themePreset ?? "",
     primaryColor: row.primaryColor ?? "",
     accentColor: row.accentColor ?? "",
+    bannerPreset: row.bannerPreset ?? "",
     privacyLevel: row.privacyLevel,
     tier: row.tier,
     slug: row.slug,
