@@ -44,13 +44,31 @@ async function toggleProvider(formData: FormData) {
   redirect("/dashboard/admin/services");
 }
 
+async function linkUser(formData: FormData) {
+  "use server";
+  await requireStaffSession();
+  const providerId = (formData.get("providerId") as string)?.trim();
+  const email = (formData.get("email") as string)?.trim()?.toLowerCase();
+  if (!providerId || !email) return;
+  const user = await prisma.user.findFirst({ where: { email } });
+  if (user) {
+    await prisma.ilmServiceProvider.update({ where: { id: providerId }, data: { userId: user.id } });
+    // Update user role to VENDOR if not already
+    if (user.role !== "SUPER_ADMIN" && user.role !== "ORG_ADMIN") {
+      await prisma.user.update({ where: { id: user.id }, data: { role: "VENDOR" } });
+    }
+  }
+  revalidatePath("/dashboard/admin/services");
+  redirect("/dashboard/admin/services");
+}
+
 export default async function AdminServicesPage() {
   await requireStaffSession();
 
   const [providers, categories] = await Promise.all([
     prisma.ilmServiceProvider.findMany({
       orderBy: { createdAt: "desc" },
-      select: { id: true, name: true, slug: true, category: { select: { label: true } }, location: true, email: true, isActive: true },
+      select: { id: true, name: true, slug: true, category: { select: { label: true } }, location: true, email: true, isActive: true, user: { select: { email: true } } },
       take: 100,
     }),
     prisma.ilmServiceCategory.findMany({ orderBy: { sortOrder: "asc" }, select: { id: true, label: true } }),
@@ -117,7 +135,15 @@ export default async function AdminServicesPage() {
                 </p>
                 <p className="text-sm text-earth-500">
                   {p.category.label}{p.location ? ` · ${p.location}` : null}{p.email ? ` · ${p.email}` : null}
+                  {p.user ? <span className="ml-1 text-calm-500">(linked to {p.user.email})</span> : <span className="ml-1 text-earth-400">(no account)</span>}
                 </p>
+                {!p.user ? (
+                  <form action={linkUser} className="mt-2 flex gap-2">
+                    <input type="hidden" name="providerId" value={p.id} />
+                    <input name="email" type="email" placeholder="user@email.com" className="w-48 rounded-lg border border-earth-200 bg-white px-2 py-1 text-xs" />
+                    <button type="submit" className="rounded bg-calm-500 px-2 py-1 text-xs font-medium text-white hover:bg-calm-600">Link account</button>
+                  </form>
+                ) : null}
               </div>
               <div className="flex gap-2">
                 <form action={toggleProvider}>

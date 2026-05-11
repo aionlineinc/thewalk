@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 import { getIlmSession } from "@/lib/auth";
 
-const STAFF_ROLES = new Set(["SUPER_ADMIN", "ORG_ADMIN", "ORG_MANAGER"]);
+const STAFF_ROLES = new Set(["SUPER_ADMIN", "ORG_ADMIN", "ORG_MANAGER", "VENDOR"]);
 
 export { STAFF_ROLES };
 

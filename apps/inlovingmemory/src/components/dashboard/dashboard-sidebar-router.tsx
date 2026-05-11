@@ -3,6 +3,7 @@
 import { usePathname } from "next/navigation";
 import { IlmDashboardSidebar } from "@/components/dashboard/ilm-dashboard-sidebar";
 import { IlmAdminSidebar } from "@/components/dashboard/ilm-admin-sidebar";
+import { IlmVendorSidebar } from "@/components/dashboard/ilm-vendor-sidebar";
 
 export function DashboardSidebarRouter({
   email,
@@ -15,10 +16,10 @@ export function DashboardSidebarRouter({
 }) {
   const pathname = usePathname() ?? "";
   const isAdmin = pathname.startsWith("/dashboard/admin");
+  const isVendor = pathname.startsWith("/dashboard/vendor");
 
-  if (isAdmin && isStaff) {
-    return <IlmAdminSidebar />;
-  }
+  if (isAdmin && isStaff) return <IlmAdminSidebar />;
+  if (isVendor) return <IlmVendorSidebar />;
 
   return <IlmDashboardSidebar email={email} name={name} isStaff={isStaff} />;
 }
