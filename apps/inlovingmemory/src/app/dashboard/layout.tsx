@@ -1,11 +1,14 @@
 import Link from "next/link";
 import { getIlmSession } from "@/lib/auth";
+import { STAFF_ROLES } from "@/lib/admin-guard";
 import { IlmDashboardSidebar } from "@/components/dashboard/ilm-dashboard-sidebar";
 
 export const dynamic = "force-dynamic";
 
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
   const session = await getIlmSession();
+  const role = (session?.user as { role?: string } | undefined)?.role;
+  const isStaff = !!role && STAFF_ROLES.has(role);
 
   return (
     <div className="min-h-[calc(100vh-64px)] w-full bg-earth-50">
@@ -23,6 +26,15 @@ export default async function DashboardLayout({ children }: { children: React.Re
             <span className="shrink-0 rounded-full bg-white px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.16em] text-earth-500 shadow-sm ring-1 ring-earth-200 sm:text-[11px] sm:px-3">
               Dashboard
             </span>
+            {isStaff ? (
+              <Link
+                href="/dashboard/admin"
+                className="shrink-0 rounded-full bg-calm-500 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.16em] text-white shadow-sm transition hover:bg-calm-600 sm:text-[11px] sm:px-3"
+                data-button-link
+              >
+                Admin
+              </Link>
+            ) : null}
           </div>
           <Link href="/" className="dash-link hidden text-sm sm:inline">
             View site
@@ -35,6 +47,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
         <IlmDashboardSidebar
           email={session?.user?.email}
           name={session?.user?.name}
+          isStaff={isStaff}
         />
         <div className="min-w-0 flex-1">{children}</div>
       </div>

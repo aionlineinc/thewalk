@@ -20,9 +20,11 @@ function navLinkClass(active: boolean) {
 export function IlmDashboardSidebar({
   email,
   name,
+  isStaff,
 }: {
   email?: string | null;
   name?: string | null;
+  isStaff?: boolean;
 }) {
   const pathname = usePathname() ?? "";
   const display = name?.trim() || email?.split("@")[0] || "—";
@@ -45,6 +47,14 @@ export function IlmDashboardSidebar({
               {label}
             </Link>
           ))}
+          {isStaff ? (
+            <Link
+              href="/dashboard/admin"
+              className={navLinkClass(pathname.startsWith("/dashboard/admin"))}
+            >
+              Admin
+            </Link>
+          ) : null}
         </nav>
 
         <div className="mt-8 border-t border-earth-200 pt-4">

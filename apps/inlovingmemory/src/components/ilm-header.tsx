@@ -2,7 +2,12 @@ import Link from "next/link";
 import type { Session } from "next-auth";
 import { SignOutButton } from "@/components/sign-out-button";
 
+const STAFF_ROLES = new Set(["SUPER_ADMIN", "ORG_ADMIN", "ORG_MANAGER"]);
+
 export function IlmHeader({ session }: { session: Session | null }) {
+  const role = (session?.user as { role?: string } | undefined)?.role;
+  const isStaff = !!role && STAFF_ROLES.has(role);
+
   return (
     <header className="fixed inset-x-0 top-6 z-50 sm:top-7">
       <div className="mx-auto max-w-6xl px-4 sm:px-6 md:px-8">
@@ -30,6 +35,11 @@ export function IlmHeader({ session }: { session: Session | null }) {
               <Link className="font-medium text-white/80 transition hover:text-white" href="/dashboard">
                 Dashboard
               </Link>
+              {isStaff ? (
+                <Link className="font-medium text-white/80 transition hover:text-white" href="/dashboard/admin">
+                  Admin
+                </Link>
+              ) : null}
               <SignOutButton className="text-sm font-medium text-white/70 underline-offset-4 transition hover:text-white hover:underline" />
             </>
           ) : (
