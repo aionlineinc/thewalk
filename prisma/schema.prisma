@@ -252,6 +252,7 @@ model IlmMemorial {
   griefRequests    IlmGriefRequest[]
   generationsVault IlmGenerationsVault?
   flowerDonations  IlmFlowerDonation[]
+  donations        IlmDonation[]
   serviceOrders    IlmServiceOrder[]
   productOrders    IlmProductOrder[]
 
@@ -534,11 +535,30 @@ model IlmFlowerDonation {
   url         String?
   description String?  @db.Text
   kind        String   @default("FLOWERS")
+  providerId  String?
+  provider    IlmServiceProvider? @relation(fields: [providerId], references: [id], onDelete: SetNull)
   sortOrder   Int      @default(0)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
   @@map("ilm_flower_donation")
+  @@index([memorialId])
+  @@index([providerId])
+}
+
+model IlmDonation {
+  id              String   @id @default(uuid())
+  memorialId      String
+  memorial        IlmMemorial @relation(fields: [memorialId], references: [id], onDelete: Cascade)
+  donorName       String
+  donorEmail      String
+  amount          Float
+  message         String?  @db.Text
+  stripePaymentIntentId String?
+  status          String   @default("COMPLETED")
+  createdAt       DateTime @default(now())
+
+  @@map("ilm_donation")
   @@index([memorialId])
 }
 
@@ -582,6 +602,7 @@ model IlmServiceProvider {
   photoUrl    String?
   pricingJson Json?
   isActive    Boolean  @default(true)
+  flowerLinks IlmFlowerDonation[]
   orders      IlmServiceOrder[]
 
   createdAt DateTime @default(now())

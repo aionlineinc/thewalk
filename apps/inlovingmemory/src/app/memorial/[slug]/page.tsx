@@ -170,7 +170,7 @@ export default async function MemorialPage({ params, searchParams }: PageProps) 
     prisma.ilmFlowerDonation.findMany({
       where: { memorialId: memorial.id },
       orderBy: { sortOrder: "asc" },
-      select: { id: true, label: true, url: true, description: true, kind: true },
+      select: { id: true, label: true, url: true, description: true, kind: true, providerId: true },
     }),
     prisma.ilmMedia.findMany({
       where: {
@@ -469,7 +469,11 @@ export default async function MemorialPage({ params, searchParams }: PageProps) 
 
           <MemorialEventInfo events={serviceEvents} />
 
-          <MemorialFlowersDonations items={flowerDonations} />
+          <MemorialFlowersDonations
+            items={flowerDonations.map((f) => ({ ...f, memorialId: memorial.id }))}
+            memorialId={memorial.id}
+            memorialSlug={memorial.slug}
+          />
 
           {funeralVideos.length > 0 ? (
             <MemorialVideos videos={funeralVideos} />

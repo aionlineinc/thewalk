@@ -42,8 +42,9 @@ export async function addFlower(formData: FormData) {
   const url = (formData.get("url") as string)?.trim() || null;
   const description = (formData.get("description") as string)?.trim() || null;
   const kind = (formData.get("kind") as string) || "FLOWERS";
+  const providerId = (formData.get("providerId") as string)?.trim() || null;
   if (!memorialId || !label) return;
-  await prisma.ilmFlowerDonation.create({ data: { memorialId, label, url, description, kind } });
+  await prisma.ilmFlowerDonation.create({ data: { memorialId, label, url, description, kind, providerId } });
   revalidatePath("/dashboard/admin/funeral");
   redirect("/dashboard/admin/funeral");
 }

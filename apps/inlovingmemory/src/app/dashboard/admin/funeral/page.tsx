@@ -7,7 +7,7 @@ export const metadata = { title: "Funeral Services · Admin · inLovingMemory" }
 export default async function AdminFuneralPage() {
   await requireStaffSession();
 
-  const [events, flowers, memorials] = await Promise.all([
+  const [events, flowers, memorials, providers] = await Promise.all([
     prisma.ilmEvent.findMany({
       orderBy: { startsAt: "asc" },
       select: {
@@ -19,13 +19,18 @@ export default async function AdminFuneralPage() {
     }),
     prisma.ilmFlowerDonation.findMany({
       orderBy: { createdAt: "desc" },
-      select: { id: true, label: true, kind: true, memorial: { select: { displayName: true } } },
+      select: { id: true, label: true, kind: true, providerId: true, memorial: { select: { displayName: true } } },
       take: 100,
     }),
     prisma.ilmMemorial.findMany({
       orderBy: { displayName: "asc" },
       select: { id: true, displayName: true },
       take: 200,
+    }),
+    prisma.ilmServiceProvider.findMany({
+      where: { isActive: true, category: { slug: "flowers" } },
+      orderBy: { name: "asc" },
+      select: { id: true, name: true },
     }),
   ]);
 
@@ -143,6 +148,13 @@ export default async function AdminFuneralPage() {
             <label className="block text-sm font-medium text-earth-700">Link URL</label>
             <input name="url" type="url" maxLength={500} placeholder="https://www.bloomflorist.com/..." className="mt-1.5 w-full rounded-lg border border-earth-200 bg-white px-3 py-2 text-sm" />
           </div>
+          <div>
+            <label className="block text-sm font-medium text-earth-700">Vendor <span className="font-normal text-earth-500">(optional — enables in-platform ordering)</span></label>
+            <select name="providerId" className="mt-1.5 w-full rounded-lg border border-earth-200 bg-white px-3 py-2 text-sm">
+              <option value="">External link only</option>
+              {providers.map((v) => <option key={v.id} value={v.id}>{v.name}</option>)}
+            </select>
+          </div>
           <div className="sm:col-span-2">
             <label className="block text-sm font-medium text-earth-700">Description <span className="font-normal text-earth-500">(optional — shown below the link on the memorial page)</span></label>
             <textarea name="description" rows={2} maxLength={500} className="mt-1.5 w-full rounded-lg border border-earth-200 bg-white px-3 py-2 text-sm" />
@@ -161,7 +173,7 @@ export default async function AdminFuneralPage() {
           {flowers.map((f) => (
             <li key={f.id} className="flex items-center justify-between px-6 py-3">
               <div>
-                <p className="font-medium text-earth-900">{f.label} <span className="text-xs font-normal text-earth-500">({f.kind === "DONATION" ? "Donation" : "Flowers"})</span></p>
+                <p className="font-medium text-earth-900">{f.label} <span className="text-xs font-normal text-earth-500">({f.kind === "DONATION" ? "Donation" : "Flowers"}{f.providerId ? ", vendor-linked" : ", external link"})</span></p>
                 <p className="text-sm text-earth-500">on {f.memorial.displayName}&apos;s memorial page</p>
               </div>
               <form action={removeFlower}>
