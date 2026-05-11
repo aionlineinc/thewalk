@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { THEME_PRESETS, THEME_PRESET_LABELS, type ThemePreset } from "@/lib/ilm-theme";
-import { BANNER_PRESETS } from "@/lib/ilm-banner-presets";
 import type { MemorialFormDefaults } from "@/app/dashboard/memorials/memorial-form-defaults";
 
 export type { MemorialFormDefaults } from "@/app/dashboard/memorials/memorial-form-defaults";
@@ -22,7 +21,7 @@ export function MemorialForm({
   customBanners?: Record<string, { label: string; url: string }>;
 }) {
   const [bannerPreset, setBannerPreset] = useState(defaults.bannerPreset);
-  const allBanners = { ...BANNER_PRESETS, ...customBanners };
+  const allBanners = customBanners ?? {};
 
   return (
     <form action={action} className="space-y-8">
