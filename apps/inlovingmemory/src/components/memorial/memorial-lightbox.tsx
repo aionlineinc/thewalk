@@ -9,7 +9,7 @@ export type LightboxItem = {
   kind: string;
   authorGuestName: string | null;
   title: string | null;
-  createdAt: Date;
+  createdAt: string;
 };
 
 export function MemorialLightbox({
@@ -41,7 +41,7 @@ export function MemorialLightbox({
 
   if (!item) return null;
 
-  const date = new Intl.DateTimeFormat("en", { dateStyle: "medium" }).format(item.createdAt);
+  const date = new Intl.DateTimeFormat("en", { dateStyle: "medium" }).format(new Date(item.createdAt));
 
   return (
     <div

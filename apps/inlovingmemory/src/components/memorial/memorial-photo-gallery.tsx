@@ -1,3 +1,5 @@
+"use client";
+
 import { galleryCaption } from "@/lib/ilm-media-slots";
 
 export function MemorialPhotoGallery({

@@ -185,6 +185,11 @@ export default async function MemorialPage({ params, searchParams }: PageProps) 
     }),
   ]);
 
+  const guestMediaClient = guestMedia.map((m) => ({
+    ...m,
+    createdAt: m.createdAt.toISOString(),
+  }));
+
   const profileUrl =
     photoRows.find((p) => p.title === ILM_MEDIA_TITLE_PROFILE)?.storageUrl ?? null;
   const customBannerUrl =
@@ -405,7 +410,7 @@ export default async function MemorialPage({ params, searchParams }: PageProps) 
             </div>
           ) : null}
 
-          <MemorialSharedMemories media={guestMedia} />
+          <MemorialSharedMemories media={guestMediaClient} />
 
           <MemorialVideoTributes tributes={videoTributes} />
 

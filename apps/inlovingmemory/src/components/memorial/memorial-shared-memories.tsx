@@ -10,7 +10,7 @@ type SharedMedia = {
   kind: string;
   authorGuestName: string | null;
   title: string | null;
-  createdAt: Date;
+  createdAt: string;
 };
 
 export function MemorialSharedMemories({ media }: { media: SharedMedia[] }) {
