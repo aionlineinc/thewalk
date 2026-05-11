@@ -1,5 +1,13 @@
 import Link from "next/link";
 
+const memorialLinks = [
+  { href: "#photos", label: "Photos" },
+  { href: "#shared-memories", label: "Shared memories" },
+  { href: "#video-tributes", label: "Video tributes" },
+  { href: "#guestbook", label: "Guest book" },
+  { href: "#prayer", label: "Prayer wall" },
+];
+
 function MemorialIcon({ className }: { className?: string }) {
   return (
     <svg className={className} fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
@@ -33,7 +41,7 @@ export function MemorialSectionNav({
       className="sticky top-0 z-30 border-b border-earth-200/80 bg-white/95 backdrop-blur"
     >
       <div className="mx-auto max-w-6xl px-4 sm:px-6 md:px-8">
-        <div className="flex gap-1 py-2">
+        <div className="flex items-center gap-1 py-2">
           <Link
             href={`/memorial/${slug}`}
             className={`flex items-center gap-2 rounded-lg px-4 py-2.5 text-sm font-semibold transition ${
@@ -58,6 +66,21 @@ export function MemorialSectionNav({
             <ServiceIcon className="h-4 w-4 shrink-0" />
             Funeral Service
           </Link>
+
+          {/* Section jump links */}
+          {!isFuneral ? (
+            <div className="ml-4 flex gap-1 overflow-x-auto border-l border-earth-200 pl-4">
+              {memorialLinks.map((l) => (
+                <a
+                  key={l.href}
+                  href={l.href}
+                  className="shrink-0 rounded-lg px-3 py-2 text-xs font-medium text-earth-500 transition hover:bg-earth-50 hover:text-earth-800"
+                >
+                  {l.label}
+                </a>
+              ))}
+            </div>
+          ) : null}
         </div>
       </div>
     </nav>

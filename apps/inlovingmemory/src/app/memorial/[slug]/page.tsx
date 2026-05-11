@@ -137,7 +137,7 @@ export default async function MemorialPage({ params, searchParams }: PageProps) 
         status: IlmSubmissionStatus.APPROVED,
       },
       orderBy: { createdAt: "asc" },
-      select: { id: true, storageUrl: true, title: true },
+      select: { id: true, storageUrl: true, title: true, authorGuestName: true, createdAt: true },
     }),
     prisma.ilmMedia.findMany({
       where: {
@@ -164,7 +164,7 @@ export default async function MemorialPage({ params, searchParams }: PageProps) 
         status: IlmSubmissionStatus.APPROVED,
       },
       orderBy: { createdAt: "desc" },
-      select: { id: true, storageUrl: true, kind: true, authorGuestName: true, createdAt: true },
+      select: { id: true, storageUrl: true, kind: true, authorGuestName: true, title: true, createdAt: true },
       take: 50,
     }),
     prisma.ilmFlowerDonation.findMany({
@@ -200,7 +200,7 @@ export default async function MemorialPage({ params, searchParams }: PageProps) 
     if (customPreset) presetBannerUrl = customPreset.storageUrl;
   }
   const bannerUrl = customBannerUrl || presetBannerUrl;
-  const galleryPhotos = photoRows.filter((p) => isGalleryPhotoTitle(p.title));
+  const galleryPhotos = photoRows.filter((p) => isGalleryPhotoTitle(p.title) && !p.authorGuestName);
 
   const theme = resolveTheme(memorial.themePreset, memorial.primaryColor, memorial.accentColor);
   const primaryColor = theme.primary;

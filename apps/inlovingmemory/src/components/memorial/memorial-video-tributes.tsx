@@ -11,7 +11,7 @@ export function MemorialVideoTributes({ tributes }: { tributes: VideoTribute[] }
   if (tributes.length === 0) return null;
 
   return (
-    <section className="ilm-container mt-12" aria-labelledby="tributes-heading">
+    <section id="video-tributes" className="ilm-container mt-12" aria-labelledby="tributes-heading">
       <h2 id="tributes-heading" className="text-xl font-semibold tracking-tight text-earth-900">
         Video tributes
       </h2>

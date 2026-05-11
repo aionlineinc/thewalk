@@ -87,8 +87,7 @@ export function MemorialHero({
 
         <div className="min-w-0 flex-1">
           <p
-            className="font-script text-2xl"
-            style={{ color: primaryColor || "#8c7b6d" }}
+            className="font-script text-2xl text-white"
           >
             {kindLabel}
           </p>

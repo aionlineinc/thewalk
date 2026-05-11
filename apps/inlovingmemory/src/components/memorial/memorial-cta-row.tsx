@@ -91,6 +91,7 @@ export function MemorialCtaRow({ shareUrl, showContribute, primaryColor, accentC
 function PhotosTab({ memorialSlug }: { memorialSlug?: string }) {
   const fileRef = useRef<HTMLInputElement>(null);
   const [authorName, setAuthorName] = useState("");
+  const [description, setDescription] = useState("");
   const [busy, setBusy] = useState(false);
   const [done, setDone] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -130,12 +131,13 @@ function PhotosTab({ memorialSlug }: { memorialSlug?: string }) {
       await fetch("/api/ilm/public/complete", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ memorialSlug, key: pj.key, authorName: authorName.trim(), kind: "PHOTO" }),
+        body: JSON.stringify({ memorialSlug, key: pj.key, authorName: authorName.trim(), description: description.trim() || undefined, kind: "PHOTO" }),
       });
 
       setDone(true);
       if (fileRef.current) fileRef.current.value = "";
       setAuthorName("");
+      setDescription("");
     } catch {
       setError("Something went wrong.");
     } finally {
@@ -156,6 +158,10 @@ function PhotosTab({ memorialSlug }: { memorialSlug?: string }) {
       <div>
         <label className="block text-sm font-medium text-earth-800">Photo</label>
         <input ref={fileRef} type="file" accept={PHOTO_TYPES.join(",")} disabled={busy} className="mt-1.5 text-sm text-earth-800 file:mr-3 file:rounded-lg file:border-0 file:bg-earth-800 file:px-3 file:py-2 file:text-sm file:font-medium file:text-white" />
+      </div>
+      <div>
+        <label className="block text-sm font-medium text-earth-800">Description <span className="font-normal text-earth-500">(optional)</span></label>
+        <textarea value={description} onChange={(e) => setDescription(e.target.value)} rows={2} maxLength={500} className="mt-1.5 w-full rounded-lg border border-earth-200 bg-white px-3 py-2 text-sm text-earth-900 outline-none focus:border-calm-500 focus:ring-2 focus:ring-calm-500/20" />
       </div>
       {error ? <p className="text-sm text-red-800">{error}</p> : null}
       <button type="button" disabled={busy} onClick={() => void upload()} className="rounded-lg bg-earth-800 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-earth-900 disabled:opacity-60">
@@ -205,6 +211,7 @@ function StoryTab({ memorialSlug }: { memorialSlug?: string }) {
 function AudioTab({ memorialSlug }: { memorialSlug?: string }) {
   const fileRef = useRef<HTMLInputElement>(null);
   const [authorName, setAuthorName] = useState("");
+  const [description, setDescription] = useState("");
   const [busy, setBusy] = useState(false);
   const [done, setDone] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -244,12 +251,13 @@ function AudioTab({ memorialSlug }: { memorialSlug?: string }) {
       await fetch("/api/ilm/public/complete", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ memorialSlug, key: pj.key, authorName: authorName.trim(), kind: "AUDIO" }),
+        body: JSON.stringify({ memorialSlug, key: pj.key, authorName: authorName.trim(), description: description.trim() || undefined, kind: "AUDIO" }),
       });
 
       setDone(true);
       if (fileRef.current) fileRef.current.value = "";
       setAuthorName("");
+      setDescription("");
     } catch {
       setError("Something went wrong.");
     } finally {
@@ -271,6 +279,10 @@ function AudioTab({ memorialSlug }: { memorialSlug?: string }) {
         <label className="block text-sm font-medium text-earth-800">Audio file</label>
         <input ref={fileRef} type="file" accept={AUDIO_TYPES.join(",")} disabled={busy} className="mt-1.5 text-sm text-earth-800 file:mr-3 file:rounded-lg file:border-0 file:bg-earth-800 file:px-3 file:py-2 file:text-sm file:font-medium file:text-white" />
         <p className="mt-1 text-xs text-earth-500">MP3, WAV, or WebM audio.</p>
+      </div>
+      <div>
+        <label className="block text-sm font-medium text-earth-800">Description <span className="font-normal text-earth-500">(optional)</span></label>
+        <textarea value={description} onChange={(e) => setDescription(e.target.value)} rows={2} maxLength={500} className="mt-1.5 w-full rounded-lg border border-earth-200 bg-white px-3 py-2 text-sm text-earth-900 outline-none focus:border-calm-500 focus:ring-2 focus:ring-calm-500/20" />
       </div>
       {error ? <p className="text-sm text-red-800">{error}</p> : null}
       <button type="button" disabled={busy} onClick={() => void upload()} className="rounded-lg bg-earth-800 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-earth-900 disabled:opacity-60">

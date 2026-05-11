@@ -8,6 +8,7 @@ const bodySchema = z.object({
   memorialSlug: z.string().min(1).max(200),
   key: z.string().min(1).max(500),
   authorName: z.string().min(1).max(120),
+  description: z.string().max(500).optional(),
   kind: z.nativeEnum(IlmMediaKind),
 });
 
@@ -22,7 +23,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Invalid request" }, { status: 400 });
   }
 
-  const { memorialSlug, key, authorName, kind } = parsed.data;
+  const { memorialSlug, key, authorName, description, kind } = parsed.data;
 
   const memorial = await prisma.ilmMemorial.findUnique({
     where: { slug: memorialSlug },
@@ -44,6 +45,7 @@ export async function POST(req: Request) {
       kind,
       storageUrl: "", // filled below after the presigned URL resolves
       authorGuestName: authorName.trim(),
+      title: description?.trim() || null,
       status: IlmSubmissionStatus.PENDING,
     },
   });
