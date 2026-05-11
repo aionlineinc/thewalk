@@ -4,6 +4,7 @@ import { DeleteMemorialForm } from "@/app/dashboard/memorials/delete-memorial-fo
 import { MemorialForm } from "@/app/dashboard/memorials/memorial-form";
 import { buildMemorialDefaults } from "@/app/dashboard/memorials/memorial-form-defaults";
 import { updateMemorialFromForm } from "@/app/dashboard/memorials/actions";
+import { MemorialSubNav } from "@/components/dashboard/memorial-sub-nav";
 import { getCustomBannerPresets } from "@/lib/ilm-banner-presets";
 import { getIlmSession } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
@@ -36,21 +37,10 @@ export default async function EditMemorialPage({ params }: { params: { id: strin
       <p className="dash-page-lead">
         Changes apply immediately on the public page (subject to privacy settings).
       </p>
-      <p className="mt-4 flex flex-wrap gap-x-6 gap-y-2 text-sm">
-        <Link
-          href={`/dashboard/memorials/${memorial.id}/media`}
-          className="dash-link"
-        >
-          Photos &amp; banner →
-        </Link>
-        <Link
-          href={`/dashboard/memorials/${memorial.id}/community`}
-          className="dash-link"
-        >
-          Moderate guest book &amp; prayer wall →
-        </Link>
-      </p>
-      <div className="dash-card-pad mt-10">
+      <div className="mt-6">
+        <MemorialSubNav memorialId={memorial.id} slug={memorial.slug} />
+      </div>
+      <div className="dash-card-pad mt-6">
         <MemorialForm action={updateMemorialFromForm} defaults={defaults} memorialIdForEdit={memorial.id} customBanners={customBanners} />
       </div>
       <div className="mt-16 border-t border-earth-200 pt-10">

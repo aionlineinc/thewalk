@@ -6,6 +6,7 @@ import {
   setPrayerStatusFromForm,
   setMediaStatusFromForm,
 } from "@/app/dashboard/memorials/[id]/community/actions";
+import { MemorialSubNav } from "@/components/dashboard/memorial-sub-nav";
 import { getIlmSession } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 
@@ -68,9 +69,15 @@ export default async function MemorialCommunityPage({ params }: { params: { id: 
       <p className="dash-page-lead">
         {memorial.displayName} · <span className="font-mono text-sm">/{memorial.slug}</span>
       </p>
-      <p className="mt-3 text-sm text-earth-500">
-        Approve or reject guest book messages and prayers. Only approved items appear on the public page.
+      <p className="dash-page-lead">
+        {memorial.displayName} · <span className="font-mono text-sm">/{memorial.slug}</span>
       </p>
+      <p className="mt-3 text-sm text-earth-500">
+        Approve or reject guest book messages, prayers, photos, audio, and videos. Only approved items appear on the public page.
+      </p>
+      <div className="mt-6">
+        <MemorialSubNav memorialId={memorial.id} slug={memorial.slug} />
+      </div>
 
       <div className="mt-10 space-y-12">
         {/* Guest book */}
@@ -232,11 +239,6 @@ export default async function MemorialCommunityPage({ params }: { params: { id: 
           )}
         </section>
 
-      <p className="mt-12">
-        <Link href={`/memorial/${memorial.slug}`} className="dash-link text-sm">
-          View public page
-        </Link>
-      </p>
     </section>
   );
 }

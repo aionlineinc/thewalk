@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { IlmMediaKind, IlmSubmissionStatus } from "@prisma/client";
 import { MemorialMediaPanel } from "@/components/dashboard/memorial-media-panel";
+import { MemorialSubNav } from "@/components/dashboard/memorial-sub-nav";
 import { getIlmSession } from "@/lib/auth";
 import { getIlmStorageEnv } from "@/lib/ilm-storage-config";
 import { prisma } from "@/lib/prisma";
@@ -48,7 +49,10 @@ export default async function MemorialMediaPage({ params }: { params: { id: stri
       <p className="dash-page-lead">
         {memorial.displayName} · <span className="font-mono text-sm">/{memorial.slug}</span>
       </p>
-      <div className="dash-card-pad mt-10">
+      <div className="mt-6">
+        <MemorialSubNav memorialId={memorial.id} slug={memorial.slug} />
+      </div>
+      <div className="dash-card-pad mt-6">
         <MemorialMediaPanel
           memorialId={memorial.id}
           storageConfigured={storageConfigured}
@@ -56,14 +60,6 @@ export default async function MemorialMediaPage({ params }: { params: { id: stri
           tier={memorial.tier}
         />
       </div>
-      <p className="mt-10 flex flex-wrap gap-6 text-sm">
-        <Link className="dash-link" href={`/memorial/${memorial.slug}`}>
-          View public page
-        </Link>
-        <Link className="dash-link" href={`/dashboard/memorials/${memorial.id}/edit`}>
-          Edit details
-        </Link>
-      </p>
     </section>
   );
 }
