@@ -16,40 +16,44 @@ export default async function AdminGuestbookPage({
 
   const filter = (typeof searchParams.status === "string" ? searchParams.status : "PENDING") as IlmSubmissionStatus;
 
-  const entries = await prisma.ilmGuestbookEntry.findMany({
-    where: { status: filter },
-    orderBy: { createdAt: "desc" },
-    select: {
-      id: true,
-      authorName: true,
-      content: true,
-      status: true,
-      createdAt: true,
-      memorial: { select: { displayName: true, slug: true } },
-    },
-    take: 100,
-  });
+  const [entries, pendingCount, approvedCount, rejectedCount] = await Promise.all([
+    prisma.ilmGuestbookEntry.findMany({
+      where: { status: filter },
+      orderBy: { createdAt: "desc" },
+      select: {
+        id: true, authorName: true, content: true, status: true, createdAt: true,
+        memorial: { select: { displayName: true, slug: true } },
+      },
+      take: 100,
+    }),
+    prisma.ilmGuestbookEntry.count({ where: { status: "PENDING" } }),
+    prisma.ilmGuestbookEntry.count({ where: { status: "APPROVED" } }),
+    prisma.ilmGuestbookEntry.count({ where: { status: "REJECTED" } }),
+  ]);
 
-  const filters: IlmSubmissionStatus[] = ["PENDING", "APPROVED", "REJECTED"];
+  const tabs = [
+    { status: "PENDING" as const, label: "Pending", count: pendingCount },
+    { status: "APPROVED" as const, label: "Approved", count: approvedCount },
+    { status: "REJECTED" as const, label: "Rejected", count: rejectedCount },
+  ];
 
   return (
     <section className="w-full">
       <h1 className="dash-page-title">Guestbook</h1>
       <p className="dash-page-lead">All guestbook entries across memorials.</p>
 
-      {/* Filter tabs */}
       <div className="mt-6 flex gap-2">
-        {filters.map((f) => (
+        {tabs.map((t) => (
           <a
-            key={f}
-            href={`/dashboard/admin/guestbook?status=${f}`}
+            key={t.status}
+            href={`/dashboard/admin/guestbook?status=${t.status}`}
             className={`rounded-full px-4 py-1.5 text-sm font-medium transition ${
-              filter === f
+              filter === t.status
                 ? "bg-calm-500 text-white"
                 : "bg-white text-earth-600 hover:bg-earth-50"
             }`}
           >
-            {f.charAt(0) + f.slice(1).toLowerCase().replace(/_/g, " ")}
+            {t.label} <span className="ml-1 opacity-70">({t.count})</span>
           </a>
         ))}
       </div>
@@ -73,31 +77,19 @@ export default async function AdminGuestbookPage({
                       {e.memorial.displayName} ·{" "}
                       {new Intl.DateTimeFormat("en", { dateStyle: "medium" }).format(e.createdAt)}
                     </p>
-                    <p className="mt-2 whitespace-pre-wrap text-sm text-earth-800 line-clamp-3">
-                      {e.content}
-                    </p>
+                    <p className="mt-2 whitespace-pre-wrap text-sm text-earth-800 line-clamp-3">{e.content}</p>
                   </div>
                   {e.status === "PENDING" ? (
                     <div className="flex shrink-0 gap-2">
                       <form action={setGuestbookStatus}>
                         <input type="hidden" name="entryId" value={e.id} />
                         <input type="hidden" name="status" value="APPROVED" />
-                        <button
-                          type="submit"
-                          className="rounded-lg bg-earth-800 px-3 py-1.5 text-xs font-medium text-white shadow-sm transition hover:bg-earth-900"
-                        >
-                          Approve
-                        </button>
+                        <button type="submit" className="rounded-lg bg-earth-800 px-3 py-1.5 text-xs font-medium text-white shadow-sm transition hover:bg-earth-900">Approve</button>
                       </form>
                       <form action={setGuestbookStatus}>
                         <input type="hidden" name="entryId" value={e.id} />
                         <input type="hidden" name="status" value="REJECTED" />
-                        <button
-                          type="submit"
-                          className="rounded-lg border border-red-200 bg-white px-3 py-1.5 text-xs font-medium text-red-800 shadow-sm transition hover:bg-red-50"
-                        >
-                          Reject
-                        </button>
+                        <button type="submit" className="rounded-lg border border-red-200 bg-white px-3 py-1.5 text-xs font-medium text-red-800 shadow-sm transition hover:bg-red-50">Reject</button>
                       </form>
                     </div>
                   ) : null}

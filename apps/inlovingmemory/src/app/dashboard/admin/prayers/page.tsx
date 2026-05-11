@@ -16,41 +16,44 @@ export default async function AdminPrayersPage({
 
   const filter = (typeof searchParams.status === "string" ? searchParams.status : "PENDING") as IlmSubmissionStatus;
 
-  const entries = await prisma.ilmPrayer.findMany({
-    where: { status: filter },
-    orderBy: { createdAt: "desc" },
-    select: {
-      id: true,
-      authorName: true,
-      content: true,
-      notifyAuthor: true,
-      status: true,
-      createdAt: true,
-      memorial: { select: { displayName: true, slug: true } },
-    },
-    take: 100,
-  });
+  const [entries, pendingCount, approvedCount, rejectedCount] = await Promise.all([
+    prisma.ilmPrayer.findMany({
+      where: { status: filter },
+      orderBy: { createdAt: "desc" },
+      select: {
+        id: true, authorName: true, content: true, notifyAuthor: true, status: true, createdAt: true,
+        memorial: { select: { displayName: true, slug: true } },
+      },
+      take: 100,
+    }),
+    prisma.ilmPrayer.count({ where: { status: "PENDING" } }),
+    prisma.ilmPrayer.count({ where: { status: "APPROVED" } }),
+    prisma.ilmPrayer.count({ where: { status: "REJECTED" } }),
+  ]);
 
-  const filters: IlmSubmissionStatus[] = ["PENDING", "APPROVED", "REJECTED"];
+  const tabs = [
+    { status: "PENDING" as const, label: "Pending", count: pendingCount },
+    { status: "APPROVED" as const, label: "Approved", count: approvedCount },
+    { status: "REJECTED" as const, label: "Rejected", count: rejectedCount },
+  ];
 
   return (
     <section className="w-full">
       <h1 className="dash-page-title">Prayers</h1>
       <p className="dash-page-lead">All prayer wall entries across memorials.</p>
 
-      {/* Filter tabs */}
       <div className="mt-6 flex gap-2">
-        {filters.map((f) => (
+        {tabs.map((t) => (
           <a
-            key={f}
-            href={`/dashboard/admin/prayers?status=${f}`}
+            key={t.status}
+            href={`/dashboard/admin/prayers?status=${t.status}`}
             className={`rounded-full px-4 py-1.5 text-sm font-medium transition ${
-              filter === f
+              filter === t.status
                 ? "bg-calm-500 text-white"
                 : "bg-white text-earth-600 hover:bg-earth-50"
             }`}
           >
-            {f.charAt(0) + f.slice(1).toLowerCase().replace(/_/g, " ")}
+            {t.label} <span className="ml-1 opacity-70">({t.count})</span>
           </a>
         ))}
       </div>
@@ -84,22 +87,12 @@ export default async function AdminPrayersPage({
                       <form action={setPrayerStatus}>
                         <input type="hidden" name="prayerId" value={e.id} />
                         <input type="hidden" name="status" value="APPROVED" />
-                        <button
-                          type="submit"
-                          className="rounded-lg bg-calm-500 px-3 py-1.5 text-xs font-medium text-white shadow-sm transition hover:bg-calm-600"
-                        >
-                          Approve
-                        </button>
+                        <button type="submit" className="rounded-lg bg-calm-500 px-3 py-1.5 text-xs font-medium text-white shadow-sm transition hover:bg-calm-600">Approve</button>
                       </form>
                       <form action={setPrayerStatus}>
                         <input type="hidden" name="prayerId" value={e.id} />
                         <input type="hidden" name="status" value="REJECTED" />
-                        <button
-                          type="submit"
-                          className="rounded-lg border border-red-200 bg-white px-3 py-1.5 text-xs font-medium text-red-800 shadow-sm transition hover:bg-red-50"
-                        >
-                          Reject
-                        </button>
+                        <button type="submit" className="rounded-lg border border-red-200 bg-white px-3 py-1.5 text-xs font-medium text-red-800 shadow-sm transition hover:bg-red-50">Reject</button>
                       </form>
                     </div>
                   ) : null}
