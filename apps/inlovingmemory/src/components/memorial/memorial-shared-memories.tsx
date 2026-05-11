@@ -20,7 +20,7 @@ export function MemorialSharedMemories({ media }: { media: SharedMedia[] }) {
         Shared memories
       </h2>
       <p className="mt-2 text-sm text-earth-600">
-        Photos and audio shared by visitors, approved by the page keeper.
+        Photos and audio shared by visitors, approved by the page moderator.
       </p>
 
       {/* Photos */}

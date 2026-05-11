@@ -54,7 +54,7 @@ export default async function IlmHomePage() {
           </div>
 
           <p className="mt-10 text-xs text-white/70">
-            {session?.user ? "Welcome back — manage your memorials in the dashboard." : "Page keepers can sign in to manage memorials."}
+            {session?.user ? "Welcome back — manage your memorials in the dashboard." : "Page moderators can sign in to manage memorials."}
           </p>
         </div>
       </section>
@@ -144,7 +144,7 @@ export default async function IlmHomePage() {
               <ul className="mt-5 space-y-2 text-sm text-earth-700">
                 <li>• Service details, order of service &amp; digital program</li>
                 <li>• Public or unlisted memorial pages</li>
-                <li>• Guestbook &amp; prayer wall with keeper moderation</li>
+                <li>• Guestbook &amp; prayer wall with moderator review</li>
                 <li>• Shareable QR code for service attendees</li>
               </ul>
             </div>

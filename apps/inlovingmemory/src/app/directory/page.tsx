@@ -310,7 +310,7 @@ export default async function DirectoryPage({
             Find a memorial
           </h1>
           <p className="mt-4 max-w-xl text-base font-light leading-relaxed text-white/70 md:text-lg">
-            Public pages only. Page keepers can hide a memorial from this list while keeping the direct link available.
+            Public pages only. Page moderators can hide a memorial from this list while keeping the direct link available.
           </p>
         </div>
       </section>

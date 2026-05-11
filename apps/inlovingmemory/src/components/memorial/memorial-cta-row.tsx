@@ -143,7 +143,7 @@ function PhotosTab({ memorialSlug }: { memorialSlug?: string }) {
   }
 
   if (done) {
-    return <p className="rounded-lg border border-earth-200 bg-earth-50 px-4 py-3 text-sm text-earth-800">Thank you — your photo was received and will appear after the page keeper approves it.</p>;
+    return <p className="rounded-lg border border-earth-200 bg-earth-50 px-4 py-3 text-sm text-earth-800">Thank you — your photo was received and will appear after the page moderator approves it.</p>;
   }
 
   return (
@@ -257,7 +257,7 @@ function AudioTab({ memorialSlug }: { memorialSlug?: string }) {
   }
 
   if (done) {
-    return <p className="rounded-lg border border-earth-200 bg-earth-50 px-4 py-3 text-sm text-earth-800">Thank you — your audio was received and will appear after the page keeper approves it.</p>;
+    return <p className="rounded-lg border border-earth-200 bg-earth-50 px-4 py-3 text-sm text-earth-800">Thank you — your audio was received and will appear after the page moderator approves it.</p>;
   }
 
   return (

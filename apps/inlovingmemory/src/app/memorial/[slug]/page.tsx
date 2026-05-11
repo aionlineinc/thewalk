@@ -237,7 +237,7 @@ export default async function MemorialPage({ params, searchParams }: PageProps) 
               : "This memorial is available to invited guests only."}
         </p>
         <p className="mt-6 text-sm text-earth-600">
-          Are you the page keeper?{" "}
+          Are you the page moderator?{" "}
           <Link className="font-medium text-earth-900 underline underline-offset-4" href="/sign-in">
             Sign in
           </Link>{" "}
@@ -256,7 +256,7 @@ export default async function MemorialPage({ params, searchParams }: PageProps) 
       {isKeeper && !isPublic ? (
         <div className="ilm-container pt-10">
           <p className="rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-950">
-            You are viewing a non-public page as the page keeper.
+            You are viewing a non-public page as the page moderator.
           </p>
         </div>
       ) : null}
@@ -333,7 +333,7 @@ export default async function MemorialPage({ params, searchParams }: PageProps) 
             style={{ borderColor: `${primaryColor}30`, backgroundColor: `${primaryColor}10` }}
             role="status"
           >
-            Thank you — your message was received and will appear after the page keeper approves it.
+            Thank you — your message was received and will appear after the page moderator approves it.
           </p>
         </div>
       ) : null}

@@ -255,7 +255,7 @@ export function MemorialForm({
       <div>
         <span className="block text-sm font-medium text-earth-800">Privacy</span>
         <p className="mt-1 text-sm text-earth-600">
-          Non-public pages still allow you (the page keeper) to preview when signed in.
+          Non-public pages still allow you (the page moderator) to preview when signed in.
         </p>
         <select
           id="privacyLevel"

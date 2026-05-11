@@ -63,7 +63,7 @@ export const ilmMarketingDefault: IlmMarketingContent = {
     ],
     links: [
       { label: "View pricing", href: "/pricing" },
-      { label: "Page keeper sign in", href: "/sign-in" },
+      { label: "Page moderator sign in", href: "/sign-in" },
     ],
   },
 
@@ -92,7 +92,7 @@ export const ilmMarketingDefault: IlmMarketingContent = {
           "AI obituary assistant",
           "Grief counselling sessions included",
           "Grief resource library",
-          "Multiple page keepers",
+          "Multiple page moderators",
         ],
       },
       {
@@ -127,11 +127,11 @@ export const ilmMarketingDefault: IlmMarketingContent = {
       },
       {
         q: "What is the prayer wall?",
-        a: "Every memorial — free or paid — includes a prayer wall. Visitors submit a prayer with their name and it appears publicly after the page keeper approves it. Families receive a weekly summary of how many people have prayed for them.",
+        a: "Every memorial — free or paid — includes a prayer wall. Visitors submit a prayer with their name and it appears publicly after the page moderator approves it. Families receive a weekly summary of how many people have prayed for them.",
       },
       {
         q: "Who manages the memorial page?",
-        a: "A page keeper signs in using their theWalk account. They control privacy, approve all contributions, and can invite co-keepers to help. Premium members can assign multiple page keepers.",
+        a: "A page moderator signs in using their theWalk account. They control privacy, approve all contributions, and can invite co-keepers to help. Premium members can assign multiple page moderators.",
       },
       {
         q: "Can I keep it private?",
@@ -147,7 +147,7 @@ export const ilmMarketingDefault: IlmMarketingContent = {
     cards: [
       {
         title: "Planning the service",
-        body: "A practical checklist for page keepers: setting up service details, generating a digital program, sharing with attendees, and managing the day.",
+        body: "A practical checklist for page moderators: setting up service details, generating a digital program, sharing with attendees, and managing the day.",
       },
       {
         title: "Grief counselling",

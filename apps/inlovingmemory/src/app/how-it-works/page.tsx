@@ -218,7 +218,7 @@ export default async function HowItWorksPage() {
               Care, prayer, and control — always
             </h2>
             <p className="mx-auto mt-4 max-w-xl text-base font-light leading-relaxed text-earth-500">
-              The page keeper decides what the world sees. theWalk community surrounds the family with prayer. And the memorial remains — long after the service, long after the hard season passes.
+              The page moderator decides what the world sees. theWalk community surrounds the family with prayer. And the memorial remains — long after the service, long after the hard season passes.
             </p>
           </div>
 

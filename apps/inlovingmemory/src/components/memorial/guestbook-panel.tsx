@@ -17,7 +17,7 @@ export function GuestbookPanel({
         Guest Book
       </h2>
       <p className="mt-2 text-sm text-earth-600">
-        Messages appear after the page keeper approves them.
+        Messages appear after the page moderator approves them.
       </p>
 
       {showForm ? (

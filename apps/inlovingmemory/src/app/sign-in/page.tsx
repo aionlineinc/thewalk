@@ -43,7 +43,7 @@ export default function SignInPage() {
       <div className="flex flex-col justify-center bg-white px-8 py-16 sm:px-12">
         <div className="mx-auto w-full max-w-sm">
           <p className="text-xs font-semibold uppercase tracking-[0.28em] text-earth-400">
-            Page keeper
+            Page moderator
           </p>
           <h1 className="mt-4 text-3xl font-semibold tracking-tight text-earth-900">Sign in</h1>
           <p className="mt-3 text-sm leading-relaxed text-earth-600">

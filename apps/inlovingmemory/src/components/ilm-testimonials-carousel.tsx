@@ -7,15 +7,15 @@ const AUTO_MS = 6500;
 const ILM_TESTIMONIALS = [
   {
     quote: "The prayer wall meant everything. Family from across the world offered their love — and we could see every one.",
-    body: "Marissa G — page keeper",
+    body: "Marissa G — page moderator",
   },
   {
     quote: "We set up the page before the service. Scanning the QR code at the funeral was the most meaningful moment for our family.",
-    body: "Menard P — page keeper",
+    body: "Menard P — page moderator",
   },
   {
     quote: "It started as a tribute for the service and became somewhere we return to even now, years later. His story is still growing.",
-    body: "Lisa D — page keeper",
+    body: "Lisa D — page moderator",
   },
 ] as const;
 

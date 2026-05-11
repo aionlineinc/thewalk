@@ -95,7 +95,7 @@ export function PrayerPanel({
               className="mt-1 rounded border-earth-300 text-calm-500 focus:ring-calm-500"
             />
             <span>
-              I’m open to the page keeper reaching out with pastoral encouragement (uses your email if provided).
+              I’m open to the page moderator reaching out with pastoral encouragement (uses your email if provided).
             </span>
           </label>
           <button

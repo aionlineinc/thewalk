@@ -53,7 +53,7 @@ const STEPS = [
   {
     num: 2,
     title: "Gather together",
-    copy: "Loved ones near and far contribute memories, photos, and prayers — gently moderated by the page keeper.",
+    copy: "Loved ones near and far contribute memories, photos, and prayers — gently moderated by the page moderator.",
     href: "/directory",
     image: "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=800&q=80",
     alt: "Family together — gathering",

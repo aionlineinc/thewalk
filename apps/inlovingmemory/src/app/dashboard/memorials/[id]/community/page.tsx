@@ -141,7 +141,7 @@ export default async function MemorialCommunityPage({ params }: { params: { id: 
                   ) : null}
                   {p.notifyAuthor ? (
                     <p className="mt-1 text-xs font-medium text-calm-500">
-                      Open to follow-up from page keeper
+                      Open to follow-up from page moderator
                     </p>
                   ) : null}
                   <p className="mt-3 whitespace-pre-wrap text-sm text-earth-800">{p.content}</p>
