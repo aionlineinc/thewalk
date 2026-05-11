@@ -7,10 +7,18 @@ import { SignOutButton } from "@/components/sign-out-button";
 
 const STAFF_ROLES = new Set(["SUPER_ADMIN", "ORG_ADMIN", "ORG_MANAGER"]);
 
-function MenuIcon({ className }: { className?: string }) {
+function DotsMenuIcon({ className }: { className?: string }) {
   return (
-    <svg className={className} fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+    <svg viewBox="0 0 276.167 276.167" aria-hidden="true" className={className} fill="currentColor">
+      <path d="M33.144,2.471C15.336,2.471,0.85,16.958,0.85,34.765s14.48,32.293,32.294,32.293s32.294-14.486,32.294-32.293S50.951,2.471,33.144,2.471z" />
+      <path d="M137.663,2.471c-17.807,0-32.294,14.487-32.294,32.294s14.487,32.293,32.294,32.293c17.808,0,32.297-14.486,32.297-32.293S155.477,2.471,137.663,2.471z" />
+      <path d="M243.873,67.059c17.804,0,32.294-14.486,32.294-32.293S261.689,2.471,243.873,2.471s-32.294,14.487-32.294,32.294S226.068,67.059,243.873,67.059z" />
+      <path d="M32.3,170.539c17.807,0,32.297-14.483,32.297-32.293c0-17.811-14.49-32.297-32.297-32.297S0,120.436,0,138.246C0,156.056,14.493,170.539,32.3,170.539z" />
+      <path d="M136.819,170.539c17.804,0,32.294-14.483,32.294-32.293c0-17.811-14.478-32.297-32.294-32.297c-17.813,0-32.294,14.486-32.294,32.297C104.525,156.056,119.012,170.539,136.819,170.539z" />
+      <path d="M243.038,170.539c17.811,0,32.294-14.483,32.294-32.293c0-17.811-14.483-32.297-32.294-32.297s-32.306,14.486-32.306,32.297C210.732,156.056,225.222,170.539,243.038,170.539z" />
+      <path d="M33.039,209.108c-17.807,0-32.3,14.483-32.3,32.294c0,17.804,14.493,32.293,32.3,32.293s32.293-14.482,32.293-32.293S50.846,209.108,33.039,209.108z" />
+      <path d="M137.564,209.108c-17.808,0-32.3,14.483-32.3,32.294c0,17.804,14.487,32.293,32.3,32.293c17.804,0,32.293-14.482,32.293-32.293S155.368,209.108,137.564,209.108z" />
+      <path d="M243.771,209.108c-17.804,0-32.294,14.483-32.294,32.294c0,17.804,14.49,32.293,32.294,32.293c17.811,0,32.294-14.482,32.294-32.293S261.575,209.108,243.771,209.108z" />
     </svg>
   );
 }
@@ -50,41 +58,43 @@ export function IlmHeader({ session }: { session: Session | null }) {
   }, [mobileOpen, close]);
 
   const navLinks = (
-    <>
-      <Link className="block py-2 text-lg font-medium text-white/80 transition hover:text-white" href="/how-it-works" onClick={close}>
-        How it works
-      </Link>
-      <Link className="block py-2 text-lg font-medium text-white/80 transition hover:text-white" href="/directory" onClick={close}>
-        Find a memorial
-      </Link>
-      <Link className="block py-2 text-lg font-medium text-white/80 transition hover:text-white" href="/services" onClick={close}>
-        Services
-      </Link>
-      {isSignedIn ? (
-        <>
-          <Link className="block py-2 text-lg font-medium text-white/80 transition hover:text-white" href="/dashboard" onClick={close}>
-            Dashboard
-          </Link>
-          {isStaff ? (
-            <Link className="block py-2 text-lg font-medium text-white/80 transition hover:text-white" href="/dashboard/admin" onClick={close}>
-              Admin
-            </Link>
-          ) : null}
-          <div className="pt-4 border-t border-white/10">
-            <SignOutButton className="text-base font-medium text-white/70 underline-offset-4 transition hover:text-white hover:underline" />
-          </div>
-        </>
-      ) : (
-        <>
-          <Link className="block py-2 text-lg font-medium text-white/80 transition hover:text-white" href="/pricing" onClick={close}>
-            Pricing
-          </Link>
-          <Link className="block py-2 text-lg font-medium text-white/80 transition hover:text-white" href="/sign-in" onClick={close}>
-            Sign in
-          </Link>
-        </>
-      )}
-    </>
+    <div className="space-y-8">
+      <div>
+        <p className="text-xs font-bold uppercase tracking-[0.2em] text-white/40">Explore</p>
+        <div className="mt-3 space-y-1">
+          <Link className="block py-2 text-lg font-medium text-white/80 transition hover:text-white" href="/how-it-works" onClick={close}>How it works</Link>
+          <Link className="block py-2 text-lg font-medium text-white/80 transition hover:text-white" href="/directory" onClick={close}>Find a memorial</Link>
+          <Link className="block py-2 text-lg font-medium text-white/80 transition hover:text-white" href="/services" onClick={close}>Services</Link>
+          <Link className="block py-2 text-lg font-medium text-white/80 transition hover:text-white" href="/pricing" onClick={close}>Pricing</Link>
+        </div>
+      </div>
+      <div>
+        <p className="text-xs font-bold uppercase tracking-[0.2em] text-white/40">Learn</p>
+        <div className="mt-3 space-y-1">
+          <Link className="block py-2 text-lg font-medium text-white/80 transition hover:text-white" href="/about" onClick={close}>About</Link>
+          <Link className="block py-2 text-lg font-medium text-white/80 transition hover:text-white" href="/faq" onClick={close}>FAQ</Link>
+          <Link className="block py-2 text-lg font-medium text-white/80 transition hover:text-white" href="/resources" onClick={close}>Resources</Link>
+        </div>
+      </div>
+      <div>
+        <p className="text-xs font-bold uppercase tracking-[0.2em] text-white/40">Account</p>
+        <div className="mt-3 space-y-1">
+          {isSignedIn ? (
+            <>
+              <Link className="block py-2 text-lg font-medium text-white/80 transition hover:text-white" href="/dashboard" onClick={close}>Dashboard</Link>
+              {isStaff ? (
+                <Link className="block py-2 text-lg font-medium text-white/80 transition hover:text-white" href="/dashboard/admin" onClick={close}>Admin</Link>
+              ) : null}
+              <div className="pt-3">
+                <SignOutButton className="text-base font-medium text-white/60 underline-offset-4 transition hover:text-white hover:underline" />
+              </div>
+            </>
+          ) : (
+            <Link className="block py-2 text-lg font-medium text-white/80 transition hover:text-white" href="/sign-in" onClick={close}>Sign in</Link>
+          )}
+        </div>
+      </div>
+    </div>
   );
 
   return (
@@ -133,7 +143,7 @@ export function IlmHeader({ session }: { session: Session | null }) {
               aria-expanded={mobileOpen}
               onClick={() => setMobileOpen((v) => !v)}
             >
-              {mobileOpen ? <CloseIcon className="h-5 w-5" /> : <MenuIcon className="h-5 w-5" />}
+              {mobileOpen ? <CloseIcon className="h-5 w-5" /> : <DotsMenuIcon className="h-5 w-5" />}
             </button>
           </div>
         </div>
