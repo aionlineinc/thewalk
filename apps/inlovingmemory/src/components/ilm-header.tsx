@@ -1,63 +1,172 @@
+"use client";
+
 import Link from "next/link";
+import { useCallback, useEffect, useState } from "react";
 import type { Session } from "next-auth";
 import { SignOutButton } from "@/components/sign-out-button";
 
 const STAFF_ROLES = new Set(["SUPER_ADMIN", "ORG_ADMIN", "ORG_MANAGER"]);
 
+function MenuIcon({ className }: { className?: string }) {
+  return (
+    <svg className={className} fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+    </svg>
+  );
+}
+
+function CloseIcon({ className }: { className?: string }) {
+  return (
+    <svg className={className} fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+    </svg>
+  );
+}
+
 export function IlmHeader({ session }: { session: Session | null }) {
+  const [mobileOpen, setMobileOpen] = useState(false);
   const role = (session?.user as { role?: string } | undefined)?.role;
   const isStaff = !!role && STAFF_ROLES.has(role);
+  const isSignedIn = !!session?.user;
+
+  const close = useCallback(() => setMobileOpen(false), []);
+
+  // Lock body scroll when mobile menu is open
+  useEffect(() => {
+    if (mobileOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => { document.body.style.overflow = ""; };
+  }, [mobileOpen]);
+
+  // Close on Escape
+  useEffect(() => {
+    if (!mobileOpen) return;
+    const handler = (e: KeyboardEvent) => { if (e.key === "Escape") close(); };
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, [mobileOpen, close]);
+
+  const navLinks = (
+    <>
+      <Link className="block py-2 text-lg font-medium text-white/80 transition hover:text-white" href="/how-it-works" onClick={close}>
+        How it works
+      </Link>
+      <Link className="block py-2 text-lg font-medium text-white/80 transition hover:text-white" href="/directory" onClick={close}>
+        Find a memorial
+      </Link>
+      <Link className="block py-2 text-lg font-medium text-white/80 transition hover:text-white" href="/services" onClick={close}>
+        Services
+      </Link>
+      {isSignedIn ? (
+        <>
+          <Link className="block py-2 text-lg font-medium text-white/80 transition hover:text-white" href="/dashboard" onClick={close}>
+            Dashboard
+          </Link>
+          {isStaff ? (
+            <Link className="block py-2 text-lg font-medium text-white/80 transition hover:text-white" href="/dashboard/admin" onClick={close}>
+              Admin
+            </Link>
+          ) : null}
+          <div className="pt-4 border-t border-white/10">
+            <SignOutButton className="text-base font-medium text-white/70 underline-offset-4 transition hover:text-white hover:underline" />
+          </div>
+        </>
+      ) : (
+        <>
+          <Link className="block py-2 text-lg font-medium text-white/80 transition hover:text-white" href="/pricing" onClick={close}>
+            Pricing
+          </Link>
+          <Link className="block py-2 text-lg font-medium text-white/80 transition hover:text-white" href="/sign-in" onClick={close}>
+            Sign in
+          </Link>
+        </>
+      )}
+    </>
+  );
 
   return (
-    <header className="fixed inset-x-0 top-6 z-50 sm:top-7">
-      <div className="mx-auto max-w-6xl px-4 sm:px-6 md:px-8">
-        <div className="flex items-center justify-between gap-4 rounded-full bg-[#0d0906]/95 px-5 py-3 shadow-lg shadow-black/30 backdrop-blur-lg">
-          <Link href="/" className="shrink-0">
-            <img
-              src="/weblogo-w.png"
-              alt="inLovingMemory — Remember. Celebrate. Cherish."
-              width={180}
-              height={48}
-              className="h-8 w-auto object-contain"
-              loading="eager"
-              decoding="async"
-            />
-          </Link>
-          <nav className="flex flex-wrap items-center gap-5 text-sm" aria-label="Primary">
-            <Link className="font-medium text-white/80 transition hover:text-white" href="/how-it-works">
-              How it works
+    <>
+      <header className="fixed inset-x-0 top-6 z-50 sm:top-7">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6 md:px-8">
+          <div className="flex items-center justify-between gap-4 rounded-full bg-[#0d0906]/95 px-5 py-3 shadow-lg shadow-black/30 backdrop-blur-lg">
+            <Link href="/" className="shrink-0">
+              <img
+                src="/weblogo-w.png"
+                alt="inLovingMemory — Remember. Celebrate. Cherish."
+                width={180}
+                height={48}
+                className="h-8 w-auto object-contain"
+                loading="eager"
+                decoding="async"
+              />
             </Link>
-            <Link className="font-medium text-white/80 transition hover:text-white" href="/directory">
-              Find a memorial
-            </Link>
-            <Link className="font-medium text-white/80 transition hover:text-white" href="/services">
-              Services
-            </Link>
-          {session?.user ? (
-            <>
-              <Link className="font-medium text-white/80 transition hover:text-white" href="/dashboard">
-                Dashboard
-              </Link>
-              {isStaff ? (
-                <Link className="font-medium text-white/80 transition hover:text-white" href="/dashboard/admin">
-                  Admin
-                </Link>
-              ) : null}
-              <SignOutButton className="text-sm font-medium text-white/70 underline-offset-4 transition hover:text-white hover:underline" />
-            </>
-          ) : (
-            <>
-              <Link className="font-medium text-white/80 transition hover:text-white" href="/pricing">
-                Pricing
-              </Link>
-              <Link className="font-medium text-white/80 transition hover:text-white" href="/sign-in">
-                Sign in
-              </Link>
-            </>
-          )}
-          </nav>
+
+            {/* Desktop nav */}
+            <nav className="hidden md:flex items-center gap-5 text-sm" aria-label="Primary">
+              <Link className="font-medium text-white/80 transition hover:text-white" href="/how-it-works">How it works</Link>
+              <Link className="font-medium text-white/80 transition hover:text-white" href="/directory">Find a memorial</Link>
+              <Link className="font-medium text-white/80 transition hover:text-white" href="/services">Services</Link>
+              {isSignedIn ? (
+                <>
+                  <Link className="font-medium text-white/80 transition hover:text-white" href="/dashboard">Dashboard</Link>
+                  {isStaff ? (
+                    <Link className="font-medium text-white/80 transition hover:text-white" href="/dashboard/admin">Admin</Link>
+                  ) : null}
+                  <SignOutButton className="text-sm font-medium text-white/70 underline-offset-4 transition hover:text-white hover:underline" />
+                </>
+              ) : (
+                <>
+                  <Link className="font-medium text-white/80 transition hover:text-white" href="/pricing">Pricing</Link>
+                  <Link className="font-medium text-white/80 transition hover:text-white" href="/sign-in">Sign in</Link>
+                </>
+              )}
+            </nav>
+
+            {/* Mobile hamburger */}
+            <button
+              type="button"
+              className="inline-flex items-center justify-center p-2 -mr-1 text-white transition-colors hover:text-white/90 md:hidden"
+              aria-label={mobileOpen ? "Close menu" : "Open menu"}
+              aria-expanded={mobileOpen}
+              onClick={() => setMobileOpen((v) => !v)}
+            >
+              {mobileOpen ? <CloseIcon className="h-5 w-5" /> : <MenuIcon className="h-5 w-5" />}
+            </button>
+          </div>
         </div>
-      </div>
-    </header>
+      </header>
+
+      {/* Mobile overlay */}
+      {mobileOpen ? (
+        <div
+          className="fixed inset-0 z-[60] md:hidden"
+          role="dialog"
+          aria-modal="true"
+        >
+          <div className="fixed inset-0 bg-[#0d0906]/98 backdrop-blur-md" onClick={close} />
+          <div className="relative flex h-full flex-col">
+            <div className="flex items-center justify-between border-b border-white/[0.08] px-4 py-4">
+              <p className="text-xs font-bold uppercase tracking-[0.2em] text-white/50">Menu</p>
+              <button
+                type="button"
+                className="flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-white transition hover:bg-white/20"
+                aria-label="Close menu"
+                onClick={close}
+              >
+                <CloseIcon className="h-5 w-5" />
+              </button>
+            </div>
+            <div className="flex-1 overflow-y-auto px-6 py-6">
+              <nav className="flex flex-col" aria-label="Mobile navigation">
+                {navLinks}
+              </nav>
+            </div>
+          </div>
+        </div>
+      ) : null}
+    </>
   );
 }
