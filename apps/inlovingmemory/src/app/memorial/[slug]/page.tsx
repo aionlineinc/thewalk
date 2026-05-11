@@ -10,6 +10,7 @@ import { MemorialHero } from "@/components/memorial/memorial-hero";
 import { MemorialOrderOfService } from "@/components/memorial/memorial-order-of-service";
 import { MemorialPhotoGallery } from "@/components/memorial/memorial-photo-gallery";
 import { MemorialSectionNav } from "@/components/memorial/memorial-section-nav";
+import { MemorialSharedMemories } from "@/components/memorial/memorial-shared-memories";
 import { MemorialSpecialRequest } from "@/components/memorial/memorial-special-request";
 import { MemorialVideos } from "@/components/memorial/memorial-videos";
 import { PrayerPanel } from "@/components/memorial/prayer-panel";
@@ -100,6 +101,7 @@ export default async function MemorialPage({ params, searchParams }: PageProps) 
     videoRows,
     events,
     pamphlets,
+    guestMedia,
   ] = await Promise.all([
     prisma.ilmGuestbookEntry.findMany({
       where: { memorialId: memorial.id, status: IlmSubmissionStatus.APPROVED },
@@ -149,6 +151,16 @@ export default async function MemorialPage({ params, searchParams }: PageProps) 
     prisma.ilmPamphlet.findFirst({
       where: { memorialId: memorial.id },
       select: { id: true, pdfUrl: true },
+    }),
+    prisma.ilmMedia.findMany({
+      where: {
+        memorialId: memorial.id,
+        authorGuestName: { not: null },
+        status: IlmSubmissionStatus.APPROVED,
+      },
+      orderBy: { createdAt: "desc" },
+      select: { id: true, storageUrl: true, kind: true, authorGuestName: true, createdAt: true },
+      take: 50,
     }),
   ]);
 
@@ -372,6 +384,8 @@ export default async function MemorialPage({ params, searchParams }: PageProps) 
             </div>
           ) : null}
 
+          <MemorialSharedMemories media={guestMedia} />
+
           <section id="gallery" className="ilm-container mt-12">
             <MemorialPhotoGallery photos={galleryPhotos} />
           </section>
@@ -419,6 +433,7 @@ export default async function MemorialPage({ params, searchParams }: PageProps) 
           showContribute={showCommunityForms}
           primaryColor={primaryColor}
           accentColor={accentColor}
+          memorialSlug={memorial.slug}
         />
       </div>
 

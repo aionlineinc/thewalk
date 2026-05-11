@@ -95,3 +95,32 @@ export async function setPrayerStatus(memorialId: string, prayerId: string, stat
   revalidatePath(`/dashboard/memorials/${memorialId}/community`);
   redirect(`/dashboard/memorials/${memorialId}/community`);
 }
+
+export async function setMediaStatusFromForm(formData: FormData) {
+  const memorialId = formText(formData, "__memorialId");
+  const mediaId = formText(formData, "__mediaId");
+  const status = parseSubmissionStatus(formData.get("__status"));
+  if (!memorialId || !mediaId || !status) redirect("/dashboard?error=invalid");
+  return setMediaStatus(memorialId, mediaId, status);
+}
+
+export async function setMediaStatus(memorialId: string, mediaId: string, status: IlmSubmissionStatus) {
+  const memorial = await requireKeeperForMemorial(memorialId);
+
+  const media = await prisma.ilmMedia.findFirst({
+    where: { id: mediaId, memorialId },
+  });
+
+  if (!media) {
+    redirect(`/dashboard/memorials/${memorialId}/community`);
+  }
+
+  await prisma.ilmMedia.update({
+    where: { id: mediaId },
+    data: { status },
+  });
+
+  revalidatePath(`/memorial/${memorial.slug}`);
+  revalidatePath(`/dashboard/memorials/${memorialId}/community`);
+  redirect(`/dashboard/memorials/${memorialId}/community`);
+}

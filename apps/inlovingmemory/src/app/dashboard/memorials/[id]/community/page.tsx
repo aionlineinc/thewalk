@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import {
   setGuestbookStatusFromForm,
   setPrayerStatusFromForm,
+  setMediaStatusFromForm,
 } from "@/app/dashboard/memorials/[id]/community/actions";
 import { getIlmSession } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
@@ -45,6 +46,11 @@ export default async function MemorialCommunityPage({ params }: { params: { id: 
           notifyAuthor: true,
           createdAt: true,
         },
+      },
+      media: {
+        where: { authorGuestName: { not: null }, status: IlmSubmissionStatus.PENDING },
+        orderBy: { createdAt: "asc" },
+        select: { id: true, storageUrl: true, kind: true, authorGuestName: true, createdAt: true },
       },
     },
   });
@@ -174,6 +180,57 @@ export default async function MemorialCommunityPage({ params }: { params: { id: 
           )}
         </section>
       </div>
+
+        {/* Media — pending */}
+        <section aria-labelledby="media-mod">
+          <h2 id="media-mod" className="text-lg font-semibold text-earth-900">
+            Shared media — pending
+          </h2>
+          {memorial.media.length === 0 ? (
+            <p className="mt-4 text-sm text-earth-500">No pending media.</p>
+          ) : (
+            <ul className="mt-6 space-y-4">
+              {memorial.media.map((m) => (
+                <li key={m.id} className="dash-card px-5 py-4">
+                  <p className="text-sm font-medium text-earth-900">{m.authorGuestName ?? "Anonymous"}</p>
+                  <p className="text-xs text-earth-500">
+                    {m.kind === "AUDIO" ? "Audio" : "Photo"} ·{" "}
+                    {new Intl.DateTimeFormat("en", { dateStyle: "medium" }).format(m.createdAt)}
+                  </p>
+                  {m.kind === "PHOTO" ? (
+                    <img src={m.storageUrl} alt="" className="mt-3 h-24 w-24 rounded-lg object-cover" loading="lazy" />
+                  ) : (
+                    <audio src={m.storageUrl} controls className="mt-3 w-full max-w-md" preload="metadata" />
+                  )}
+                  <div className="mt-4 flex flex-wrap gap-2">
+                    <form action={setMediaStatusFromForm}>
+                      <input type="hidden" name="__memorialId" value={memorial.id} />
+                      <input type="hidden" name="__mediaId" value={m.id} />
+                      <input type="hidden" name="__status" value={IlmSubmissionStatus.APPROVED} />
+                      <button
+                        type="submit"
+                        className="rounded-lg bg-earth-800 px-3 py-1.5 text-xs font-medium text-white shadow-sm transition hover:bg-earth-900"
+                      >
+                        Approve
+                      </button>
+                    </form>
+                    <form action={setMediaStatusFromForm}>
+                      <input type="hidden" name="__memorialId" value={memorial.id} />
+                      <input type="hidden" name="__mediaId" value={m.id} />
+                      <input type="hidden" name="__status" value={IlmSubmissionStatus.REJECTED} />
+                      <button
+                        type="submit"
+                        className="rounded-lg border border-red-200 bg-white px-3 py-1.5 text-xs font-medium text-red-800 shadow-sm transition hover:bg-red-50"
+                      >
+                        Reject
+                      </button>
+                    </form>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          )}
+        </section>
 
       <p className="mt-12">
         <Link href={`/memorial/${memorial.slug}`} className="dash-link text-sm">
