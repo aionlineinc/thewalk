@@ -13,13 +13,16 @@ export function MemorialForm({
   action,
   defaults,
   memorialIdForEdit,
+  customBanners,
 }: {
   action: (formData: FormData) => void | Promise<void>;
   defaults: MemorialFormDefaults;
   /** When set, posts hidden `__memorialId` so the server action does not rely on `.bind()`. */
   memorialIdForEdit?: string;
+  customBanners?: Record<string, { label: string; url: string }>;
 }) {
   const [bannerPreset, setBannerPreset] = useState(defaults.bannerPreset);
+  const allBanners = { ...BANNER_PRESETS, ...customBanners };
 
   return (
     <form action={action} className="space-y-8">
@@ -224,7 +227,7 @@ export function MemorialForm({
               None
             </div>
           </label>
-          {Object.entries(BANNER_PRESETS).map(([key, preset]) => (
+          {Object.entries(allBanners).map(([key, preset]) => (
             <label
               key={key}
               className={`cursor-pointer overflow-hidden rounded-xl border-2 transition ${

@@ -4,6 +4,7 @@ import { DeleteMemorialForm } from "@/app/dashboard/memorials/delete-memorial-fo
 import { MemorialForm } from "@/app/dashboard/memorials/memorial-form";
 import { buildMemorialDefaults } from "@/app/dashboard/memorials/memorial-form-defaults";
 import { updateMemorialFromForm } from "@/app/dashboard/memorials/actions";
+import { getCustomBannerPresets } from "@/lib/ilm-banner-presets";
 import { getIlmSession } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 
@@ -24,6 +25,7 @@ export default async function EditMemorialPage({ params }: { params: { id: strin
   }
 
   const defaults = buildMemorialDefaults(memorial);
+  const customBanners = await getCustomBannerPresets();
 
   return (
     <section className="w-full">
@@ -49,7 +51,7 @@ export default async function EditMemorialPage({ params }: { params: { id: strin
         </Link>
       </p>
       <div className="dash-card-pad mt-10">
-        <MemorialForm action={updateMemorialFromForm} defaults={defaults} memorialIdForEdit={memorial.id} />
+        <MemorialForm action={updateMemorialFromForm} defaults={defaults} memorialIdForEdit={memorial.id} customBanners={customBanners} />
       </div>
       <div className="mt-16 border-t border-earth-200 pt-10">
         <h2 className="text-lg font-semibold text-earth-900">Danger zone</h2>

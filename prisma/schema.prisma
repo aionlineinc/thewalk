@@ -504,3 +504,14 @@ model IlmProductOrder {
   @@map("ilm_product_order")
   @@index([memorialId])
 }
+
+model IlmBannerPreset {
+  id         String   @id @default(uuid())
+  label      String
+  storageUrl String
+  sortOrder  Int      @default(0)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@map("ilm_banner_preset")
+}

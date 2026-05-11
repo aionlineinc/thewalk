@@ -9,6 +9,7 @@ const items = [
   { href: "/dashboard/admin/memorials", label: "Memorials", match: (p: string) => p.startsWith("/dashboard/admin/memorials") },
   { href: "/dashboard/admin/guestbook", label: "Guestbook", match: (p: string) => p.startsWith("/dashboard/admin/guestbook") },
   { href: "/dashboard/admin/prayers", label: "Prayers", match: (p: string) => p.startsWith("/dashboard/admin/prayers") },
+  { href: "/dashboard/admin/banners", label: "Banners", match: (p: string) => p.startsWith("/dashboard/admin/banners") },
 ];
 
 function navLinkClass(active: boolean) {

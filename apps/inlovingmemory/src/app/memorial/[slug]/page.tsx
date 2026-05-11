@@ -157,10 +157,22 @@ export default async function MemorialPage({ params, searchParams }: PageProps) 
     photoRows.find((p) => p.title === ILM_MEDIA_TITLE_PROFILE)?.storageUrl ?? null;
   const customBannerUrl =
     photoRows.find((p) => p.title === ILM_MEDIA_TITLE_BANNER)?.storageUrl ?? null;
-  const presetBannerUrl =
-    memorial.bannerPreset && BANNER_PRESETS[memorial.bannerPreset]
-      ? BANNER_PRESETS[memorial.bannerPreset].url
-      : null;
+
+  let presetBannerUrl: string | null = null;
+  if (memorial.bannerPreset) {
+    // Check built-in presets first
+    if (BANNER_PRESETS[memorial.bannerPreset]) {
+      presetBannerUrl = BANNER_PRESETS[memorial.bannerPreset].url;
+    } else if (memorial.bannerPreset.startsWith("custom:")) {
+      // Check custom preset in DB
+      const customId = memorial.bannerPreset.slice(7);
+      const customPreset = await prisma.ilmBannerPreset.findUnique({
+        where: { id: customId },
+        select: { storageUrl: true },
+      });
+      if (customPreset) presetBannerUrl = customPreset.storageUrl;
+    }
+  }
   const bannerUrl = customBannerUrl || presetBannerUrl;
   const galleryPhotos = photoRows.filter((p) => isGalleryPhotoTitle(p.title));
 

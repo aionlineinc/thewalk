@@ -2,6 +2,7 @@ import Link from "next/link";
 import { IlmMemorialKind, IlmPrivacyLevel } from "@prisma/client";
 import { createMemorial } from "@/app/dashboard/memorials/actions";
 import { MemorialForm } from "@/app/dashboard/memorials/memorial-form";
+import { getCustomBannerPresets } from "@/lib/ilm-banner-presets";
 
 export const metadata = {
   title: "New memorial · inLovingMemory",
@@ -26,7 +27,9 @@ const emptyDefaults = {
   tier: "BASIC",
 };
 
-export default function NewMemorialPage() {
+export default async function NewMemorialPage() {
+  const customBanners = await getCustomBannerPresets();
+
   return (
     <section className="w-full">
       <Link href="/dashboard" className="dash-link text-sm">
@@ -38,7 +41,7 @@ export default function NewMemorialPage() {
         when you save.
       </p>
       <div className="dash-card-pad mt-10">
-        <MemorialForm action={createMemorial} defaults={emptyDefaults} />
+        <MemorialForm action={createMemorial} defaults={emptyDefaults} customBanners={customBanners} />
       </div>
     </section>
   );
