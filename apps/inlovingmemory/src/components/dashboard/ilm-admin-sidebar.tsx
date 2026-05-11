@@ -10,6 +10,8 @@ const items = [
   { href: "/dashboard/admin/guestbook", label: "Guestbook", match: (p: string) => p.startsWith("/dashboard/admin/guestbook") },
   { href: "/dashboard/admin/prayers", label: "Prayers", match: (p: string) => p.startsWith("/dashboard/admin/prayers") },
   { href: "/dashboard/admin/banners", label: "Banners", match: (p: string) => p.startsWith("/dashboard/admin/banners") },
+  { href: "/dashboard/admin/events", label: "Events", match: (p: string) => p.startsWith("/dashboard/admin/events") },
+  { href: "/dashboard/admin/flowers", label: "Flowers", match: (p: string) => p.startsWith("/dashboard/admin/flowers") },
 ];
 
 function navLinkClass(active: boolean) {

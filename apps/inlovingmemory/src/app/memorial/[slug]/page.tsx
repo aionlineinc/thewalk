@@ -6,6 +6,8 @@ import { notFound } from "next/navigation";
 import { GuestbookPanel } from "@/components/memorial/guestbook-panel";
 import { MemorialCtaRow } from "@/components/memorial/memorial-cta-row";
 import { MemorialEventInfo } from "@/components/memorial/memorial-event-info";
+import { MemorialEventRsvpForm } from "@/components/memorial/memorial-event-rsvp-form";
+import { MemorialFlowersDonations } from "@/components/memorial/memorial-flowers-donations";
 import { MemorialHero } from "@/components/memorial/memorial-hero";
 import { MemorialOrderOfService } from "@/components/memorial/memorial-order-of-service";
 import { MemorialPhotoGallery } from "@/components/memorial/memorial-photo-gallery";
@@ -102,6 +104,7 @@ export default async function MemorialPage({ params, searchParams }: PageProps) 
     events,
     pamphlets,
     guestMedia,
+    flowerDonations,
   ] = await Promise.all([
     prisma.ilmGuestbookEntry.findMany({
       where: { memorialId: memorial.id, status: IlmSubmissionStatus.APPROVED },
@@ -146,7 +149,7 @@ export default async function MemorialPage({ params, searchParams }: PageProps) 
     prisma.ilmEvent.findMany({
       where: { memorialId: memorial.id },
       orderBy: { startsAt: "asc" },
-      select: { id: true, kind: true, title: true, startsAt: true, venue: true, notes: true, streamUrl: true },
+      select: { id: true, kind: true, title: true, startsAt: true, venue: true, address: true, mapUrl: true, officiant: true, programDetails: true, notes: true, streamUrl: true },
     }),
     prisma.ilmPamphlet.findFirst({
       where: { memorialId: memorial.id },
@@ -161,6 +164,11 @@ export default async function MemorialPage({ params, searchParams }: PageProps) 
       orderBy: { createdAt: "desc" },
       select: { id: true, storageUrl: true, kind: true, authorGuestName: true, createdAt: true },
       take: 50,
+    }),
+    prisma.ilmFlowerDonation.findMany({
+      where: { memorialId: memorial.id },
+      orderBy: { sortOrder: "asc" },
+      select: { id: true, label: true, url: true, description: true, kind: true },
     }),
   ]);
 
@@ -407,13 +415,18 @@ export default async function MemorialPage({ params, searchParams }: PageProps) 
         <>
           <MemorialOrderOfService pdfUrl={pamphlets?.pdfUrl} />
 
+          <MemorialEventInfo events={serviceEvents} />
+
+          <MemorialFlowersDonations items={flowerDonations} />
+
           {funeralVideos.length > 0 ? (
             <MemorialVideos videos={funeralVideos} />
           ) : null}
 
-          {serviceEvents.length > 0 ? (
-            <MemorialEventInfo events={serviceEvents} />
-          ) : null}
+          <MemorialEventRsvpForm
+            eventIds={serviceEvents.map((e) => e.id)}
+            memorialSlug={memorial.slug}
+          />
 
           <section id="guestbook" className="ilm-container mt-12">
             <GuestbookPanel

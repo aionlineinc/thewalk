@@ -249,6 +249,7 @@ model IlmMemorial {
   pamphlets        IlmPamphlet[]
   griefRequests    IlmGriefRequest[]
   generationsVault IlmGenerationsVault?
+  flowerDonations  IlmFlowerDonation[]
   productOrders    IlmProductOrder[]
 
   createdAt DateTime @default(now())
@@ -323,8 +324,14 @@ model IlmEvent {
   startsAt   DateTime?
   endsAt     DateTime?
   venue      String?
+  address    String?
+  mapUrl     String?
+  officiant  String?
+  programDetails String? @db.Text
   streamUrl  String?
   notes      String?     @db.Text
+
+  rsvps      IlmEventRsvp[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -514,4 +521,34 @@ model IlmBannerPreset {
   updatedAt  DateTime @updatedAt
 
   @@map("ilm_banner_preset")
+}
+
+model IlmFlowerDonation {
+  id          String   @id @default(uuid())
+  memorialId  String
+  memorial    IlmMemorial @relation(fields: [memorialId], references: [id], onDelete: Cascade)
+  label       String
+  url         String?
+  description String?  @db.Text
+  kind        String   @default("FLOWERS")
+  sortOrder   Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("ilm_flower_donation")
+  @@index([memorialId])
+}
+
+model IlmEventRsvp {
+  id         String   @id @default(uuid())
+  eventId    String
+  event      IlmEvent @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  guestName  String
+  guestEmail String?
+  guestCount Int      @default(1)
+  message    String?  @db.Text
+  createdAt  DateTime @default(now())
+
+  @@map("ilm_event_rsvp")
+  @@index([eventId])
 }
