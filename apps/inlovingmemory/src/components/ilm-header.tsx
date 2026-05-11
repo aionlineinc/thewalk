@@ -33,6 +33,7 @@ function CloseIcon({ className }: { className?: string }) {
 
 export function IlmHeader({ session }: { session: Session | null }) {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [activeMenu, setActiveMenu] = useState<string | null>(null);
   const role = (session?.user as { role?: string } | undefined)?.role;
   const isStaff = !!role && STAFF_ROLES.has(role);
   const isSignedIn = !!session?.user;
@@ -114,26 +115,76 @@ export function IlmHeader({ session }: { session: Session | null }) {
               />
             </Link>
 
-            {/* Desktop nav */}
-            <nav className="hidden md:flex items-center gap-5 text-sm" aria-label="Primary">
-              <Link className="font-medium text-white/80 transition hover:text-white" href="/how-it-works">How it works</Link>
-              <Link className="font-medium text-white/80 transition hover:text-white" href="/directory">Find a memorial</Link>
-              <Link className="font-medium text-white/80 transition hover:text-white" href="/services">Services</Link>
-              {isSignedIn ? (
-                <>
-                  <Link className="font-medium text-white/80 transition hover:text-white" href="/dashboard">Dashboard</Link>
-                  {isStaff ? (
-                    <Link className="font-medium text-white/80 transition hover:text-white" href="/dashboard/admin">Admin</Link>
-                  ) : null}
-                  <SignOutButton className="text-sm font-medium text-white/70 underline-offset-4 transition hover:text-white hover:underline" />
-                </>
-              ) : (
-                <>
-                  <Link className="font-medium text-white/80 transition hover:text-white" href="/pricing">Pricing</Link>
-                  <Link className="font-medium text-white/80 transition hover:text-white" href="/sign-in">Sign in</Link>
-                </>
-              )}
-            </nav>
+            {/* Desktop nav with mega menu */}
+            <div className="relative hidden md:block" onMouseLeave={() => setActiveMenu(null)}>
+              <nav className="flex items-center gap-1 text-sm" aria-label="Primary">
+                <Link className="rounded-full px-3 py-2 font-medium text-white/80 transition hover:bg-white/10 hover:text-white" href="/how-it-works">How it works</Link>
+                <Link className="rounded-full px-3 py-2 font-medium text-white/80 transition hover:bg-white/10 hover:text-white" href="/directory">Find a memorial</Link>
+                <button
+                  type="button"
+                  className="rounded-full px-3 py-2 font-medium text-white/80 transition hover:bg-white/10 hover:text-white"
+                  onMouseEnter={() => setActiveMenu("services")}
+                  aria-expanded={activeMenu === "services"}
+                >
+                  Services
+                  <svg className={`ml-1 inline h-3 w-3 transition-transform ${activeMenu === "services" ? "rotate-180" : ""}`} fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" /></svg>
+                </button>
+                <button
+                  type="button"
+                  className="rounded-full px-3 py-2 font-medium text-white/80 transition hover:bg-white/10 hover:text-white"
+                  onMouseEnter={() => setActiveMenu("more")}
+                  aria-expanded={activeMenu === "more"}
+                >
+                  More
+                  <svg className={`ml-1 inline h-3 w-3 transition-transform ${activeMenu === "more" ? "rotate-180" : ""}`} fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" /></svg>
+                </button>
+                {isSignedIn ? (
+                  <>
+                    <Link className="rounded-full px-3 py-2 font-medium text-white/80 transition hover:bg-white/10 hover:text-white" href="/dashboard">Dashboard</Link>
+                    {isStaff ? (
+                      <Link className="rounded-full px-3 py-2 font-medium text-white/80 transition hover:bg-white/10 hover:text-white" href="/dashboard/admin">Admin</Link>
+                    ) : null}
+                    <SignOutButton className="ml-2 text-sm font-medium text-white/60 underline-offset-4 transition hover:text-white hover:underline" />
+                  </>
+                ) : (
+                  <Link className="rounded-full bg-white/10 px-4 py-2 font-medium text-white transition hover:bg-white/20" href="/sign-in">Sign in</Link>
+                )}
+              </nav>
+
+              {/* Mega menu panel */}
+              <div
+                className={`absolute left-1/2 top-full z-30 w-[min(48rem,calc(100vw-2rem))] -translate-x-1/2 pt-3 transition-all duration-200 ${
+                  activeMenu ? "visible opacity-100 pointer-events-auto" : "invisible opacity-0 pointer-events-none"
+                }`}
+              >
+                <div className="overflow-hidden rounded-2xl border border-white/10 bg-[#12100e] shadow-2xl shadow-black/50">
+                  {activeMenu === "services" && (
+                    <div className="grid gap-1 p-4 sm:grid-cols-2">
+                      <Link href="/services?category=flowers" onClick={() => setActiveMenu(null)} className="rounded-xl px-4 py-3 text-sm font-medium text-white/80 transition hover:bg-white/5 hover:text-white">Florists</Link>
+                      <Link href="/services?category=funeral-home" onClick={() => setActiveMenu(null)} className="rounded-xl px-4 py-3 text-sm font-medium text-white/80 transition hover:bg-white/5 hover:text-white">Funeral Homes</Link>
+                      <Link href="/services?category=church" onClick={() => setActiveMenu(null)} className="rounded-xl px-4 py-3 text-sm font-medium text-white/80 transition hover:bg-white/5 hover:text-white">Churches</Link>
+                      <Link href="/services?category=videographer" onClick={() => setActiveMenu(null)} className="rounded-xl px-4 py-3 text-sm font-medium text-white/80 transition hover:bg-white/5 hover:text-white">Videographers</Link>
+                      <Link href="/services?category=graphics" onClick={() => setActiveMenu(null)} className="rounded-xl px-4 py-3 text-sm font-medium text-white/80 transition hover:bg-white/5 hover:text-white">Graphics & Printing</Link>
+                      <Link href="/services?category=counsellor" onClick={() => setActiveMenu(null)} className="rounded-xl px-4 py-3 text-sm font-medium text-white/80 transition hover:bg-white/5 hover:text-white">Counsellors</Link>
+                      <Link href="/services?category=caregiver" onClick={() => setActiveMenu(null)} className="rounded-xl px-4 py-3 text-sm font-medium text-white/80 transition hover:bg-white/5 hover:text-white">Care Givers</Link>
+                      <Link href="/services?category=hospice" onClick={() => setActiveMenu(null)} className="rounded-xl px-4 py-3 text-sm font-medium text-white/80 transition hover:bg-white/5 hover:text-white">Hospice Services</Link>
+                      <div className="col-span-full mt-2 border-t border-white/10 pt-2">
+                        <Link href="/services" onClick={() => setActiveMenu(null)} className="block rounded-xl px-4 py-3 text-sm font-semibold text-calm-400 transition hover:bg-white/5">All services →</Link>
+                      </div>
+                    </div>
+                  )}
+                  {activeMenu === "more" && (
+                    <div className="grid gap-1 p-4 sm:grid-cols-2">
+                      <Link href="/about" onClick={() => setActiveMenu(null)} className="rounded-xl px-4 py-3 text-sm font-medium text-white/80 transition hover:bg-white/5 hover:text-white">About</Link>
+                      <Link href="/faq" onClick={() => setActiveMenu(null)} className="rounded-xl px-4 py-3 text-sm font-medium text-white/80 transition hover:bg-white/5 hover:text-white">FAQ</Link>
+                      <Link href="/resources" onClick={() => setActiveMenu(null)} className="rounded-xl px-4 py-3 text-sm font-medium text-white/80 transition hover:bg-white/5 hover:text-white">Resources</Link>
+                      <Link href="/pricing" onClick={() => setActiveMenu(null)} className="rounded-xl px-4 py-3 text-sm font-medium text-white/80 transition hover:bg-white/5 hover:text-white">Pricing</Link>
+                      <Link href="/services/register" onClick={() => setActiveMenu(null)} className="rounded-xl px-4 py-3 text-sm font-medium text-white/80 transition hover:bg-white/5 hover:text-white">Register as provider</Link>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
 
             {/* Mobile hamburger */}
             <button
