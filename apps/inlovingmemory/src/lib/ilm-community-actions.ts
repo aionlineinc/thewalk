@@ -134,3 +134,52 @@ export async function submitPrayerFromForm(formData: FormData) {
   if (!slug) redirect("/?prayer=invalid");
   return submitPrayer(slug, formData);
 }
+
+export async function submitVideoEulogy(slug: string, formData: FormData) {
+  const videoUrl = (formData.get("videoUrl") as string)?.trim();
+  const authorName = (formData.get("authorName") as string)?.trim();
+  const message = (formData.get("message") as string)?.trim();
+
+  if (!videoUrl || !authorName) {
+    redirect(`/memorial/${slug}?video=invalid`);
+  }
+
+  // Validate it's a YouTube or Vimeo URL
+  let u: URL;
+  try { u = new URL(videoUrl); } catch {
+    redirect(`/memorial/${slug}?video=invalid`);
+  }
+  const isYouTube = u.hostname.includes("youtube.com") || u.hostname === "youtu.be";
+  const isVimeo = u.hostname.includes("vimeo.com");
+  if (!isYouTube && !isVimeo) {
+    redirect(`/memorial/${slug}?video=invalid`);
+  }
+
+  const memorial = await prisma.ilmMemorial.findUnique({
+    where: { slug },
+    select: { id: true, privacyLevel: true },
+  });
+
+  if (!memorial || memorial.privacyLevel !== "PUBLIC") {
+    redirect(`/memorial/${slug}?video=closed`);
+  }
+
+  await prisma.ilmMedia.create({
+    data: {
+      memorialId: memorial.id,
+      kind: "VIDEO",
+      storageUrl: videoUrl,
+      authorGuestName: authorName,
+      title: message || null,
+      status: "PENDING",
+    },
+  });
+
+  revalidatePath(`/memorial/${slug}`);
+}
+
+export async function submitVideoEulogyFromForm(formData: FormData) {
+  const slug = (formData.get("__ilmSlug") as string)?.trim();
+  if (!slug) redirect("/");
+  return submitVideoEulogy(slug, formData);
+}

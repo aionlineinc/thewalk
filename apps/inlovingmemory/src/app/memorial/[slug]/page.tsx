@@ -14,7 +14,8 @@ import { MemorialPhotoGallery } from "@/components/memorial/memorial-photo-galle
 import { MemorialSectionNav } from "@/components/memorial/memorial-section-nav";
 import { MemorialSharedMemories } from "@/components/memorial/memorial-shared-memories";
 import { MemorialSpecialRequest } from "@/components/memorial/memorial-special-request";
-import { MemorialVideos } from "@/components/memorial/memorial-videos";
+import { MemorialVideoTributes } from "@/components/memorial/memorial-video-tributes";
+import { MemorialVideos, toEmbedUrl } from "@/components/memorial/memorial-videos";
 import { PrayerPanel } from "@/components/memorial/prayer-panel";
 import { getIlmSession } from "@/lib/auth";
 import {
@@ -105,6 +106,7 @@ export default async function MemorialPage({ params, searchParams }: PageProps) 
     pamphlets,
     guestMedia,
     flowerDonations,
+    videoTributes,
   ] = await Promise.all([
     prisma.ilmGuestbookEntry.findMany({
       where: { memorialId: memorial.id, status: IlmSubmissionStatus.APPROVED },
@@ -169,6 +171,17 @@ export default async function MemorialPage({ params, searchParams }: PageProps) 
       where: { memorialId: memorial.id },
       orderBy: { sortOrder: "asc" },
       select: { id: true, label: true, url: true, description: true, kind: true },
+    }),
+    prisma.ilmMedia.findMany({
+      where: {
+        memorialId: memorial.id,
+        kind: IlmMediaKind.VIDEO,
+        authorGuestName: { not: null },
+        status: IlmSubmissionStatus.APPROVED,
+      },
+      orderBy: { createdAt: "desc" },
+      select: { id: true, storageUrl: true, authorGuestName: true, createdAt: true },
+      take: 20,
     }),
   ]);
 
@@ -394,6 +407,8 @@ export default async function MemorialPage({ params, searchParams }: PageProps) 
 
           <MemorialSharedMemories media={guestMedia} />
 
+          <MemorialVideoTributes tributes={videoTributes} />
+
           <section id="gallery" className="ilm-container mt-12">
             <MemorialPhotoGallery photos={galleryPhotos} />
           </section>
@@ -414,6 +429,38 @@ export default async function MemorialPage({ params, searchParams }: PageProps) 
       {isFuneralTab ? (
         <>
           <MemorialOrderOfService pdfUrl={pamphlets?.pdfUrl} />
+
+          {/* Livestream */}
+          {serviceEvents.filter((e) => e.streamUrl).length > 0 ? (
+            <section className="ilm-container mt-8">
+              <h2 className="text-xl font-semibold tracking-tight text-earth-900">Livestream</h2>
+              <div className="mt-6 space-y-6">
+                {serviceEvents
+                  .filter((e) => e.streamUrl)
+                  .map((e) => {
+                    const embedUrl = toEmbedUrl(e.streamUrl!);
+                    if (!embedUrl) return null;
+                    return (
+                      <div key={e.id} className="overflow-hidden rounded-2xl border border-earth-200 shadow-sm">
+                        <div className="relative aspect-video w-full bg-earth-900">
+                          <iframe
+                            src={embedUrl}
+                            title={e.title ?? "Livestream"}
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowFullScreen
+                            className="absolute inset-0 h-full w-full"
+                            loading="lazy"
+                          />
+                        </div>
+                        {e.title ? (
+                          <p className="bg-white px-4 py-2 text-sm font-medium text-earth-800">{e.title}</p>
+                        ) : null}
+                      </div>
+                    );
+                  })}
+              </div>
+            </section>
+          ) : null}
 
           <MemorialEventInfo events={serviceEvents} />
 

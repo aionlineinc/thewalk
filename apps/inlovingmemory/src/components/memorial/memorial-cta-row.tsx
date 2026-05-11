@@ -13,7 +13,7 @@ type Props = {
   memorialSlug?: string;
 };
 
-type Tab = "Photos" | "Story" | "Audio";
+type Tab = "Photos" | "Story" | "Audio" | "Video";
 
 const PHOTO_TYPES = ["image/jpeg", "image/png", "image/webp", "image/gif"];
 const AUDIO_TYPES = ["audio/mpeg", "audio/mp4", "audio/wav", "audio/webm"];
@@ -22,7 +22,7 @@ export function MemorialCtaRow({ shareUrl, showContribute, primaryColor, accentC
   const [open, setOpen] = useState(false);
   const [tab, setTab] = useState<Tab>("Photos");
 
-  const tabs = useMemo(() => ["Photos", "Story", "Audio"] as const, []);
+  const tabs = useMemo(() => ["Photos", "Story", "Audio", "Video"] as const, []);
 
   return (
     <>
@@ -79,6 +79,7 @@ export function MemorialCtaRow({ shareUrl, showContribute, primaryColor, accentC
           {tab === "Photos" ? <PhotosTab memorialSlug={memorialSlug} /> : null}
           {tab === "Story" ? <StoryTab memorialSlug={memorialSlug} /> : null}
           {tab === "Audio" ? <AudioTab memorialSlug={memorialSlug} /> : null}
+          {tab === "Video" ? <VideoTab memorialSlug={memorialSlug} /> : null}
         </div>
       </Modal>
     </>
@@ -276,5 +277,44 @@ function AudioTab({ memorialSlug }: { memorialSlug?: string }) {
         {busy ? "Uploading…" : "Upload audio"}
       </button>
     </div>
+  );
+}
+
+/* ── Video Tab ─────────────────────────────────────── */
+
+function VideoTab({ memorialSlug }: { memorialSlug?: string }) {
+  const [done, setDone] = useState(false);
+
+  if (done) {
+    return <p className="rounded-lg border border-earth-200 bg-earth-50 px-4 py-3 text-sm text-earth-800">Thank you — your video tribute was received and will appear after the page moderator approves it.</p>;
+  }
+
+  return (
+    <form
+      action={async (formData) => {
+        const { submitVideoEulogyFromForm } = await import("@/lib/ilm-community-actions");
+        await submitVideoEulogyFromForm(formData);
+        setDone(true);
+      }}
+      className="space-y-4"
+    >
+      <input type="hidden" name="__ilmSlug" value={memorialSlug ?? ""} />
+      <div>
+        <label className="block text-sm font-medium text-earth-800">Your name</label>
+        <input name="authorName" required maxLength={120} className="mt-1.5 w-full rounded-lg border border-earth-200 bg-white px-3 py-2 text-sm text-earth-900 outline-none focus:border-calm-500 focus:ring-2 focus:ring-calm-500/20" />
+      </div>
+      <div>
+        <label className="block text-sm font-medium text-earth-800">YouTube or Vimeo URL</label>
+        <input name="videoUrl" type="url" required maxLength={500} placeholder="https://youtube.com/watch?v=… or https://vimeo.com/…" className="mt-1.5 w-full rounded-lg border border-earth-200 bg-white px-3 py-2 text-sm text-earth-900 outline-none focus:border-calm-500 focus:ring-2 focus:ring-calm-500/20" />
+        <p className="mt-1 text-xs text-earth-500">Paste a link to your video on YouTube or Vimeo.</p>
+      </div>
+      <div>
+        <label className="block text-sm font-medium text-earth-800">Message <span className="font-normal text-earth-500">(optional)</span></label>
+        <textarea name="message" rows={3} maxLength={1000} className="mt-1.5 w-full rounded-lg border border-earth-200 bg-white px-3 py-2 text-sm text-earth-900 outline-none focus:border-calm-500 focus:ring-2 focus:ring-calm-500/20" />
+      </div>
+      <button type="submit" className="rounded-lg bg-earth-800 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-earth-900">
+        Submit video
+      </button>
+    </form>
   );
 }
