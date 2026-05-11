@@ -30,6 +30,9 @@ export function IlmHeader({ session }: { session: Session | null }) {
             <Link className="font-medium text-white/80 transition hover:text-white" href="/directory">
               Find a memorial
             </Link>
+            <Link className="font-medium text-white/80 transition hover:text-white" href="/services">
+              Services
+            </Link>
           {session?.user ? (
             <>
               <Link className="font-medium text-white/80 transition hover:text-white" href="/dashboard">

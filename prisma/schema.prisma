@@ -12,6 +12,7 @@ enum UserRole {
   ORG_ADMIN
   ORG_MANAGER
   MEMBER
+  VENDOR
 }
 
 enum GroupRegistrationStatus {
@@ -40,6 +41,7 @@ model User {
   ilmGriefRequests            IlmGriefRequest[]           @relation("IlmGriefRequester")
   ilmVaultMemberships         IlmVaultMember[]
   ilmOrgAccountsAdmin         IlmOrgAccount[]             @relation("IlmOrgAdmin")
+  serviceProvider             IlmServiceProvider?
   platformAppEntitlements     UserApplicationEntitlement[]
 
   createdAt DateTime @default(now())
@@ -250,6 +252,7 @@ model IlmMemorial {
   griefRequests    IlmGriefRequest[]
   generationsVault IlmGenerationsVault?
   flowerDonations  IlmFlowerDonation[]
+  serviceOrders    IlmServiceOrder[]
   productOrders    IlmProductOrder[]
 
   createdAt DateTime @default(now())
@@ -551,4 +554,61 @@ model IlmEventRsvp {
 
   @@map("ilm_event_rsvp")
   @@index([eventId])
+}
+
+model IlmServiceCategory {
+  id        String   @id @default(uuid())
+  slug      String   @unique
+  label     String
+  sortOrder Int      @default(0)
+  vendors   IlmServiceProvider[]
+
+  @@map("ilm_service_category")
+}
+
+model IlmServiceProvider {
+  id          String   @id @default(uuid())
+  userId      String?  @unique
+  user        User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  categoryId  String
+  category    IlmServiceCategory @relation(fields: [categoryId], references: [id])
+  name        String
+  slug        String   @unique
+  description String?  @db.Text
+  location    String?
+  phone       String?
+  email       String?
+  website     String?
+  photoUrl    String?
+  pricingJson Json?
+  isActive    Boolean  @default(true)
+  orders      IlmServiceOrder[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("ilm_service_provider")
+  @@index([categoryId])
+}
+
+model IlmServiceOrder {
+  id              String   @id @default(uuid())
+  providerId      String
+  provider        IlmServiceProvider @relation(fields: [providerId], references: [id])
+  memorialId      String?
+  memorial        IlmMemorial? @relation(fields: [memorialId], references: [id], onDelete: SetNull)
+  customerName    String
+  customerEmail   String
+  customerPhone   String?
+  description     String?  @db.Text
+  amount          Float?
+  status          String   @default("PENDING")
+  stripePaymentIntentId String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("ilm_service_order")
+  @@index([providerId])
+  @@index([memorialId])
 }
