@@ -68,7 +68,7 @@ const STEPS = [
   },
 ] as const;
 
-const RAIL_TOP_CLASSES = "top-[calc(13rem+2.75rem+1.5rem)]";
+const RAIL_TOP_CLASSES = "top-[18.75rem]";
 
 export function IlmJourneyCards() {
   const sectionRef = useRef<HTMLElement>(null);
