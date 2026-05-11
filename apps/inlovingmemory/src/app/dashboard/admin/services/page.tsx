@@ -5,6 +5,45 @@ import { prisma } from "@/lib/prisma";
 
 export const metadata = { title: "Services · Admin · inLovingMemory" };
 
+const DEFAULT_CATEGORIES = [
+  { slug: "flowers", label: "Flowers" },
+  { slug: "funeral-home", label: "Funeral Homes" },
+  { slug: "church", label: "Churches" },
+  { slug: "videographer", label: "Videographers" },
+  { slug: "graphics", label: "Graphics & Printing" },
+  { slug: "counsellor", label: "Counsellors" },
+  { slug: "caregiver", label: "Care Givers" },
+  { slug: "hospice", label: "Hospice Services" },
+];
+
+async function seedCategories() {
+  const count = await prisma.ilmServiceCategory.count();
+  if (count > 0) return;
+  for (let i = 0; i < DEFAULT_CATEGORIES.length; i++) {
+    await prisma.ilmServiceCategory.create({ data: { ...DEFAULT_CATEGORIES[i], sortOrder: i + 1 } });
+  }
+}
+
+async function createCategory(formData: FormData) {
+  "use server";
+  await requireStaffSession();
+  const label = (formData.get("label") as string)?.trim();
+  const slug = (formData.get("slug") as string)?.trim()?.toLowerCase().replace(/[^a-z0-9-]+/g, "-");
+  if (!label || !slug) return;
+  await prisma.ilmServiceCategory.create({ data: { label, slug } });
+  revalidatePath("/dashboard/admin/services");
+  redirect("/dashboard/admin/services");
+}
+
+async function deleteCategory(formData: FormData) {
+  "use server";
+  await requireStaffSession();
+  const id = (formData.get("id") as string)?.trim();
+  if (id) await prisma.ilmServiceCategory.delete({ where: { id } });
+  revalidatePath("/dashboard/admin/services");
+  redirect("/dashboard/admin/services");
+}
+
 async function createProvider(formData: FormData) {
   "use server";
   await requireStaffSession();
@@ -64,6 +103,7 @@ async function linkUser(formData: FormData) {
 
 export default async function AdminServicesPage() {
   await requireStaffSession();
+  await seedCategories();
 
   const [providers, categories] = await Promise.all([
     prisma.ilmServiceProvider.findMany({
@@ -160,6 +200,27 @@ export default async function AdminServicesPage() {
             </li>
           ))}
         </ul>
+      </div>
+
+      {/* Categories */}
+      <div className="dash-card-pad mt-10">
+        <h2 className="text-lg font-semibold text-earth-900">Manage categories</h2>
+        <form action={createCategory} className="mt-4 flex gap-3">
+          <input name="label" required maxLength={100} placeholder="Label (e.g. Florists)" className="flex-1 rounded-lg border border-earth-200 bg-white px-3 py-2 text-sm" />
+          <input name="slug" required maxLength={100} placeholder="slug (e.g. florists)" className="w-40 rounded-lg border border-earth-200 bg-white px-3 py-2 text-sm" />
+          <button type="submit" className="rounded-lg bg-earth-800 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-earth-900">Add</button>
+        </form>
+        <div className="mt-4 flex flex-wrap gap-2">
+          {categories.map((c) => (
+            <span key={c.id} className="inline-flex items-center gap-1 rounded-full border border-earth-200 bg-white px-3 py-1 text-sm text-earth-700">
+              {c.label}
+              <form action={deleteCategory} className="inline-flex">
+                <input type="hidden" name="id" value={c.id} />
+                <button type="submit" className="ml-1 text-earth-400 hover:text-red-600">&times;</button>
+              </form>
+            </span>
+          ))}
+        </div>
       </div>
     </section>
   );
