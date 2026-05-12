@@ -27,20 +27,22 @@ export default async function AboutPage() {
         <div className="relative z-10 ilm-container pb-12 pt-28 md:pb-16">
           <p className="text-xs font-semibold uppercase tracking-[0.28em] text-white/55">About</p>
           <h1 className="mt-3 text-4xl font-medium tracking-tight text-white md:text-[50px] md:leading-[1.1]">{content.about.title}</h1>
-          <p className="mt-4 max-w-xl text-base font-light leading-relaxed text-white/70 md:text-lg">{content.about.body}</p>
-          <div className="mt-8 flex flex-wrap gap-4">
-            {content.about.links.map((l, idx) => (
-              <ButtonLink key={l.href} href={l.href} variant={idx === 0 ? "primary" : "outline"}>
-                {l.label}
-              </ButtonLink>
-            ))}
-          </div>
         </div>
       </section>
 
-      {/* Value cards */}
+      {/* Content */}
       <section className="ilm-container py-14">
-        <div className="grid gap-6 md:grid-cols-2">
+        <p className="max-w-2xl text-lg leading-relaxed text-earth-800">{content.about.body}</p>
+        <div className="mt-8 flex flex-wrap gap-4">
+          {content.about.links.map((l, idx) => (
+            <ButtonLink key={l.href} href={l.href} variant={idx === 0 ? "primary" : "outline"}>
+              {l.label}
+            </ButtonLink>
+          ))}
+        </div>
+
+        {/* Value cards */}
+        <div className="mt-16 grid gap-6 md:grid-cols-2">
           <div className="rounded-2xl border border-earth-200 bg-white px-6 py-6 shadow-sm">
             <p className="text-xs font-semibold uppercase tracking-wide text-earth-500">The service</p>
             <h2 className="mt-2 text-xl font-semibold text-earth-900">Honor the moment</h2>

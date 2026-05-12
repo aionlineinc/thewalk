@@ -139,13 +139,31 @@ export function IlmHeader({ session }: { session: Session | null }) {
                   <svg className={`ml-1 inline h-3 w-3 transition-transform ${activeMenu === "more" ? "rotate-180" : ""}`} fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" /></svg>
                 </button>
                 {isSignedIn ? (
-                  <>
-                    <Link className="rounded-full px-3 py-2 font-medium text-white/80 transition hover:bg-white/10 hover:text-white" href="/dashboard">Dashboard</Link>
-                    {isStaff ? (
-                      <Link className="rounded-full px-3 py-2 font-medium text-white/80 transition hover:bg-white/10 hover:text-white" href="/dashboard/admin">Admin</Link>
+                  <div className="relative" onMouseEnter={() => setActiveMenu("account")} onMouseLeave={() => setActiveMenu(null)}>
+                    <button
+                      type="button"
+                      className="flex items-center gap-2 rounded-full px-3 py-2 font-medium text-white/80 transition hover:bg-white/10 hover:text-white"
+                      aria-expanded={activeMenu === "account"}
+                    >
+                      <svg className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+                      </svg>
+                      <svg className={`h-3 w-3 transition-transform ${activeMenu === "account" ? "rotate-180" : ""}`} fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" /></svg>
+                    </button>
+                    {activeMenu === "account" ? (
+                      <div className="absolute right-0 top-full z-30 w-48 pt-2">
+                        <div className="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-xl">
+                          <Link href="/dashboard" onClick={() => setActiveMenu(null)} className="block px-4 py-3 text-sm font-medium text-gray-700 transition hover:bg-gray-50">Dashboard</Link>
+                          {isStaff ? (
+                            <Link href="/dashboard/admin" onClick={() => setActiveMenu(null)} className="block px-4 py-3 text-sm font-medium text-gray-700 transition hover:bg-gray-50">Admin</Link>
+                          ) : null}
+                          <div className="border-t border-gray-100">
+                            <SignOutButton className="block w-full px-4 py-3 text-left text-sm font-medium text-gray-500 transition hover:bg-gray-50 hover:text-gray-700" />
+                          </div>
+                        </div>
+                      </div>
                     ) : null}
-                    <SignOutButton className="ml-2 text-sm font-medium text-white/60 underline-offset-4 transition hover:text-white hover:underline" />
-                  </>
+                  </div>
                 ) : (
                   <Link className="rounded-full bg-white/10 px-4 py-2 font-medium text-white transition hover:bg-white/20" href="/sign-in">Sign in</Link>
                 )}
