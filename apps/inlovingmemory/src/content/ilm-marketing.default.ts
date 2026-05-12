@@ -49,7 +49,17 @@ export type IlmMarketingContent = {
     panelImageUrl: string;
     quote: string;
   };
-  about: { title: string; body: string; links: IlmMarketingLink[] };
+  about: {
+    title: string;
+    body: string;
+    links: IlmMarketingLink[];
+    heroImage?: string;
+    story?: { heading: string; body: string };
+    belief?: { heading: string; body: string; verse: string; verseRef: string };
+    offering?: { heading: string; body: string };
+    connection?: { heading: string; body: string; cta: IlmMarketingLink };
+    closing?: { heading: string; primaryCta: IlmMarketingLink; secondaryCta: IlmMarketingLink };
+  };
   howItWorks: { title: string; intro: string; steps: { title: string; body: string }[]; links: IlmMarketingLink[] };
   pricing: { title: string; intro: string; tiers: { name: string; summary: string; bullets: string[] }[] };
   faq: { title: string; intro: string; items: { q: string; a: string }[] };
@@ -139,13 +149,34 @@ export const ilmMarketingDefault: IlmMarketingContent = {
   },
 
   about: {
-    title: "More than a memorial platform",
-    body:
-      "inLovingMemory was born out of theWalk Ministries' conviction that every life deserves to be honoured with dignity, remembered with love, and preserved with intention. We are a community of remembrance, grief support, and generational legacy. Powered by theWalk Ministries Int'l, we connect the bereaved to pastoral care, grief counselling, prayer, and community — because grief was never meant to be faced alone. This is where the end of one walk becomes the foundation of another.",
-    links: [
-      { label: "How it works", href: "/how-it-works" },
-      { label: "View pricing", href: "/pricing" },
-    ],
+    title: "Every life deserves to be remembered. Every family deserves to be supported.",
+    body: "inLovingMemory was born from a simple conviction: that the end of a walk is not the end of a story.",
+    heroImage: "https://images.unsplash.com/photo-1475776408506-9a5371e7a068?w=1920&q=85",
+    links: [],
+    story: {
+      heading: "Where we come from.",
+      body: "inLovingMemory was born out of theWalk Ministries' conviction that every life lived in faith — and every life lived at all — deserves to be honoured with dignity, remembered with love, and preserved with intention.\n\nWe watched families struggle to find a single, beautiful, lasting place for their grief and their gratitude. We watched funeral homes serve families under pressure with limited digital tools. We watched ministers and counsellors reach for something more connected, more whole.\n\nSo we built it.\n\ninLovingMemory is not a product that happened to find a market. It is a ministry that became a platform — shaped by pastoral care, built for human dignity, and grounded in the belief that how we remember those we love says everything about who we are.",
+    },
+    belief: {
+      heading: "We believe every walk matters.",
+      body: "We are shaped by theWalk Ministries' understanding of life as a journey — a walk — with purpose, with community, and with a destination that exceeds this world. Death, in this frame, is not the end of a story. It is the close of one chapter and the opening of another.\n\nEvery memorial on this platform is therefore not simply a record of loss. It is the honouring of a walk well taken. A testimony. A gift to those who follow.",
+      verse: "Precious in the sight of the Lord is the death of his faithful servants.",
+      verseRef: "Psalm 116:15",
+    },
+    offering: {
+      heading: "More than a memorial. A living legacy.",
+      body: "We are more than a memorial platform. We are remembrance, grief support, and generational legacy.\n\nWhen you create a memorial here, you are not simply marking an end — you are protecting a beginning. A legacy that speaks to children not yet born, to family members not yet found, and to a community that carries someone's story forward.\n\nWe connect the bereaved to pastoral care, grief counselling, prayer, and community — because grief was never meant to be faced alone.\n\nThis is where the end of one walk becomes the foundation of another.",
+    },
+    connection: {
+      heading: "Rooted in theWalk Ministries.",
+      body: "inLovingMemory is a ministry of theWalk Ministries Int'l — a global community committed to discipleship, care, and the transformation of lives. Through theWalk, every memorial on this platform is connected to a network of ministers, counsellors, and prayer teams ready to walk with grieving families.\n\nWhen you use inLovingMemory, you are not just accessing a website. You are stepping into a community.",
+      cta: { label: "Learn about theWalk Ministries", href: "https://thewalk.org" },
+    },
+    closing: {
+      heading: "Their story starts here.",
+      primaryCta: { label: "Create a Free Memorial", href: "/dashboard/memorials/new" },
+      secondaryCta: { label: "Contact Us", href: "/resources" },
+    },
   },
 
   howItWorks: {
