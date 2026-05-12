@@ -45,7 +45,7 @@ export default async function AboutPage() {
             <p className="text-xs font-semibold uppercase tracking-wide text-earth-500">The service</p>
             <h2 className="mt-2 text-xl font-semibold text-earth-900">Honor the moment</h2>
             <p className="mt-3 text-sm leading-relaxed text-earth-700">
-              A memorial page ready before the day — service details, a digital program, and a gathering place for family who couldn't be there in person.
+              A memorial page ready before the day — service details, a digital program, and a gathering place for family who could not be there in person.
             </p>
           </div>
           <div className="rounded-2xl border border-calm-500/20 bg-calm-500/5 px-6 py-6 shadow-sm">
