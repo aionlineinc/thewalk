@@ -52,6 +52,7 @@ export default async function ResourcesPage() {
         </div>
 
         <div className="mt-12 flex flex-wrap gap-4">
+          <Link href="/resources/blog" className="inline-flex rounded-lg bg-earth-800 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-earth-900">Read the blog</Link>
           <Link href="/about" className="inline-flex rounded-lg border border-earth-300 bg-white px-5 py-2.5 text-sm font-semibold text-earth-900 shadow-sm transition hover:border-earth-400 hover:bg-earth-50">About inLovingMemory</Link>
           <Link href="/pricing" className="inline-flex rounded-lg bg-earth-800 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-earth-900">View pricing</Link>
         </div>

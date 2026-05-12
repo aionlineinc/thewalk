@@ -36,6 +36,9 @@ export function IlmFooter() {
             <Link className="font-medium text-white/60 transition hover:text-white/90" href="/resources">
               Resources
             </Link>
+            <Link className="font-medium text-white/60 transition hover:text-white/90" href="/resources/blog">
+              Blog
+            </Link>
             <Link className="font-medium text-white/60 transition hover:text-white/90" href="/directory">
               Find a memorial
             </Link>

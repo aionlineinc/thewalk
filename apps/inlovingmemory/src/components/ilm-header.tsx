@@ -75,6 +75,7 @@ export function IlmHeader({ session }: { session: Session | null }) {
           <Link className="block py-2 text-lg font-medium text-white/80 transition hover:text-white" href="/about" onClick={close}>About</Link>
           <Link className="block py-2 text-lg font-medium text-white/80 transition hover:text-white" href="/faq" onClick={close}>FAQ</Link>
           <Link className="block py-2 text-lg font-medium text-white/80 transition hover:text-white" href="/resources" onClick={close}>Resources</Link>
+          <Link className="block py-2 text-lg font-medium text-white/80 transition hover:text-white" href="/resources/blog" onClick={close}>Blog</Link>
         </div>
       </div>
       <div>
@@ -235,6 +236,7 @@ export function IlmHeader({ session }: { session: Session | null }) {
                           <Link href="/pricing" onClick={() => setActiveMenu(null)} className="rounded-xl px-3 py-2.5 text-sm font-medium text-gray-700 transition hover:bg-gray-50 hover:text-calm-600">Pricing</Link>
                           <Link href="/faq" onClick={() => setActiveMenu(null)} className="rounded-xl px-3 py-2.5 text-sm font-medium text-gray-700 transition hover:bg-gray-50 hover:text-calm-600">FAQ</Link>
                           <Link href="/resources" onClick={() => setActiveMenu(null)} className="rounded-xl px-3 py-2.5 text-sm font-medium text-gray-700 transition hover:bg-gray-50 hover:text-calm-600">Resources</Link>
+                          <Link href="/resources/blog" onClick={() => setActiveMenu(null)} className="rounded-xl px-3 py-2.5 text-sm font-medium text-gray-700 transition hover:bg-gray-50 hover:text-calm-600">Blog</Link>
                         </div>
                         <div className="mt-4 border-t border-gray-100 pt-3">
                           <Link href="/services/register" onClick={() => setActiveMenu(null)} className="text-sm font-semibold text-calm-500 transition hover:text-calm-600">Register as provider →</Link>
