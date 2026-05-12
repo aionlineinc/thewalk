@@ -297,6 +297,7 @@ type DirectusArticle = {
   image_url?: string | null;
   image_alt: string | null;
   featured?: boolean | null;
+  app?: string | null;
   /** Expanded via `fields=series.slug,series.title`. */
   series?: { slug: string; title: string } | null;
   series_sort?: number | null;
@@ -312,14 +313,15 @@ function formatDate(iso: string | null): string {
 async function tryFetchDirectusArticles(): Promise<GrowthArticle[] | null> {
   const { directusFetch } = await import("@/lib/directus");
   const { cmsAssetPresets } = await import("@/lib/cms/assets");
+  const growthArticlesApp = process.env.GROWTH_ARTICLES_APP?.trim() || "thewalk";
 
   try {
     const res = await directusFetch<DirectusListResponse<DirectusArticle>>(
       "/items/articles",
       {
         fields:
-          "slug,title,excerpt,body,category,author,date_published,image.id,image_url,image_alt,featured,series.slug,series.title,series_sort",
-        filter: JSON.stringify({ status: { _eq: "published" } }),
+          "slug,title,excerpt,body,category,author,date_published,image.id,image_url,image_alt,featured,app,series.slug,series.title,series_sort",
+        filter: JSON.stringify({ _and: [{ status: { _eq: "published" } }, { app: { _eq: growthArticlesApp } }] }),
         limit: 200,
         sort: "-date_published",
       },

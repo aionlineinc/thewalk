@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 import { getDirectusConfig, directusGetJson } from "@/lib/cms/directus-client";
 
 export const dynamic = "force-dynamic";
+const ILM_ARTICLES_APP = process.env.ILM_ARTICLES_APP?.trim() || "inlovingmemory";
 
 interface BlogPost {
   title: string;
@@ -20,7 +21,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   if (!getDirectusConfig()) return { title: "Blog · inLovingMemory" };
   try {
     const data = await directusGetJson<{ data: BlogPost[] }>(
-      `/items/articles?filter[slug][_eq]=${encodeURIComponent(params.slug)}&filter[status][_eq]=published&limit=1`
+      `/items/articles?filter[slug][_eq]=${encodeURIComponent(params.slug)}&filter[status][_eq]=published&filter[app][_eq]=${encodeURIComponent(ILM_ARTICLES_APP)}&limit=1`
     );
     const post = data.data?.[0];
     if (!post) return { title: "Blog · inLovingMemory" };
@@ -34,7 +35,7 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
   let post: BlogPost | null = null;
   try {
     const data = await directusGetJson<{ data: BlogPost[] }>(
-      `/items/articles?filter[slug][_eq]=${encodeURIComponent(params.slug)}&filter[status][_eq]=published&limit=1`
+      `/items/articles?filter[slug][_eq]=${encodeURIComponent(params.slug)}&filter[status][_eq]=published&filter[app][_eq]=${encodeURIComponent(ILM_ARTICLES_APP)}&limit=1`
     );
     post = data.data?.[0] ?? null;
   } catch { /* not found */ }

@@ -3,6 +3,7 @@ import { getDirectusConfig, directusGetJson } from "@/lib/cms/directus-client";
 
 export const metadata = { title: "Blog · Resources · inLovingMemory" };
 export const dynamic = "force-dynamic";
+const ILM_ARTICLES_APP = process.env.ILM_ARTICLES_APP?.trim() || "inlovingmemory";
 
 interface DirectusArticle {
   id: string;
@@ -21,7 +22,7 @@ export default async function BlogPage() {
   if (getDirectusConfig()) {
     try {
       const data = await directusGetJson<{ data: DirectusArticle[] }>(
-        "/items/articles?fields=id,title,slug,excerpt,image,date_published,category&sort=-date_published&filter[status][_eq]=published"
+        `/items/articles?fields=id,title,slug,excerpt,image,date_published,category&sort=-date_published&filter[status][_eq]=published&filter[app][_eq]=${encodeURIComponent(ILM_ARTICLES_APP)}`
       );
       posts = data.data ?? [];
     } catch { /* use empty list */ }
