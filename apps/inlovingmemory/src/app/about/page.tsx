@@ -39,7 +39,7 @@ export default async function AboutPage() {
         <section className="relative overflow-hidden py-20 md:py-28">
           <div className="absolute inset-0">
             <img
-              src="https://images.unsplash.com/photo-1506815928480-bc4456a7e4fe?w=1920&q=80"
+              src={a.offering?.backgroundImageUrl || "https://images.unsplash.com/photo-1506815928480-bc4456a7e4fe?w=1920&q=80"}
               alt=""
               className="h-full w-full object-cover"
               loading="lazy"
@@ -75,7 +75,7 @@ export default async function AboutPage() {
               <div className="md:col-span-2">
                 <div className="overflow-hidden rounded-2xl shadow-lg">
                   <img
-                    src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=600&q=80"
+                    src={a.story.imageUrl || "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=600&q=80"}
                     alt=""
                     className="aspect-[3/4] w-full object-cover"
                     loading="lazy"
@@ -114,7 +114,7 @@ export default async function AboutPage() {
         <section className="relative overflow-hidden py-20 md:py-28">
           <div className="absolute inset-0">
             <img
-              src="https://images.unsplash.com/photo-1506815928480-bc4456a7e4fe?w=1920&q=80"
+              src={a.offering?.backgroundImageUrl || "https://images.unsplash.com/photo-1506815928480-bc4456a7e4fe?w=1920&q=80"}
               alt=""
               className="h-full w-full object-cover"
               loading="lazy"
@@ -135,51 +135,46 @@ export default async function AboutPage() {
       ) : null}
 
       {/* Partners */}
-      <section className="border-t border-earth-200/80 bg-earth-50/30 py-20 md:py-28">
-        <div className="ilm-container text-center">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-earth-500">Our partners</p>
-          <h2 className="mt-3 text-2xl font-semibold tracking-tight text-earth-900 md:text-3xl">
-            Trusted by churches, funeral homes, and ministries
-          </h2>
-          <div className="mt-12 grid grid-cols-2 gap-8 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
-            {[
-              { name: "theWalk Ministries", logo: null },
-              { name: "Grace Community Church", logo: null },
-              { name: "Hope Funeral Services", logo: null },
-              { name: "Faith Memorial Homes", logo: null },
-              { name: "New Life Counselling", logo: null },
-              { name: "Legacy Videography", logo: null },
-            ].map((p) => (
-              <div key={p.name} className="flex items-center justify-center rounded-2xl bg-white px-4 py-6 shadow-sm">
-                <span className="text-sm font-semibold text-earth-500">{p.name}</span>
-              </div>
-            ))}
+      {a.partners ? (
+        <section className="border-t border-earth-200/80 bg-earth-50/30 py-20 md:py-28">
+          <div className="ilm-container text-center">
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-earth-500">{a.partners.eyebrow}</p>
+            <h2 className="mt-3 text-2xl font-semibold tracking-tight text-earth-900 md:text-3xl">{a.partners.heading}</h2>
+            <div className="mt-12 grid grid-cols-2 gap-8 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
+              {a.partners.items.map((p) => (
+                <div key={p.name} className="flex items-center justify-center rounded-2xl bg-white px-4 py-6 shadow-sm">
+                  <span className="text-sm font-semibold text-earth-500">{p.name}</span>
+                </div>
+              ))}
+            </div>
+            <p className="mt-8 text-sm text-earth-500">
+              {a.partners.ctaLabel.split("→")[0]}
+              <a href={a.partners.ctaHref} className="font-medium text-calm-500 underline-offset-4 hover:underline">
+                {" "}{a.partners.ctaLabel.includes("→") ? "→" : ""}
+              </a>
+            </p>
           </div>
-          <p className="mt-8 text-sm text-earth-500">
-            Interested in partnering?{" "}
-            <a href="/services/register" className="font-medium text-calm-500 underline-offset-4 hover:underline">
-              Register as a provider →
-            </a>
-          </p>
-        </div>
-      </section>
+        </section>
+      ) : null}
 
       {/* Testimonial */}
-      <section className="relative overflow-hidden bg-[#0f0b08] py-20 md:py-28">
-        <div className="pointer-events-none absolute -top-32 left-1/2 h-[600px] w-[600px] -translate-x-1/2 rounded-full bg-amber-900/10 blur-3xl" aria-hidden />
-        <div className="relative ilm-container text-center">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-white/50">Testimonial</p>
-          <blockquote className="mx-auto mt-8 max-w-2xl">
-            <p className="text-xl leading-relaxed text-white/80 md:text-2xl">
-              &ldquo;inLovingMemory gave our family a place to grieve, remember, and celebrate our father&rsquo;s life. It was more than a memorial — it became our gathering place.&rdquo;
-            </p>
-            <footer className="mt-6">
-              <p className="text-base font-semibold text-white">Marissa G.</p>
-              <p className="mt-1 text-sm text-white/50">Page moderator · Memorial since 2024</p>
-            </footer>
-          </blockquote>
-        </div>
-      </section>
+      {a.testimonial ? (
+        <section className="relative overflow-hidden bg-[#0f0b08] py-20 md:py-28">
+          <div className="pointer-events-none absolute -top-32 left-1/2 h-[600px] w-[600px] -translate-x-1/2 rounded-full bg-amber-900/10 blur-3xl" aria-hidden />
+          <div className="relative ilm-container text-center">
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-white/50">Testimonial</p>
+            <blockquote className="mx-auto mt-8 max-w-2xl">
+              <p className="text-xl leading-relaxed text-white/80 md:text-2xl">
+                &ldquo;{a.testimonial.quote}&rdquo;
+              </p>
+              <footer className="mt-6">
+                <p className="text-base font-semibold text-white">{a.testimonial.author}</p>
+                <p className="mt-1 text-sm text-white/50">{a.testimonial.attribution}</p>
+              </footer>
+            </blockquote>
+          </div>
+        </section>
+      ) : null}
 
       {/* Connection to theWalk — 2-column */}
       {a.connection ? (
@@ -208,7 +203,7 @@ export default async function AboutPage() {
               </div>
               <div className="overflow-hidden rounded-2xl shadow-lg">
                 <img
-                  src="https://images.unsplash.com/photo-1490730141103-6cac27aaab94?w=600&q=80"
+                  src={a.connection.imageUrl || "https://images.unsplash.com/photo-1490730141103-6cac27aaab94?w=600&q=80"}
                   alt=""
                   className="aspect-[4/3] w-full object-cover"
                   loading="lazy"

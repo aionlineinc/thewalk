@@ -39,6 +39,19 @@ export type IlmMarketingContent = {
       cardBody: string;
       cardBullets: string[];
     };
+    testimonials?: {
+      eyebrow: string;
+      heading: string;
+      body: string;
+      items: { quote: string; author: string; attribution: string }[];
+    };
+    partners?: {
+      eyebrow: string;
+      heading: string;
+      ctaLabel: string;
+      ctaHref: string;
+      items: { name: string; logoUrl?: string }[];
+    };
   };
   journey: {
     title: string;
@@ -48,22 +61,37 @@ export type IlmMarketingContent = {
   signIn: {
     panelImageUrl: string;
     quote: string;
+    formHeading?: string;
+    formBody?: string;
   };
   about: {
     title: string;
     body: string;
     links: IlmMarketingLink[];
     heroImage?: string;
-    story?: { heading: string; body: string };
+    story?: { heading: string; body: string; imageUrl?: string };
     belief?: { heading: string; body: string; verse: string; verseRef: string };
-    offering?: { heading: string; body: string };
-    connection?: { heading: string; body: string; cta: IlmMarketingLink };
+    offering?: { heading: string; body: string; backgroundImageUrl?: string };
+    connection?: { heading: string; body: string; cta: IlmMarketingLink; imageUrl?: string };
     closing?: { heading: string; primaryCta: IlmMarketingLink; secondaryCta: IlmMarketingLink };
+    testimonial?: { quote: string; author: string; attribution: string };
+    partners?: { eyebrow: string; heading: string; ctaLabel: string; ctaHref: string; items: { name: string }[] };
   };
-  howItWorks: { title: string; intro: string; steps: { title: string; body: string }[]; links: IlmMarketingLink[] };
-  pricing: { title: string; intro: string; tiers: { name: string; summary: string; bullets: string[] }[] };
-  faq: { title: string; intro: string; items: { q: string; a: string }[] };
-  resources: { title: string; intro: string; cards: { title: string; body: string; cta?: IlmMarketingLink }[] };
+  howItWorks: {
+    title: string;
+    intro: string;
+    heroImage?: string;
+    steps: { title: string; body: string }[];
+    links: IlmMarketingLink[];
+  };
+  pricing: {
+    title: string;
+    intro: string;
+    heroImage?: string;
+    tiers: { name: string; summary: string; bullets: string[] }[];
+  };
+  faq: { title: string; intro: string; heroImage?: string; items: { q: string; a: string }[] };
+  resources: { title: string; intro: string; heroImage?: string; cards: { title: string; body: string; cta?: IlmMarketingLink }[] };
 };
 
 export const ilmMarketingDefault: IlmMarketingContent = {
@@ -108,6 +136,30 @@ export const ilmMarketingDefault: IlmMarketingContent = {
         "Public or unlisted memorial pages",
         "Guestbook & prayer wall with moderator review",
         "Shareable QR code for service attendees",
+      ],
+    },
+    testimonials: {
+      eyebrow: "Stories",
+      heading: "Loved by families",
+      body: "A simple experience that helps people focus on what matters most.",
+      items: [
+        { quote: "inLovingMemory gave our family a place to grieve, remember, and celebrate our father's life. It was more than a memorial — it became our gathering place.", author: "Marissa G.", attribution: "Page moderator · Memorial since 2024" },
+        { quote: "The prayer wall brought our community together in a way we never expected. Every prayer felt like a hand on our shoulder.", author: "Menard P.", attribution: "Page moderator" },
+        { quote: "Setting up my living legacy page gave me peace of mind. My family will have everything they need when the time comes.", author: "Lisa D.", attribution: "Page moderator" },
+      ],
+    },
+    partners: {
+      eyebrow: "Our partners",
+      heading: "Trusted by churches, funeral homes, and ministries",
+      ctaLabel: "Interested in partnering? Register as a provider →",
+      ctaHref: "/services/register",
+      items: [
+        { name: "theWalk Ministries" },
+        { name: "Grace Community Church" },
+        { name: "Hope Funeral Services" },
+        { name: "Faith Memorial Homes" },
+        { name: "New Life Counselling" },
+        { name: "Legacy Videography" },
       ],
     },
   },
@@ -156,6 +208,7 @@ export const ilmMarketingDefault: IlmMarketingContent = {
     story: {
       heading: "Where we come from.",
       body: "inLovingMemory was born out of theWalk Ministries' conviction that every life lived in faith — and every life lived at all — deserves to be honoured with dignity, remembered with love, and preserved with intention.\n\nWe watched families struggle to find a single, beautiful, lasting place for their grief and their gratitude. We watched funeral homes serve families under pressure with limited digital tools. We watched ministers and counsellors reach for something more connected, more whole.\n\nSo we built it.\n\ninLovingMemory is not a product that happened to find a market. It is a ministry that became a platform — shaped by pastoral care, built for human dignity, and grounded in the belief that how we remember those we love says everything about who we are.",
+      imageUrl: "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=600&q=80",
     },
     belief: {
       heading: "We believe every walk matters.",
@@ -166,16 +219,37 @@ export const ilmMarketingDefault: IlmMarketingContent = {
     offering: {
       heading: "More than a memorial. A living legacy.",
       body: "We are more than a memorial platform. We are remembrance, grief support, and generational legacy.\n\nWhen you create a memorial here, you are not simply marking an end — you are protecting a beginning. A legacy that speaks to children not yet born, to family members not yet found, and to a community that carries someone's story forward.\n\nWe connect the bereaved to pastoral care, grief counselling, prayer, and community — because grief was never meant to be faced alone.\n\nThis is where the end of one walk becomes the foundation of another.",
+      backgroundImageUrl: "https://images.unsplash.com/photo-1506815928480-bc4456a7e4fe?w=1920&q=80",
     },
     connection: {
       heading: "Rooted in theWalk Ministries.",
       body: "inLovingMemory is a ministry of theWalk Ministries Int'l — a global community committed to discipleship, care, and the transformation of lives. Through theWalk, every memorial on this platform is connected to a network of ministers, counsellors, and prayer teams ready to walk with grieving families.\n\nWhen you use inLovingMemory, you are not just accessing a website. You are stepping into a community.",
       cta: { label: "Learn about theWalk Ministries", href: "https://thewalk.org" },
+      imageUrl: "https://images.unsplash.com/photo-1490730141103-6cac27aaab94?w=600&q=80",
     },
     closing: {
       heading: "Their story starts here.",
       primaryCta: { label: "Create a Free Memorial", href: "/dashboard/memorials/new" },
       secondaryCta: { label: "Contact Us", href: "/resources" },
+    },
+    testimonial: {
+      quote: "inLovingMemory gave our family a place to grieve, remember, and celebrate our father's life. It was more than a memorial — it became our gathering place.",
+      author: "Marissa G.",
+      attribution: "Page moderator · Memorial since 2024",
+    },
+    partners: {
+      eyebrow: "Our partners",
+      heading: "Trusted by churches, funeral homes, and ministries",
+      ctaLabel: "Interested in partnering? Register as a provider →",
+      ctaHref: "/services/register",
+      items: [
+        { name: "theWalk Ministries" },
+        { name: "Grace Community Church" },
+        { name: "Hope Funeral Services" },
+        { name: "Faith Memorial Homes" },
+        { name: "New Life Counselling" },
+        { name: "Legacy Videography" },
+      ],
     },
   },
 
