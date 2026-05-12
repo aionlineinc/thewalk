@@ -37,12 +37,28 @@ function asString(value: unknown): string | null {
   return typeof value === "string" && value.trim() ? value : null;
 }
 
-function firstSection(page: IlmPageRow | undefined, collection: string): Record<string, unknown> | null {
-  if (!page?.sections || !Array.isArray(page.sections)) return null;
-  const rows = [...page.sections]
+function sectionsOf(page: IlmPageRow | undefined, collection: string): Record<string, unknown>[] {
+  if (!page?.sections || !Array.isArray(page.sections)) return [];
+  return [...page.sections]
     .filter((row) => row.collection === collection && isPlainObject(row.item))
-    .sort((a, b) => (a.sort ?? 0) - (b.sort ?? 0));
-  return (rows[0]?.item as Record<string, unknown>) ?? null;
+    .sort((a, b) => (a.sort ?? 0) - (b.sort ?? 0))
+    .map((row) => row.item as Record<string, unknown>);
+}
+
+function firstSection(page: IlmPageRow | undefined, collection: string): Record<string, unknown> | null {
+  const rows = sectionsOf(page, collection);
+  return rows[0] ?? null;
+}
+
+function pickFeatureCardsSection(
+  page: IlmPageRow | undefined,
+  keyword: string,
+): Record<string, unknown> | null {
+  const rows = sectionsOf(page, "section_feature_cards");
+  const lowered = keyword.toLowerCase();
+  return (
+    rows.find((row) => (asString(row.title_internal) ?? "").toLowerCase().includes(lowered)) ?? null
+  );
 }
 
 function fileRefToUrl(baseUrl: string, fileRef: unknown): string | null {
@@ -119,16 +135,19 @@ async function getStructuredPagesContent(
   const signInPage = bySlug.get("ilm-sign-in");
 
   const homeHero = firstSection(homePage, "section_hero");
+  const homeIntro = firstSection(homePage, "section_rich_text");
   const homeSplit = firstSection(homePage, "section_image_split");
-  const homeCards = firstSection(homePage, "section_feature_cards");
+  const homeCardsJourney = pickFeatureCardsSection(homePage, "journey") ?? firstSection(homePage, "section_feature_cards");
+  const homeCardsOrganisations = pickFeatureCardsSection(homePage, "organisation");
   const howCards = firstSection(howPage, "section_feature_cards");
   const faqSection = firstSection(faqPage, "section_faq");
   const resourcesCards = firstSection(resourcesPage, "section_feature_cards");
   const signInHero = firstSection(signInPage, "section_hero");
+  const signInIntro = firstSection(signInPage, "section_rich_text");
 
   const mapped: Partial<IlmMarketingContent> = {
-    heroTitle: asString(homeHero?.headline) ?? undefined,
-    heroBody: asString(homeHero?.subheadline) ?? undefined,
+    heroTitle: asString(homeHero?.headline) ?? asString(homeIntro?.headline) ?? undefined,
+    heroBody: asString(homeHero?.subheadline) ?? asString(homeIntro?.body) ?? undefined,
     home: {
       ...ilmMarketingDefault.home,
       heroBackgroundImageUrl:
@@ -155,9 +174,10 @@ async function getStructuredPagesContent(
       },
       organisations: {
         ...ilmMarketingDefault.home.organisations,
-        eyebrow: asString(homeCards?.eyebrow) ?? ilmMarketingDefault.home.organisations.eyebrow,
-        title: asString(homeCards?.headline) ?? ilmMarketingDefault.home.organisations.title,
-        body: asString(homeCards?.intro) ?? ilmMarketingDefault.home.organisations.body,
+        eyebrow:
+          asString(homeCardsOrganisations?.eyebrow) ?? ilmMarketingDefault.home.organisations.eyebrow,
+        title: asString(homeCardsOrganisations?.headline) ?? ilmMarketingDefault.home.organisations.title,
+        body: asString(homeCardsOrganisations?.intro) ?? ilmMarketingDefault.home.organisations.body,
       },
     },
     about: {
@@ -216,13 +236,13 @@ async function getStructuredPagesContent(
     },
     journey: {
       ...ilmMarketingDefault.journey,
-      title: asString(howCards?.headline) ?? ilmMarketingDefault.journey.title,
-      intro: asString(howCards?.intro) ?? ilmMarketingDefault.journey.intro,
+      title: asString(homeCardsJourney?.headline) ?? asString(howCards?.headline) ?? ilmMarketingDefault.journey.title,
+      intro: asString(homeCardsJourney?.intro) ?? asString(howCards?.intro) ?? ilmMarketingDefault.journey.intro,
       steps:
-        Array.isArray(howCards?.items) && howCards?.items.length
+        Array.isArray(homeCardsJourney?.items) && homeCardsJourney?.items.length
           ? (() => {
               const steps: IlmMarketingContent["journey"]["steps"] = [];
-              for (const [index, item] of (howCards.items as Array<Record<string, unknown>>).entries()) {
+              for (const [index, item] of (homeCardsJourney.items as Array<Record<string, unknown>>).entries()) {
                 const title = asString(item.title);
                 const copy = asString(item.body);
                 if (!title || !copy) continue;
@@ -249,7 +269,7 @@ async function getStructuredPagesContent(
       ...ilmMarketingDefault.signIn,
       panelImageUrl:
         fileRefToUrl(cfg.baseUrl, signInHero?.image) ?? ilmMarketingDefault.signIn.panelImageUrl,
-      quote: asString(signInHero?.headline) ?? ilmMarketingDefault.signIn.quote,
+      quote: asString(signInHero?.headline) ?? asString(signInIntro?.headline) ?? ilmMarketingDefault.signIn.quote,
     },
   };
 
