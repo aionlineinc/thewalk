@@ -1,10 +1,54 @@
 export type IlmMarketingLink = { label: string; href: string };
+export type IlmMarketingJourneyStep = {
+  num: number;
+  title: string;
+  copy: string;
+  href: string;
+  image: string;
+  alt: string;
+};
 
 export type IlmMarketingContent = {
   tagline: string;
   heroTitle: string;
   heroBody: string;
   heroLinks: IlmMarketingLink[];
+  home: {
+    heroBackgroundImageUrl: string;
+    primaryCta: IlmMarketingLink;
+    secondaryCta: IlmMarketingLink;
+    signedInHint: string;
+    signedOutHint: string;
+    assistance: {
+      eyebrow: string;
+      title: string;
+      body: string;
+      primaryCta: IlmMarketingLink;
+      secondaryCta: IlmMarketingLink;
+      backgroundImageUrl: string;
+      sideImageUrl: string;
+      sideImageAlt: string;
+    };
+    organisations: {
+      eyebrow: string;
+      title: string;
+      body: string;
+      primaryCta: IlmMarketingLink;
+      secondaryCta: IlmMarketingLink;
+      cardTitle: string;
+      cardBody: string;
+      cardBullets: string[];
+    };
+  };
+  journey: {
+    title: string;
+    intro: string;
+    steps: IlmMarketingJourneyStep[];
+  };
+  signIn: {
+    panelImageUrl: string;
+    quote: string;
+  };
   about: { title: string; body: string; links: IlmMarketingLink[] };
   howItWorks: { title: string; intro: string; steps: { title: string; body: string }[]; links: IlmMarketingLink[] };
   pricing: { title: string; intro: string; tiers: { name: string; summary: string; bullets: string[] }[] };
@@ -24,6 +68,75 @@ export const ilmMarketingDefault: IlmMarketingContent = {
     { label: "How it works", href: "/how-it-works" },
     { label: "Find a memorial", href: "/directory" },
   ],
+
+  home: {
+    heroBackgroundImageUrl: "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=1920&q=85",
+    primaryCta: { label: "Get Started", href: "/how-it-works" },
+    secondaryCta: { label: "Find a memorial", href: "/directory" },
+    signedInHint: "Welcome back — manage your memorials in the dashboard.",
+    signedOutHint: "Page moderators can sign in to manage memorials.",
+    assistance: {
+      eyebrow: "You are not alone",
+      title: "Grief support, prayer, and pastoral care — in one place",
+      body: "inLovingMemory connects families to grief counselling, the prayer of a community, and the pastoral care of theWalk Ministries — from the day of the service through every season that follows.",
+      primaryCta: { label: "Find support", href: "/resources" },
+      secondaryCta: { label: "How it works", href: "/how-it-works" },
+      backgroundImageUrl: "https://images.unsplash.com/photo-1511895426328-dc8714191011?w=1600&q=80",
+      sideImageUrl: "https://images.unsplash.com/photo-1511895426328-dc8714191011?w=900&q=80",
+      sideImageAlt: "Family together sharing memories.",
+    },
+    organisations: {
+      eyebrow: "For organisations",
+      title: "Funeral homes & ministries",
+      body: "Purpose-built tools for organisations that serve families — from digital service programs and QR code access on the day, to long-term memorial hosting for the years ahead.",
+      primaryCta: { label: "Learn more", href: "/resources" },
+      secondaryCta: { label: "View memorials", href: "/directory" },
+      cardTitle: "What you can do today",
+      cardBody: "Begin with the service essentials — then grow into a full, lasting memorial.",
+      cardBullets: [
+        "Service details, order of service & digital program",
+        "Public or unlisted memorial pages",
+        "Guestbook & prayer wall with moderator review",
+        "Shareable QR code for service attendees",
+      ],
+    },
+  },
+
+  journey: {
+    title: "Create a Beautiful Online Memorial",
+    intro: "Remember with clarity, gather with community, and preserve a legacy worth carrying forward.",
+    steps: [
+      {
+        num: 1,
+        title: "Honor the service",
+        copy: "A tribute page ready before the day — service details, digital program, and a QR code for every attendee.",
+        href: "/how-it-works",
+        image: "https://images.unsplash.com/photo-1474649107449-ea4f014b7e9f?w=800&q=80",
+        alt: "Warm candlelight — service",
+      },
+      {
+        num: 2,
+        title: "Gather together",
+        copy: "Loved ones near and far contribute memories, photos, and prayers — gently moderated by the page moderator.",
+        href: "/directory",
+        image: "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=800&q=80",
+        alt: "Family together — gathering",
+      },
+      {
+        num: 3,
+        title: "Walk through grief",
+        copy: "Access grief counselling, a community prayer wall, and pastoral care from theWalk — you were never meant to carry this alone.",
+        href: "/resources",
+        image: "https://images.unsplash.com/photo-1501854140801-50d01698950b?w=800&q=80",
+        alt: "Open landscape — walking together",
+      },
+    ],
+  },
+
+  signIn: {
+    panelImageUrl: "https://images.unsplash.com/photo-1474649107449-ea4f014b7e9f?w=1200&q=85",
+    quote: "A living place for a life well-lived.",
+  },
 
   about: {
     title: "More than a memorial platform",

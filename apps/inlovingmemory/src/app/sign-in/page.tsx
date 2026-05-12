@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Suspense } from "react";
 import { SignInForm } from "@/app/sign-in/sign-in-form";
+import { getIlmMarketingContent } from "@/lib/cms/ilm-content";
 import { getThewalkPublicOrigin } from "@/lib/ilm-thewalk";
 
 export const metadata = {
@@ -12,15 +13,16 @@ function SignInFormFallback() {
   return <div className="mt-8 h-52 animate-pulse rounded-xl bg-earth-100/80" aria-hidden />;
 }
 
-export default function SignInPage() {
+export default async function SignInPage() {
   const origin = getThewalkPublicOrigin();
+  const content = await getIlmMarketingContent();
 
   return (
     <main className="grid min-h-[calc(100vh-80px)] md:grid-cols-2">
       {/* Left — atmospheric photo panel */}
       <div className="relative hidden overflow-hidden md:block">
         <Image
-          src="https://images.unsplash.com/photo-1474649107449-ea4f014b7e9f?w=1200&q=85"
+          src={content.signIn.panelImageUrl}
           alt=""
           fill
           priority
@@ -34,7 +36,7 @@ export default function SignInPage() {
             inLovingMemory
           </p>
           <blockquote className="mt-4 max-w-xs text-2xl font-light leading-snug text-white/90">
-            “A living place for a life well-lived.”
+            {`"${content.signIn.quote}"`}
           </blockquote>
         </div>
       </div>

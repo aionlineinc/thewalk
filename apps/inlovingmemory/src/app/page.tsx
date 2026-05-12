@@ -21,7 +21,7 @@ export default async function IlmHomePage() {
         <div className="absolute inset-2 overflow-hidden rounded-[20px] md:inset-4">
           <div className="absolute inset-0">
             <Image
-              src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=1920&q=85"
+              src={content.home.heroBackgroundImageUrl}
               alt=""
               fill
               priority
@@ -42,29 +42,33 @@ export default async function IlmHomePage() {
           </AppLeadOnDark>
 
           <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
-            <AppPillLink href="/how-it-works" variant="primary">
-              Get Started
+            <AppPillLink href={content.home.primaryCta.href} variant="primary">
+              {content.home.primaryCta.label}
               <svg className="ml-1 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden>
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
               </svg>
             </AppPillLink>
-            <AppPillLink href="/directory" variant="ghostOnDark">
-              Find a memorial
+            <AppPillLink href={content.home.secondaryCta.href} variant="ghostOnDark">
+              {content.home.secondaryCta.label}
             </AppPillLink>
           </div>
 
           <p className="mt-10 text-xs text-white/70">
-            {session?.user ? "Welcome back — manage your memorials in the dashboard." : "Page moderators can sign in to manage memorials."}
+            {session?.user ? content.home.signedInHint : content.home.signedOutHint}
           </p>
         </div>
       </section>
 
-      <IlmJourneyCards />
+      <IlmJourneyCards
+        heading={content.journey.title}
+        intro={content.journey.intro}
+        steps={content.journey.steps}
+      />
 
       <section className="relative overflow-hidden bg-[#0f0b08]" aria-labelledby="ilm-assistance-heading">
         <div className="absolute inset-0">
           <Image
-            src="https://images.unsplash.com/photo-1511895426328-dc8714191011?w=1600&q=80"
+            src={content.home.assistance.backgroundImageUrl}
             alt=""
             fill
             className="object-cover object-center opacity-35"
@@ -75,32 +79,34 @@ export default async function IlmHomePage() {
         <div className="relative container mx-auto max-w-6xl px-4 py-20 md:px-8 md:py-28">
           <div className="grid gap-10 md:grid-cols-2 md:gap-12 lg:gap-16 md:items-center">
             <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.28em] text-amber-400/70">You are not alone</p>
+              <p className="text-xs font-semibold uppercase tracking-[0.28em] text-amber-400/70">
+                {content.home.assistance.eyebrow}
+              </p>
               <h2
                 id="ilm-assistance-heading"
                 className="mt-4 text-3xl font-medium tracking-tight text-white md:text-4xl lg:text-[38px] lg:leading-[1.1]"
               >
-                Grief support, prayer, and pastoral care — in one place
+                {content.home.assistance.title}
               </h2>
               <p className="mt-5 max-w-xl text-[15px] font-light leading-relaxed text-white/65 md:text-lg md:leading-relaxed">
-                inLovingMemory connects families to grief counselling, the prayer of a community, and the pastoral care of theWalk Ministries — from the day of the service through every season that follows.
+                {content.home.assistance.body}
               </p>
               <div className="mt-10 flex flex-wrap gap-4">
-                <AppPillLink href="/resources" variant="primary">
-                  Find support
+                <AppPillLink href={content.home.assistance.primaryCta.href} variant="primary">
+                  {content.home.assistance.primaryCta.label}
                   <svg className="ml-1 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden>
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                   </svg>
                 </AppPillLink>
-                <AppPillLink href="/how-it-works" variant="ghostOnDark">
-                  How it works
+                <AppPillLink href={content.home.assistance.secondaryCta.href} variant="ghostOnDark">
+                  {content.home.assistance.secondaryCta.label}
                 </AppPillLink>
               </div>
             </div>
             <div className="relative hidden h-[420px] overflow-hidden rounded-2xl md:block ring-1 ring-white/10">
               <Image
-                src="https://images.unsplash.com/photo-1511895426328-dc8714191011?w=900&q=80"
-                alt="Family together sharing memories."
+                src={content.home.assistance.sideImageUrl}
+                alt={content.home.assistance.sideImageAlt}
                 fill
                 className="object-cover object-center"
                 sizes="min(50vw, 640px)"
@@ -116,36 +122,41 @@ export default async function IlmHomePage() {
       <section className="ilm-container py-14">
         <div className="grid gap-10 md:grid-cols-2 md:items-start">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.28em] text-earth-500">For organisations</p>
+            <p className="text-xs font-semibold uppercase tracking-[0.28em] text-earth-500">
+              {content.home.organisations.eyebrow}
+            </p>
             <h2 className="mt-4 text-2xl font-semibold tracking-tight text-earth-900">
-              Funeral homes &amp; ministries
+              {content.home.organisations.title}
             </h2>
             <p className="mt-4 text-earth-700">
-              Purpose-built tools for organisations that serve families — from digital service programs and QR code access on the day, to long-term memorial hosting for the years ahead.
+              {content.home.organisations.body}
             </p>
             <div className="mt-8 flex flex-wrap gap-4">
-              <AppPillLink href="/resources" variant="primary">
-                Learn more
+              <AppPillLink href={content.home.organisations.primaryCta.href} variant="primary">
+                {content.home.organisations.primaryCta.label}
                 <svg className="ml-1 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden>
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                 </svg>
               </AppPillLink>
-              <AppPillLink href="/directory" variant="ghostOnDark" className="border-earth-200 bg-white text-earth-900 hover:bg-earth-100">
-                View memorials
+              <AppPillLink
+                href={content.home.organisations.secondaryCta.href}
+                variant="ghostOnDark"
+                className="border-earth-200 bg-white text-earth-900 hover:bg-earth-100"
+              >
+                {content.home.organisations.secondaryCta.label}
               </AppPillLink>
             </div>
           </div>
           <Card className="bg-earth-50/60">
             <div className="px-8 py-8 md:px-10 md:py-10">
-              <CardTitle>What you can do today</CardTitle>
+              <CardTitle>{content.home.organisations.cardTitle}</CardTitle>
               <CardDescription>
-                Begin with the service essentials — then grow into a full, lasting memorial.
+                {content.home.organisations.cardBody}
               </CardDescription>
               <ul className="mt-5 space-y-2 text-sm text-earth-700">
-                <li>• Service details, order of service &amp; digital program</li>
-                <li>• Public or unlisted memorial pages</li>
-                <li>• Guestbook &amp; prayer wall with moderator review</li>
-                <li>• Shareable QR code for service attendees</li>
+                {content.home.organisations.cardBullets.map((bullet) => (
+                  <li key={bullet}>• {bullet}</li>
+                ))}
               </ul>
             </div>
           </Card>

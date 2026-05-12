@@ -1,6 +1,26 @@
 import { ilmMarketingDefault, type IlmMarketingContent } from "@/content/ilm-marketing.default";
 import { directusGetJson, getDirectusConfig } from "@/lib/cms/directus-client";
 
+function isPlainObject(value: unknown): value is Record<string, unknown> {
+  return !!value && typeof value === "object" && !Array.isArray(value);
+}
+
+function deepMerge<T>(base: T, override: unknown): T {
+  if (!isPlainObject(base) || !isPlainObject(override)) return base;
+  const merged: Record<string, unknown> = { ...base };
+
+  for (const [key, value] of Object.entries(override)) {
+    const current = merged[key];
+    if (isPlainObject(current) && isPlainObject(value)) {
+      merged[key] = deepMerge(current, value);
+      continue;
+    }
+    merged[key] = value;
+  }
+
+  return merged as T;
+}
+
 /**
  * Returns marketing content for ILM. Always returns something (local fallback)
  * so deploys are not blocked on CMS configuration.
@@ -22,9 +42,8 @@ export async function getIlmMarketingContent(): Promise<IlmMarketingContent> {
     const data = res && typeof res === "object" && "data" in res ? (res as { data?: unknown }).data : undefined;
     if (!data || typeof data !== "object") return ilmMarketingDefault;
 
-    // We deliberately keep this permissive: Directus fields can evolve.
-    // Only override when the value is structurally compatible.
-    return { ...ilmMarketingDefault, ...(data as Partial<IlmMarketingContent>) };
+    // Keep this permissive so Directus fields can evolve while preserving defaults.
+    return deepMerge(ilmMarketingDefault, data) as IlmMarketingContent;
   } catch {
     return ilmMarketingDefault;
   }

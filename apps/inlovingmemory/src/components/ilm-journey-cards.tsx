@@ -70,7 +70,30 @@ const STEPS = [
 
 const RAIL_TOP_CLASSES = "top-[18.75rem]";
 
-export function IlmJourneyCards() {
+export type IlmJourneyStep = {
+  num: number;
+  title: string;
+  copy: string;
+  href: string;
+  image: string;
+  alt: string;
+};
+
+type IlmJourneyCardsProps = {
+  heading?: string;
+  intro?: string;
+  steps?: IlmJourneyStep[];
+};
+
+export function IlmJourneyCards({
+  heading = "Create a Beautiful Online Memorial",
+  intro = "Remember with clarity, gather with community, and preserve a legacy worth carrying forward.",
+  steps,
+}: IlmJourneyCardsProps) {
+  const journeySteps = (steps?.length ? steps : STEPS).map((step, index) => ({
+    ...step,
+    num: step.num || index + 1,
+  }));
   const sectionRef = useRef<HTMLElement>(null);
   const [scrollProgress, setScrollProgress] = useState(0);
   const [sectionExposure, setSectionExposure] = useState(0);
@@ -134,7 +157,7 @@ export function IlmJourneyCards() {
     reduceMotion || scrollProgress > 0.001 ? scrollProgress : sectionExposure > 0.02 ? Math.max(scrollProgress, 0.05) : scrollProgress;
 
   const cardTs: CardT = reduceMotion ? [1, 1, 1] : sequentialCardTs(timelineRaw);
-  const lineFill01 = reduceMotion ? 1 : (cardTs[0] + cardTs[1] + cardTs[2]) / STEPS.length;
+  const lineFill01 = reduceMotion ? 1 : (cardTs[0] + cardTs[1] + cardTs[2]) / journeySteps.length;
   const lineScale = reduceMotion ? 1 : LINE_SCALE_MIN + (LINE_SCALE_MAX - LINE_SCALE_MIN) * lineFill01;
 
   const imageMotion = (index: number) => {
@@ -165,10 +188,10 @@ export function IlmJourneyCards() {
               id="ilm-journey-heading"
               className="text-3xl font-medium tracking-tight text-neutral-950 md:text-4xl lg:text-[35px] lg:leading-[1.1]"
             >
-              Create a Beautiful Online Memorial
+              {heading}
             </h2>
             <p className="mx-auto mt-5 max-w-2xl text-[15px] font-light leading-relaxed text-neutral-500 md:text-lg md:leading-relaxed">
-              Remember with clarity, gather with community, and preserve a legacy worth carrying forward.
+              {intro}
             </p>
           </header>
 
@@ -186,7 +209,7 @@ export function IlmJourneyCards() {
 
             <div className="relative z-10 pb-4 md:pb-0">
               <div className="grid grid-cols-3 gap-4 py-6 md:gap-6 lg:gap-x-10">
-                {STEPS.map((step, index) => (
+                {journeySteps.map((step, index) => (
                   <Link
                     key={step.href}
                     href={step.href}
@@ -224,7 +247,7 @@ export function IlmJourneyCards() {
           </div>
 
           <div className="flex flex-col gap-14 md:hidden">
-            {STEPS.map((step, index) => (
+            {journeySteps.map((step, index) => (
               <Link
                 key={step.href}
                 href={step.href}
