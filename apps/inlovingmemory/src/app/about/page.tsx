@@ -30,15 +30,34 @@ export default async function AboutPage() {
           <h1 className="mt-3 max-w-3xl text-4xl font-medium tracking-tight text-white md:text-[50px] md:leading-[1.1]">
             {a.title}
           </h1>
+          <p className="mt-4 max-w-xl text-base font-light leading-relaxed text-white/70 md:text-lg">{a.body}</p>
         </div>
       </section>
 
-      {/* Introduction */}
-      <section className="ilm-container py-20 md:py-28">
-        <div className="mx-auto max-w-3xl text-center">
-          <p className="text-xl leading-relaxed text-earth-800 md:text-2xl">{a.body}</p>
-        </div>
-      </section>
+      {/* What We Offer — photo background with overlay */}
+      {a.offering ? (
+        <section className="relative overflow-hidden py-20 md:py-28">
+          <div className="absolute inset-0">
+            <img
+              src="https://images.unsplash.com/photo-1506815928480-bc4456a7e4fe?w=1920&q=80"
+              alt=""
+              className="h-full w-full object-cover"
+              loading="lazy"
+            />
+            <div className="absolute inset-0 bg-white/90" aria-hidden />
+          </div>
+          <div className="relative ilm-container">
+            <div className="mx-auto max-w-3xl">
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-earth-500">{a.offering.heading}</p>
+              <div className="mt-6 space-y-4 text-base leading-relaxed text-earth-700">
+                {a.offering.body.split("\n\n").map((p, i) => (
+                  <p key={i}>{p}</p>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+      ) : null}
 
       {/* Our Story — 2-column with photo */}
       {a.story ? (
@@ -68,35 +87,23 @@ export default async function AboutPage() {
         </section>
       ) : null}
 
-      {/* Our Belief — dark section with 2 columns */}
+      {/* Our Belief — dark section */}
       {a.belief ? (
         <section className="relative overflow-hidden bg-[#0f0b08] py-20 md:py-28">
           <div className="pointer-events-none absolute -top-32 right-0 h-[500px] w-[500px] rounded-full bg-amber-900/15 blur-3xl" aria-hidden />
           <div className="pointer-events-none absolute -bottom-32 left-0 h-[400px] w-[400px] rounded-full bg-amber-900/10 blur-3xl" aria-hidden />
           <div className="relative ilm-container">
-            <div className="grid gap-12 md:grid-cols-2">
-              <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-white/50">{a.belief.heading}</p>
-                <div className="mt-6 space-y-4 text-base leading-relaxed text-white/75">
-                  {a.belief.body.split("\n\n").map((p, i) => (
-                    <p key={i}>{p}</p>
-                  ))}
-                </div>
+            <div className="mx-auto max-w-3xl">
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-white/50">{a.belief.heading}</p>
+              <div className="mt-6 space-y-4 text-base leading-relaxed text-white/75">
+                {a.belief.body.split("\n\n").map((p, i) => (
+                  <p key={i}>{p}</p>
+                ))}
               </div>
-              <div className="flex flex-col justify-center">
-                <div className="overflow-hidden rounded-2xl">
-                  <img
-                    src="https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=600&q=80"
-                    alt=""
-                    className="aspect-[4/3] w-full object-cover"
-                    loading="lazy"
-                  />
-                </div>
-                <blockquote className="mt-8 border-l-2 border-calm-500/40 pl-5">
-                  <p className="text-lg italic leading-relaxed text-white/60">{a.belief.verse}</p>
-                  <footer className="mt-3 text-sm text-white/40">— {a.belief.verseRef}</footer>
-                </blockquote>
-              </div>
+              <blockquote className="mt-10 border-l-2 border-calm-500/40 pl-5">
+                <p className="text-lg italic leading-relaxed text-white/60">{a.belief.verse}</p>
+                <footer className="mt-3 text-sm text-white/40">— {a.belief.verseRef}</footer>
+              </blockquote>
             </div>
           </div>
         </section>
