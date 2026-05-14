@@ -61,6 +61,17 @@ function pickFeatureCardsSection(
   );
 }
 
+function pickRichTextSection(
+  page: IlmPageRow | undefined,
+  keyword: string,
+): Record<string, unknown> | null {
+  const rows = sectionsOf(page, "section_rich_text");
+  const lowered = keyword.toLowerCase();
+  return (
+    rows.find((row) => (asString(row.title_internal) ?? "").toLowerCase().includes(lowered)) ?? null
+  );
+}
+
 function fileRefToUrl(baseUrl: string, fileRef: unknown): string | null {
   const directUrl = asString(fileRef);
   if (directUrl) return directUrl;
@@ -104,6 +115,7 @@ async function getStructuredPagesContent(
     deep: JSON.stringify({ sections: { _sort: ["sort"] } }),
   });
   params.append("filter[app][_eq]", appName);
+  params.append("filter[status][_eq]", "published");
 
   slugs.forEach((slug, index) => params.append(`filter[_or][${index}][slug][_eq]`, slug));
 
@@ -135,10 +147,16 @@ async function getStructuredPagesContent(
   const signInPage = bySlug.get("ilm-sign-in");
 
   const homeHero = firstSection(homePage, "section_hero");
-  const homeIntro = firstSection(homePage, "section_rich_text");
+  const homeIntro = pickRichTextSection(homePage, "hero") ?? firstSection(homePage, "section_rich_text");
+  const homeAssistanceText = pickRichTextSection(homePage, "assistance");
   const homeSplit = firstSection(homePage, "section_image_split");
   const homeCardsJourney = pickFeatureCardsSection(homePage, "journey") ?? firstSection(homePage, "section_feature_cards");
   const homeCardsOrganisations = pickFeatureCardsSection(homePage, "organisation");
+  const aboutHero = firstSection(aboutPage, "section_hero");
+  const howHero = firstSection(howPage, "section_hero");
+  const pricingHero = firstSection(pricingPage, "section_hero");
+  const faqHero = firstSection(faqPage, "section_hero");
+  const resourcesHero = firstSection(resourcesPage, "section_hero");
   const howCards = firstSection(howPage, "section_feature_cards");
   const faqSection = firstSection(faqPage, "section_faq");
   const resourcesCards = firstSection(resourcesPage, "section_feature_cards");
@@ -162,9 +180,21 @@ async function getStructuredPagesContent(
       },
       assistance: {
         ...ilmMarketingDefault.home.assistance,
-        eyebrow: asString(homeSplit?.eyebrow) ?? ilmMarketingDefault.home.assistance.eyebrow,
-        title: asString(homeSplit?.headline) ?? ilmMarketingDefault.home.assistance.title,
-        body: asString(homeSplit?.body) ?? ilmMarketingDefault.home.assistance.body,
+        eyebrow:
+          asString(homeSplit?.eyebrow) ??
+          asString(homeAssistanceText?.eyebrow) ??
+          ilmMarketingDefault.home.assistance.eyebrow,
+        title:
+          asString(homeSplit?.headline) ??
+          asString(homeAssistanceText?.headline) ??
+          ilmMarketingDefault.home.assistance.title,
+        body:
+          asString(homeSplit?.body) ??
+          asString(homeAssistanceText?.body) ??
+          ilmMarketingDefault.home.assistance.body,
+        backgroundImageUrl:
+          fileRefToUrl(cfg.baseUrl, homeSplit?.image) ??
+          ilmMarketingDefault.home.assistance.backgroundImageUrl,
         sideImageUrl:
           fileRefToUrl(cfg.baseUrl, homeSplit?.image) ?? ilmMarketingDefault.home.assistance.sideImageUrl,
         primaryCta: {
@@ -185,23 +215,27 @@ async function getStructuredPagesContent(
       title: asString(aboutPage?.title) ?? ilmMarketingDefault.about.title,
       body:
         asString(firstSection(aboutPage, "section_rich_text")?.body) ?? ilmMarketingDefault.about.body,
+      heroImage: fileRefToUrl(cfg.baseUrl, aboutHero?.image) ?? ilmMarketingDefault.about.heroImage,
     },
     howItWorks: {
       ...ilmMarketingDefault.howItWorks,
       title: asString(howPage?.title) ?? ilmMarketingDefault.howItWorks.title,
       intro:
         asString(firstSection(howPage, "section_rich_text")?.body) ?? ilmMarketingDefault.howItWorks.intro,
+      heroImage: fileRefToUrl(cfg.baseUrl, howHero?.image) ?? ilmMarketingDefault.howItWorks.heroImage,
     },
     pricing: {
       ...ilmMarketingDefault.pricing,
       title: asString(pricingPage?.title) ?? ilmMarketingDefault.pricing.title,
       intro:
         asString(firstSection(pricingPage, "section_rich_text")?.body) ?? ilmMarketingDefault.pricing.intro,
+      heroImage: fileRefToUrl(cfg.baseUrl, pricingHero?.image) ?? ilmMarketingDefault.pricing.heroImage,
     },
     faq: {
       ...ilmMarketingDefault.faq,
       title: asString(faqPage?.title) ?? ilmMarketingDefault.faq.title,
       intro: asString(faqSection?.intro) ?? ilmMarketingDefault.faq.intro,
+      heroImage: fileRefToUrl(cfg.baseUrl, faqHero?.image) ?? ilmMarketingDefault.faq.heroImage,
       items:
         Array.isArray(faqSection?.items) && faqSection?.items.length
           ? (faqSection.items as Array<Record<string, unknown>>)
@@ -215,6 +249,8 @@ async function getStructuredPagesContent(
       intro:
         asString(firstSection(resourcesPage, "section_rich_text")?.body) ??
         ilmMarketingDefault.resources.intro,
+      heroImage:
+        fileRefToUrl(cfg.baseUrl, resourcesHero?.image) ?? ilmMarketingDefault.resources.heroImage,
       cards:
         Array.isArray(resourcesCards?.items) && resourcesCards?.items.length
           ? (() => {
@@ -270,6 +306,8 @@ async function getStructuredPagesContent(
       panelImageUrl:
         fileRefToUrl(cfg.baseUrl, signInHero?.image) ?? ilmMarketingDefault.signIn.panelImageUrl,
       quote: asString(signInHero?.headline) ?? asString(signInIntro?.headline) ?? ilmMarketingDefault.signIn.quote,
+      formHeading: asString(signInIntro?.headline) ?? ilmMarketingDefault.signIn.formHeading,
+      formBody: asString(signInIntro?.body) ?? ilmMarketingDefault.signIn.formBody,
     },
   };
 

@@ -8,9 +8,13 @@ function withSlashTrimmed(s: string) {
 }
 
 export function getDirectusConfig(): DirectusClientConfig | null {
-  const baseUrl = process.env.DIRECTUS_URL?.trim();
+  const baseUrl = (
+    process.env.DIRECTUS_URL ||
+    process.env.NEXT_PUBLIC_DIRECTUS_URL ||
+    process.env.NEXT_PUBLIC_CMS_URL
+  )?.trim();
   if (!baseUrl) return null;
-  const token = process.env.DIRECTUS_TOKEN?.trim() || undefined;
+  const token = (process.env.DIRECTUS_TOKEN || process.env.DIRECTUS_ACCESS_TOKEN)?.trim() || undefined;
   return { baseUrl: withSlashTrimmed(baseUrl), token };
 }
 

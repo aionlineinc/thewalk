@@ -198,6 +198,8 @@ export const ilmMarketingDefault: IlmMarketingContent = {
   signIn: {
     panelImageUrl: "https://images.unsplash.com/photo-1474649107449-ea4f014b7e9f?w=1200&q=85",
     quote: "A living place for a life well-lived.",
+    formHeading: "Sign in",
+    formBody: "Use the same email and password as your theWalk account.",
   },
 
   about: {

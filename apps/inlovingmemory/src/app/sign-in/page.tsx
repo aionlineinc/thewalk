@@ -47,9 +47,11 @@ export default async function SignInPage() {
           <p className="text-xs font-semibold uppercase tracking-[0.28em] text-earth-400">
             Page moderator
           </p>
-          <h1 className="mt-4 text-3xl font-semibold tracking-tight text-earth-900">Sign in</h1>
+          <h1 className="mt-4 text-3xl font-semibold tracking-tight text-earth-900">
+            {content.signIn.formHeading ?? "Sign in"}
+          </h1>
           <p className="mt-3 text-sm leading-relaxed text-earth-600">
-            Use the same email and password as your theWalk account. New here?{" "}
+            {content.signIn.formBody ?? "Use the same email and password as your theWalk account."} New here?{" "}
             <Link
               className="font-medium text-earth-900 underline underline-offset-4 transition hover:text-calm-600"
               href={`${origin}/register`}

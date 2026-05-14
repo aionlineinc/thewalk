@@ -34,31 +34,6 @@ export default async function AboutPage() {
         </div>
       </section>
 
-      {/* What We Offer — photo background with overlay */}
-      {a.offering ? (
-        <section className="relative overflow-hidden py-20 md:py-28">
-          <div className="absolute inset-0">
-            <img
-              src={a.offering?.backgroundImageUrl || "https://images.unsplash.com/photo-1506815928480-bc4456a7e4fe?w=1920&q=80"}
-              alt=""
-              className="h-full w-full object-cover"
-              loading="lazy"
-            />
-            <div className="absolute inset-0 bg-white/90" aria-hidden />
-          </div>
-          <div className="relative ilm-container">
-            <div className="mx-auto max-w-3xl">
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-earth-500">{a.offering.heading}</p>
-              <div className="mt-6 space-y-4 text-base leading-relaxed text-earth-700">
-                {a.offering.body.split("\n\n").map((p, i) => (
-                  <p key={i}>{p}</p>
-                ))}
-              </div>
-            </div>
-          </div>
-        </section>
-      ) : null}
-
       {/* Our Story — 2-column with photo */}
       {a.story ? (
         <section className="border-t border-earth-200/80 bg-white py-20 md:py-28">

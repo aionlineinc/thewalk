@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { getIlmMarketingContent } from "@/lib/cms/ilm-content";
 
@@ -13,7 +14,11 @@ export default async function ResourcesPage() {
       {/* Cinematic hero */}
       <section className="relative flex h-[62vh] min-h-[480px] items-end p-2 md:p-4">
         <div className="absolute inset-2 overflow-hidden rounded-[20px] md:inset-4">
-          <div className="h-full w-full bg-gradient-to-br from-[#1a1008] via-[#0f0b08] to-[#0d0806]" />
+          {content.resources.heroImage ? (
+            <Image src={content.resources.heroImage} alt="" fill priority className="object-cover object-center" sizes="100vw" />
+          ) : (
+            <div className="h-full w-full bg-gradient-to-br from-[#1a1008] via-[#0f0b08] to-[#0d0806]" />
+          )}
           <div className="absolute inset-0 bg-gradient-to-t from-[#0d0806] via-black/55 to-black/20" aria-hidden />
           <div className="absolute inset-0 bg-[#7c4a1e]/15 mix-blend-overlay" aria-hidden />
         </div>

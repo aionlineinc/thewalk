@@ -15,7 +15,9 @@ export default async function PricingPage() {
       <section className="relative flex h-[62vh] min-h-[480px] items-end p-2 md:p-4">
         <div className="absolute inset-2 overflow-hidden rounded-[20px] md:inset-4">
           <Image
-            src="https://images.unsplash.com/photo-1501854140801-50d01698950b?w=1920&q=85"
+            src={
+              content.pricing.heroImage ?? "https://images.unsplash.com/photo-1501854140801-50d01698950b?w=1920&q=85"
+            }
             alt=""
             fill
             priority

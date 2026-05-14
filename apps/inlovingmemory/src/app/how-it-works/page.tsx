@@ -64,7 +64,9 @@ export default async function HowItWorksPage() {
       <section className="relative flex h-[62vh] min-h-[480px] items-end p-2 md:p-4" aria-labelledby="hiw-hero-heading">
         <div className="absolute inset-2 overflow-hidden rounded-[20px] md:inset-4">
           <Image
-            src="https://images.unsplash.com/photo-1455390582262-044cdead277a?w=1920&q=85"
+            src={
+              content.howItWorks.heroImage ?? "https://images.unsplash.com/photo-1455390582262-044cdead277a?w=1920&q=85"
+            }
             alt=""
             fill
             priority
@@ -80,10 +82,10 @@ export default async function HowItWorksPage() {
             id="hiw-hero-heading"
             className="mt-3 max-w-2xl text-4xl font-medium tracking-tight text-white md:text-[52px] md:leading-[1.1]"
           >
-            Honor the service. Preserve the story.
+            {content.howItWorks.title}
           </h1>
           <p className="mt-4 max-w-xl text-base font-light leading-relaxed text-white/70 md:text-lg">
-            Set up a page before the service, share it on the day, then let it grow into a memorial your family can return to for years.
+            {content.howItWorks.intro}
           </p>
           <div className="mt-8 flex flex-wrap gap-4">
             <AppPillLink href="/sign-in" variant="primary">
