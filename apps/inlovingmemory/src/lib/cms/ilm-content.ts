@@ -278,7 +278,9 @@ async function getStructuredPagesContent(
         Array.isArray(homeCardsJourney?.items) && homeCardsJourney?.items.length
           ? (() => {
               const steps: IlmMarketingContent["journey"]["steps"] = [];
-              for (const [index, item] of (homeCardsJourney.items as Array<Record<string, unknown>>).entries()) {
+              for (const [index, item] of (homeCardsJourney.items as Array<Record<string, unknown>>)
+                .slice(0, 3)
+                .entries()) {
                 const title = asString(item.title);
                 const copy = asString(item.body);
                 if (!title || !copy) continue;

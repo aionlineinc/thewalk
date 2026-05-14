@@ -79,10 +79,33 @@ const STEPS = [
   },
 ] as const;
 
+export type JourneyTransformationStep = {
+  num: number;
+  title: string;
+  copy: string;
+  href: string;
+  image: string;
+  alt: string;
+};
+
+type JourneyTransformationSectionProps = {
+  heading?: string;
+  intro?: string;
+  steps?: JourneyTransformationStep[];
+};
+
 /** Rail through badge center: image h-52 (13rem) + mt-11 (2.75rem) + half badge row (h-12/2) */
 const RAIL_TOP_CLASSES = "top-[calc(13rem+2.75rem+1.5rem)]";
 
-export function JourneyTransformationSection() {
+export function JourneyTransformationSection({
+  heading = "A Journey of Transformation",
+  intro = "theWalk is structured as a clear spiritual journey designed to support believers through different stages of growth, healing, identity, and community.",
+  steps,
+}: JourneyTransformationSectionProps) {
+  const journeySteps = (steps?.length ? steps : STEPS).slice(0, 3).map((step, index) => ({
+    ...step,
+    num: step.num || index + 1,
+  }));
   const sectionRef = useRef<HTMLElement>(null);
   const [scrollProgress, setScrollProgress] = useState(0);
   const [sectionExposure, setSectionExposure] = useState(0);
@@ -158,7 +181,7 @@ export function JourneyTransformationSection() {
   const cardTs: CardT = reduceMotion ? [1, 1, 1] : sequentialCardTs(timelineRaw);
   const lineFill01 = reduceMotion
     ? 1
-    : (cardTs[0] + cardTs[1] + cardTs[2]) / STEPS.length;
+    : (cardTs[0] + cardTs[1] + cardTs[2]) / journeySteps.length;
   const lineScale =
     reduceMotion ? 1 : LINE_SCALE_MIN + (LINE_SCALE_MAX - LINE_SCALE_MIN) * lineFill01;
 
@@ -205,14 +228,13 @@ export function JourneyTransformationSection() {
               id="journey-transformation-heading"
               className="text-3xl font-medium tracking-tight text-neutral-950 md:text-4xl lg:text-[35px] lg:leading-[1.1]"
             >
-              A Journey of Transformation
+              {heading}
             </h2>
             <p
               id="home-journey-transformation-lede"
               className="mx-auto mt-5 max-w-2xl text-[15px] font-light leading-relaxed text-neutral-500 md:text-lg md:leading-relaxed"
             >
-              theWalk is structured as a clear spiritual journey designed to support believers through
-              different stages of growth, healing, identity, and community.
+              {intro}
             </p>
           </header>
 
@@ -236,7 +258,7 @@ export function JourneyTransformationSection() {
 
             <div className="relative z-10 pb-4 md:pb-0">
               <div className="grid grid-cols-3 gap-4 py-6 md:gap-6 md:py-6 lg:gap-x-10 lg:py-0">
-              {STEPS.map((step, index) => (
+              {journeySteps.map((step, index) => (
                 <Link
                   key={step.href}
                   id={`home-journey-step-${step.href.replace("/journey/", "")}`}
@@ -281,7 +303,7 @@ export function JourneyTransformationSection() {
           </div>
 
           <div className="flex flex-col gap-14 md:hidden">
-            {STEPS.map((step, index) => (
+            {journeySteps.map((step, index) => (
               <Link
                 key={step.href}
                 id={`home-journey-step-mobile-${step.href.replace("/journey/", "")}`}

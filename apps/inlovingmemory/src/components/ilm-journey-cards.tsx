@@ -90,7 +90,7 @@ export function IlmJourneyCards({
   intro = "Remember with clarity, gather with community, and preserve a legacy worth carrying forward.",
   steps,
 }: IlmJourneyCardsProps) {
-  const journeySteps = (steps?.length ? steps : STEPS).map((step, index) => ({
+  const journeySteps = (steps?.length ? steps : STEPS).slice(0, 3).map((step, index) => ({
     ...step,
     num: step.num || index + 1,
   }));

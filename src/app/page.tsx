@@ -4,7 +4,10 @@ import { HomeFinalCtaSection } from "@/components/home/cms/HomeFinalCtaSection";
 import { HomeHeroSection } from "@/components/home/cms/HomeHeroSection";
 import { HomeIntroSection } from "@/components/home/cms/HomeIntroSection";
 import { CurrentSeriesSection } from "@/components/sections/CurrentSeriesSection";
-import { JourneyTransformationSection } from "@/components/sections/JourneyTransformationSection";
+import {
+  JourneyTransformationSection,
+  type JourneyTransformationStep,
+} from "@/components/sections/JourneyTransformationSection";
 import { MinistryGroupsSection } from "@/components/sections/MinistryGroupsSection";
 import { WalkWithUsSection } from "@/components/sections/WalkWithUsSection";
 import { AppPillLink } from "@/components/ui/AppPillLink";
@@ -15,6 +18,7 @@ import {
   AppLead,
   AppLeadOnDark,
 } from "@/components/ui/Typography";
+import { cmsAssetPresets } from "@/lib/cms/assets";
 import { findSection, getPage } from "@/lib/cms";
 import { getCurrentSeries } from "@/lib/series-content";
 
@@ -140,7 +144,46 @@ export default async function Home() {
   ]);
   const heroSection = findSection(page?.sections, "section_hero");
   const introSection = findSection(page?.sections, "section_rich_text");
+  const journeyCardsSection =
+    page?.sections.find(
+      (s) =>
+        s.__collection === "section_feature_cards" &&
+        (s.title_internal ?? "").toLowerCase().includes("journey"),
+    ) ??
+    findSection(page?.sections, "section_feature_cards");
   const finalCtaSection = findSection(page?.sections, "section_cta_banner");
+  const journeySteps: JourneyTransformationStep[] | undefined =
+    journeyCardsSection && journeyCardsSection.__collection === "section_feature_cards"
+      ? (() => {
+          const mapped = journeyCardsSection.items
+            .slice(0, 3)
+            .map((item, index) => {
+              const title = item.title?.trim();
+              const copy = item.body?.trim();
+              if (!title || !copy) return null;
+              return {
+                num: index + 1,
+                title,
+                copy,
+                href: item.url?.trim() || `/journey`,
+                image:
+                  cmsAssetPresets.card(item.icon) ||
+                  "https://images.unsplash.com/photo-1490730141103-6cac27aaab94?q=80&w=800&auto=format&fit=crop",
+                alt: item.icon_alt?.trim() || title,
+              };
+            })
+            .filter((item): item is JourneyTransformationStep => !!item);
+          return mapped.length ? mapped : undefined;
+        })()
+      : undefined;
+  const journeyHeading =
+    journeyCardsSection && journeyCardsSection.__collection === "section_feature_cards"
+      ? (journeyCardsSection.headline ?? undefined)
+      : undefined;
+  const journeyIntro =
+    journeyCardsSection && journeyCardsSection.__collection === "section_feature_cards"
+      ? (journeyCardsSection.intro ?? undefined)
+      : undefined;
 
   return (
     <>
@@ -156,7 +199,11 @@ export default async function Home() {
         <HardcodedIntro />
       )}
 
-      <JourneyTransformationSection />
+      <JourneyTransformationSection
+        heading={journeyHeading}
+        intro={journeyIntro}
+        steps={journeySteps}
+      />
 
       <MinistryGroupsSection />
 
