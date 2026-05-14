@@ -21,6 +21,44 @@ function devDistDir() {
 
 const localDevDist = devDistDir();
 
+/**
+ * Allow `next/image` to load Directus `/assets/{id}` URLs (marketing heroes, cards, etc.).
+ * Must match the CMS host used at runtime; include env URLs so local / staging CMS works.
+ */
+function directusAssetRemotePatterns() {
+  /** @type {import('next').RemotePattern[]} */
+  const patterns = [];
+  const seen = new Set();
+
+  function addFromUrl(raw) {
+    if (!raw || typeof raw !== "string") return;
+    const trimmed = raw.trim();
+    if (!trimmed) return;
+    try {
+      const u = new URL(trimmed);
+      const protocol = u.protocol === "https:" ? "https" : "http";
+      const key = `${protocol}://${u.hostname}${u.port ? `:${u.port}` : ""}`;
+      if (seen.has(key)) return;
+      seen.add(key);
+      patterns.push({
+        protocol,
+        hostname: u.hostname,
+        ...(u.port ? { port: u.port } : {}),
+        pathname: "/assets/**",
+      });
+    } catch {
+      /* ignore invalid env */
+    }
+  }
+
+  addFromUrl("https://cms.thewalk.org");
+  addFromUrl(process.env.NEXT_PUBLIC_CMS_URL);
+  addFromUrl(process.env.DIRECTUS_URL);
+  addFromUrl(process.env.NEXT_PUBLIC_DIRECTUS_URL);
+
+  return patterns;
+}
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   ...(localDevDist ? { distDir: localDevDist } : {}),
@@ -34,6 +72,7 @@ const nextConfig = {
         hostname: "images.unsplash.com",
         pathname: "/**",
       },
+      ...directusAssetRemotePatterns(),
     ],
   },
 };

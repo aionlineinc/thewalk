@@ -131,4 +131,8 @@ Point your ILM hostname at this service. On the **main** theWalk deployment, set
 
 ILM marketing content is read from the shared Directus instance (see repo root **`docs/cms.md`**). Page slug for the ILM home experience: **`ilm-home`**.
 
+**Home hero image:** Add a **`section_hero`** block on `ilm-home` (first in the sections list if you use several), set **status** to **Published**, and fill **headline**, **image**, and **image_alt** (all required in Directus). The app reads `section_hero.image` for the full-bleed home background.
+
+**`next/image` and the CMS host:** Directus asset URLs must be allowed in `next.config.mjs`. Production includes **`cms.thewalk.org`**; for another CMS origin, set **`NEXT_PUBLIC_CMS_URL`** (or **`DIRECTUS_URL`**) at **build** time so that host is included in `images.remotePatterns`.
+
 **Optional:** With the workspace **Directus MCP** enabled in Cursor, you can have an agent inspect or adjust `ilm-home` sections and file references; confirm changes in the admin UI afterward.
