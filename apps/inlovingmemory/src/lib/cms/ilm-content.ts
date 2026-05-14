@@ -205,9 +205,9 @@ async function getStructuredPagesContent(
           asString(homeSplit?.body) ??
           asString(homeAssistanceText?.body) ??
           ilmMarketingDefault.home.assistance.body,
-        backgroundImageUrl:
-          fileRefToUrl(cfg.baseUrl, homeSplit?.image) ??
-          ilmMarketingDefault.home.assistance.backgroundImageUrl,
+        // Keep the assistance *atmosphere* background on the ILM default unless we add a dedicated CMS field.
+        // `section_image_split.image` is used for the side panel only so we do not reuse theWalk hero art as a full-bleed ILM background.
+        backgroundImageUrl: ilmMarketingDefault.home.assistance.backgroundImageUrl,
         sideImageUrl:
           fileRefToUrl(cfg.baseUrl, homeSplit?.image) ?? ilmMarketingDefault.home.assistance.sideImageUrl,
         primaryCta: {
