@@ -126,3 +126,9 @@ By default, Wasabi buckets are private. To serve photos publicly:
 - **Always set `NEXTAUTH_URL` to the exact public URL** of the deployed instance (apex vs subdomain) so callbacks and cookie security settings are correct.
 
 Point your ILM hostname at this service. On the **main** theWalk deployment, set `ILM_APP_URL` to that same public URL for admin sidebar links.
+
+## CMS (Directus)
+
+ILM marketing content is read from the shared Directus instance (see repo root **`docs/cms.md`**). Page slug for the ILM home experience: **`ilm-home`**.
+
+**Optional:** With the workspace **Directus MCP** enabled in Cursor, you can have an agent inspect or adjust `ilm-home` sections and file references; confirm changes in the admin UI afterward.

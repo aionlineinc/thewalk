@@ -44,6 +44,14 @@ fail top-level validation return `null`, which route handlers must treat as
 6. Click **Save**. A Directus Flow automatically pings the site's
    `/api/revalidate` endpoint so the change is live within ~5 seconds.
 
+## Optional: Directus MCP (Cursor)
+
+If this workspace has the **Directus** MCP server enabled in Cursor, you can ask the agent to query or update CMS data (collections, files, page sections) using the server’s tools—useful for smoke checks, verifying a page slug, or small field fixes without clicking through the admin UI. Authenticate with the MCP server when prompted so calls are allowed.
+
+**ILM marketing (`ilm-home`):** confirm **Pages → `ilm-home` → sections** use ILM-specific assets (not shared theWalk placeholders). A published **`section_hero`** drives the top hero image from Directus; **`section_image_split`** on that page supplies the assistance **side** image. The full-bleed assistance **background** is still the app default until a dedicated CMS field exists—see `apps/inlovingmemory/src/lib/cms/ilm-content.ts`.
+
+For large copy or layout work, prefer **https://cms.thewalk.org/admin**; use MCP for targeted, auditable edits you can re-check in Data Studio.
+
 ## Frontend contract
 
 - `getPage(slug)` in `src/lib/cms/fetch.ts` returns a validated `Page` or
