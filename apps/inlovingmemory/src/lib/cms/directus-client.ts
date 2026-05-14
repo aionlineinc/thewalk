@@ -7,6 +7,42 @@ function withSlashTrimmed(s: string) {
   return s.replace(/\/+$/, "");
 }
 
+/** Directus image transform presets — mirrors thewalk.org's cmsAssetPresets pattern. */
+export const ilmAssetPresets = {
+  /** Full-bleed hero background: 2000px wide, WebP, cover fit. */
+  hero: { width: 2000, quality: 85, format: "webp" as const, fit: "cover" as const },
+  /** Half-width / card image: 800px wide. */
+  card: { width: 800, quality: 85, format: "webp" as const, fit: "cover" as const },
+} as const;
+
+/**
+ * Build a Directus asset URL with transform params from a file reference.
+ * Accepts either a plain UUID string or an expanded `{ id }` object.
+ * Returns null when the input is neither.
+ */
+export function cmsAssetUrl(
+  baseUrl: string,
+  fileRef: unknown,
+  preset: { width: number; quality: number; format: string; fit: string },
+): string | null {
+  let id: string | null = null;
+  if (typeof fileRef === "string" && fileRef.trim()) {
+    // If it's already a full URL, return as-is (e.g. Unsplash fallback).
+    if (fileRef.startsWith("http")) return fileRef;
+    id = fileRef.trim();
+  } else if (fileRef && typeof fileRef === "object" && typeof (fileRef as Record<string, unknown>).id === "string") {
+    id = (fileRef as Record<string, unknown>).id as string;
+  }
+  if (!id) return null;
+  const params = new URLSearchParams({
+    width: String(preset.width),
+    quality: String(preset.quality),
+    format: preset.format,
+    fit: preset.fit,
+  });
+  return `${baseUrl}/assets/${id}?${params.toString()}`;
+}
+
 export function getDirectusConfig(): DirectusClientConfig | null {
   const baseUrl = (
     process.env.DIRECTUS_URL ||

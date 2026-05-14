@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { AppPillLink } from "@/components/ui/AppPillLink";
 import { getIlmMarketingContent } from "@/lib/cms/ilm-content";
+import { IlmPageHero } from "@/components/ilm-page-hero";
 
 export const metadata = {
   title: "How it works · inLovingMemory",
@@ -60,43 +61,13 @@ export default async function HowItWorksPage() {
 
   return (
     <main>
-      {/* ── Hero ── */}
-      <section className="relative flex h-[62vh] min-h-[480px] items-end p-2 md:p-4" aria-labelledby="hiw-hero-heading">
-        <div className="absolute inset-2 overflow-hidden rounded-[20px] md:inset-4">
-          <Image
-            src={
-              content.howItWorks.heroImage ?? "https://images.unsplash.com/photo-1455390582262-044cdead277a?w=1920&q=85"
-            }
-            alt=""
-            fill
-            priority
-            className="object-cover object-center"
-            sizes="100vw"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#0d0806] via-black/55 to-black/20" aria-hidden />
-          <div className="absolute inset-0 bg-[#7c4a1e]/15 mix-blend-overlay" aria-hidden />
-        </div>
-        <div className="relative z-10 ilm-container pb-12 pt-28 md:pb-16">
-          <p className="text-xs font-semibold uppercase tracking-[0.28em] text-white/50">How it works</p>
-          <h1
-            id="hiw-hero-heading"
-            className="mt-3 max-w-2xl text-4xl font-medium tracking-tight text-white md:text-[52px] md:leading-[1.1]"
-          >
-            {content.howItWorks.title}
-          </h1>
-          <p className="mt-4 max-w-xl text-base font-light leading-relaxed text-white/70 md:text-lg">
-            {content.howItWorks.intro}
-          </p>
-          <div className="mt-8 flex flex-wrap gap-4">
-            <AppPillLink href="/sign-in" variant="primary">
-              Create your first memorial
-            </AppPillLink>
-            <AppPillLink href="/pricing" variant="ghostOnDark">
-              View pricing
-            </AppPillLink>
-          </div>
-        </div>
-      </section>
+      <IlmPageHero
+        eyebrow={content.howItWorks.heroEyebrow || "How it works"}
+        title={content.howItWorks.title}
+        body={content.howItWorks.intro}
+        image={content.howItWorks.heroImage}
+        ctas={content.howItWorks.heroCtas}
+      />
 
       {/* ── Steps ── */}
       <section className="bg-white py-20 md:py-24" aria-labelledby="hiw-steps-heading">

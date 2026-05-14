@@ -1,4 +1,4 @@
-export type IlmMarketingLink = { label: string; href: string };
+export type IlmMarketingLink = { label: string; href: string; variant?: "primary" | "ghostOnDark" };
 export type IlmMarketingJourneyStep = {
   num: number;
   title: string;
@@ -9,10 +9,8 @@ export type IlmMarketingJourneyStep = {
 };
 
 export type IlmMarketingContent = {
-  tagline: string;
   heroTitle: string;
   heroBody: string;
-  heroLinks: IlmMarketingLink[];
   home: {
     heroBackgroundImageUrl: string;
     primaryCta: IlmMarketingLink;
@@ -68,7 +66,9 @@ export type IlmMarketingContent = {
     title: string;
     body: string;
     links: IlmMarketingLink[];
+    heroEyebrow?: string;
     heroImage?: string;
+    heroCtas?: IlmMarketingLink[];
     story?: { heading: string; body: string; imageUrl?: string };
     belief?: { heading: string; body: string; verse: string; verseRef: string };
     offering?: { heading: string; body: string; backgroundImageUrl?: string };
@@ -80,32 +80,29 @@ export type IlmMarketingContent = {
   howItWorks: {
     title: string;
     intro: string;
+    heroEyebrow?: string;
     heroImage?: string;
+    heroCtas?: IlmMarketingLink[];
     steps: { title: string; body: string }[];
     links: IlmMarketingLink[];
   };
   pricing: {
     title: string;
     intro: string;
+    heroEyebrow?: string;
     heroImage?: string;
+    heroCtas?: IlmMarketingLink[];
     tiers: { name: string; summary: string; bullets: string[] }[];
   };
-  faq: { title: string; intro: string; heroImage?: string; items: { q: string; a: string }[] };
-  resources: { title: string; intro: string; heroImage?: string; cards: { title: string; body: string; cta?: IlmMarketingLink }[] };
+  faq: { title: string; intro: string; heroEyebrow?: string; heroImage?: string; items: { q: string; a: string }[] };
+  resources: { title: string; intro: string; heroEyebrow?: string; heroImage?: string; cards: { title: string; body: string; cta?: IlmMarketingLink }[] };
 };
 
 export const ilmMarketingDefault: IlmMarketingContent = {
-  tagline: "More than a memorial — a living legacy.",
-
   heroTitle: "When their walk ends, their story lives on",
 
   heroBody:
     "From the moment of loss through every season of grief — inLovingMemory gives families a beautiful place to honor the service, gather memories, and find care and community along the way. Because grief was never meant to be faced alone.",
-
-  heroLinks: [
-    { label: "How it works", href: "/how-it-works" },
-    { label: "Find a memorial", href: "/directory" },
-  ],
 
   home: {
     heroBackgroundImageUrl: "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=1920&q=85",
@@ -285,12 +282,20 @@ export const ilmMarketingDefault: IlmMarketingContent = {
       { label: "View pricing", href: "/pricing" },
       { label: "Page moderator sign in", href: "/sign-in" },
     ],
+    heroCtas: [
+      { label: "Create your first memorial", href: "/sign-in", variant: "primary" },
+      { label: "View pricing", href: "/pricing", variant: "ghostOnDark" },
+    ],
   },
 
   pricing: {
     title: "Free to start. Built to last.",
     intro:
       "Create a memorial at no cost — ready for the service. Upgrade when your family needs more: richer media, grief counselling, and a private legacy vault.",
+    heroCtas: [
+      { label: "Get started", href: "/sign-in", variant: "primary" },
+      { label: "Read FAQ", href: "/faq", variant: "ghostOnDark" },
+    ],
     tiers: [
       {
         name: "Basic",

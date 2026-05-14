@@ -1,5 +1,5 @@
-import { ilmMarketingDefault, type IlmMarketingContent } from "@/content/ilm-marketing.default";
-import { directusGetJson, getDirectusConfig } from "@/lib/cms/directus-client";
+import { ilmMarketingDefault, type IlmMarketingContent, type IlmMarketingLink } from "@/content/ilm-marketing.default";
+import { directusGetJson, getDirectusConfig, cmsAssetUrl, ilmAssetPresets } from "@/lib/cms/directus-client";
 
 type IlmSectionRow = {
   collection?: string | null;
@@ -72,13 +72,26 @@ function pickRichTextSection(
   );
 }
 
+function heroCtasFromSection(
+  hero: Record<string, unknown> | null,
+): IlmMarketingContent["about"]["heroCtas"] {
+  if (!hero) return undefined;
+  const ctas: IlmMarketingLink[] = [];
+  const label1 = asString(hero.cta_primary_label);
+  const url1 = asString(hero.cta_primary_url);
+  if (label1 && url1) ctas.push({ label: label1, href: url1 });
+  const label2 = asString(hero.cta_secondary_label);
+  const url2 = asString(hero.cta_secondary_url);
+  if (label2 && url2) ctas.push({ label: label2, href: url2 });
+  return ctas.length ? ctas : undefined;
+}
+
 function fileRefToUrl(baseUrl: string, fileRef: unknown): string | null {
-  const directUrl = asString(fileRef);
-  if (directUrl) return directUrl;
-  if (isPlainObject(fileRef) && typeof fileRef.id === "string") {
-    return `${baseUrl}/assets/${fileRef.id}`;
-  }
-  return null;
+  return cmsAssetUrl(baseUrl, fileRef, ilmAssetPresets.hero);
+}
+
+function fileRefToCardUrl(baseUrl: string, fileRef: unknown): string | null {
+  return cmsAssetUrl(baseUrl, fileRef, ilmAssetPresets.card);
 }
 
 async function getStructuredPagesContent(
@@ -215,26 +228,33 @@ async function getStructuredPagesContent(
       title: asString(aboutPage?.title) ?? ilmMarketingDefault.about.title,
       body:
         asString(firstSection(aboutPage, "section_rich_text")?.body) ?? ilmMarketingDefault.about.body,
+      heroEyebrow: asString(aboutHero?.eyebrow) ?? ilmMarketingDefault.about.heroEyebrow,
       heroImage: fileRefToUrl(cfg.baseUrl, aboutHero?.image) ?? ilmMarketingDefault.about.heroImage,
+      heroCtas: heroCtasFromSection(aboutHero) ?? ilmMarketingDefault.about.heroCtas,
     },
     howItWorks: {
       ...ilmMarketingDefault.howItWorks,
       title: asString(howPage?.title) ?? ilmMarketingDefault.howItWorks.title,
       intro:
         asString(firstSection(howPage, "section_rich_text")?.body) ?? ilmMarketingDefault.howItWorks.intro,
+      heroEyebrow: asString(howHero?.eyebrow) ?? ilmMarketingDefault.howItWorks.heroEyebrow,
       heroImage: fileRefToUrl(cfg.baseUrl, howHero?.image) ?? ilmMarketingDefault.howItWorks.heroImage,
+      heroCtas: heroCtasFromSection(howHero) ?? ilmMarketingDefault.howItWorks.heroCtas,
     },
     pricing: {
       ...ilmMarketingDefault.pricing,
       title: asString(pricingPage?.title) ?? ilmMarketingDefault.pricing.title,
       intro:
         asString(firstSection(pricingPage, "section_rich_text")?.body) ?? ilmMarketingDefault.pricing.intro,
+      heroEyebrow: asString(pricingHero?.eyebrow) ?? ilmMarketingDefault.pricing.heroEyebrow,
       heroImage: fileRefToUrl(cfg.baseUrl, pricingHero?.image) ?? ilmMarketingDefault.pricing.heroImage,
+      heroCtas: heroCtasFromSection(pricingHero) ?? ilmMarketingDefault.pricing.heroCtas,
     },
     faq: {
       ...ilmMarketingDefault.faq,
       title: asString(faqPage?.title) ?? ilmMarketingDefault.faq.title,
       intro: asString(faqSection?.intro) ?? ilmMarketingDefault.faq.intro,
+      heroEyebrow: asString(faqHero?.eyebrow) ?? ilmMarketingDefault.faq.heroEyebrow,
       heroImage: fileRefToUrl(cfg.baseUrl, faqHero?.image) ?? ilmMarketingDefault.faq.heroImage,
       items:
         Array.isArray(faqSection?.items) && faqSection?.items.length
@@ -249,6 +269,7 @@ async function getStructuredPagesContent(
       intro:
         asString(firstSection(resourcesPage, "section_rich_text")?.body) ??
         ilmMarketingDefault.resources.intro,
+      heroEyebrow: asString(resourcesHero?.eyebrow) ?? ilmMarketingDefault.resources.heroEyebrow,
       heroImage:
         fileRefToUrl(cfg.baseUrl, resourcesHero?.image) ?? ilmMarketingDefault.resources.heroImage,
       cards:
@@ -290,7 +311,7 @@ async function getStructuredPagesContent(
                   copy,
                   href: asString(item.url) ?? ilmMarketingDefault.journey.steps[index]?.href ?? "/",
                   image:
-                    fileRefToUrl(cfg.baseUrl, item.icon) ??
+                    fileRefToCardUrl(cfg.baseUrl, item.icon) ??
                     ilmMarketingDefault.journey.steps[index]?.image ??
                     ilmMarketingDefault.journey.steps[0].image,
                   alt:

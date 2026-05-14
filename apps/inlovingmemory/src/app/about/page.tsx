@@ -1,4 +1,5 @@
 import { getIlmMarketingContent } from "@/lib/cms/ilm-content";
+import { IlmPageHero } from "@/components/ilm-page-hero";
 
 export const dynamic = "force-dynamic";
 
@@ -13,26 +14,13 @@ export default async function AboutPage() {
 
   return (
     <main>
-      {/* Hero */}
-      <section className="relative flex h-[62vh] min-h-[480px] items-end p-2 md:p-4">
-        <div className="absolute inset-2 overflow-hidden rounded-[20px] md:inset-4">
-          <img
-            src={a.heroImage || "https://images.unsplash.com/photo-1475776408506-9a5371e7a068?w=1920&q=85"}
-            alt=""
-            className="h-full w-full object-cover object-center"
-            loading="eager"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#0d0806] via-black/55 to-black/20" aria-hidden />
-          <div className="absolute inset-0 bg-[#7c4a1e]/15 mix-blend-overlay" aria-hidden />
-        </div>
-        <div className="relative z-10 ilm-container pb-12 pt-28 md:pb-16">
-          <p className="text-xs font-semibold uppercase tracking-[0.28em] text-white/55">About</p>
-          <h1 className="mt-3 max-w-3xl text-4xl font-medium tracking-tight text-white md:text-[50px] md:leading-[1.1]">
-            {a.title}
-          </h1>
-          <p className="mt-4 max-w-xl text-base font-light leading-relaxed text-white/70 md:text-lg">{a.body}</p>
-        </div>
-      </section>
+      <IlmPageHero
+        eyebrow={a.heroEyebrow || "About"}
+        title={a.title}
+        body={a.body}
+        image={a.heroImage}
+        ctas={a.heroCtas}
+      />
 
       {/* Our Story — 2-column with photo */}
       {a.story ? (
