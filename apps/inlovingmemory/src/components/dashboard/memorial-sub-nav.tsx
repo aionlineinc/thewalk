@@ -10,6 +10,7 @@ export function MemorialSubNav({ memorialId, slug }: { memorialId: string; slug:
     { href: `/dashboard/memorials/${memorialId}/edit`, label: "Edit details" },
     { href: `/dashboard/memorials/${memorialId}/media`, label: "Photos & media" },
     { href: `/dashboard/memorials/${memorialId}/community`, label: "Community" },
+    { href: `/dashboard/memorials/${memorialId}/vault`, label: "Vault" },
     { href: `/memorial/${slug}`, label: "View page →" },
   ];
 

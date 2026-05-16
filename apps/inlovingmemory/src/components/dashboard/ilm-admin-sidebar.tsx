@@ -12,6 +12,7 @@ const items = [
   { href: "/dashboard/admin/banners", label: "Banners", match: (p: string) => p.startsWith("/dashboard/admin/banners") },
   { href: "/dashboard/admin/services", label: "Service providers", match: (p: string) => p.startsWith("/dashboard/admin/services") },
   { href: "/dashboard/admin/funeral", label: "Funeral services", match: (p: string) => p.startsWith("/dashboard/admin/funeral") },
+  { href: "/dashboard/admin/organisations", label: "Organisations", match: (p: string) => p.startsWith("/dashboard/admin/organisations") },
 ];
 
 function navLinkClass(active: boolean) {

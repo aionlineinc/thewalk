@@ -8,6 +8,11 @@ export type MemorialFormDefaults = {
   deathDate: string;
   country: string;
   parish: string;
+  restingPlaceName: string;
+  restingPlaceAddress: string;
+  restingPlaceLat: string;
+  restingPlaceLng: string;
+  restingPlaceMapUrl: string;
   themePreset: string;
   primaryColor: string;
   accentColor: string;
@@ -32,6 +37,11 @@ export function buildMemorialDefaults(row: {
   deathDate: Date | null;
   country: string | null;
   parish: string | null;
+  restingPlaceName: string | null;
+  restingPlaceAddress: string | null;
+  restingPlaceLat: number | null;
+  restingPlaceLng: number | null;
+  restingPlaceMapUrl: string | null;
   themePreset: string | null;
   primaryColor: string | null;
   accentColor: string | null;
@@ -50,6 +60,11 @@ export function buildMemorialDefaults(row: {
     deathDate: isoDateForInput(row.deathDate),
     country: row.country ?? "",
     parish: row.parish ?? "",
+    restingPlaceName: row.restingPlaceName ?? "",
+    restingPlaceAddress: row.restingPlaceAddress ?? "",
+    restingPlaceLat: row.restingPlaceLat != null ? String(row.restingPlaceLat) : "",
+    restingPlaceLng: row.restingPlaceLng != null ? String(row.restingPlaceLng) : "",
+    restingPlaceMapUrl: row.restingPlaceMapUrl ?? "",
     themePreset: row.themePreset ?? "",
     primaryColor: row.primaryColor ?? "",
     accentColor: row.accentColor ?? "",

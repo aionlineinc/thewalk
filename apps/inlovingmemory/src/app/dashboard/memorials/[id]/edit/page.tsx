@@ -5,6 +5,7 @@ import { MemorialForm } from "@/app/dashboard/memorials/memorial-form";
 import { buildMemorialDefaults } from "@/app/dashboard/memorials/memorial-form-defaults";
 import { updateMemorialFromForm } from "@/app/dashboard/memorials/actions";
 import { MemorialSubNav } from "@/components/dashboard/memorial-sub-nav";
+import { MemorialPamphletForm } from "@/components/dashboard/memorial-pamphlet-form";
 import { getCustomBannerPresets } from "@/lib/ilm-banner-presets";
 import { getIlmSession } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
@@ -28,6 +29,13 @@ export default async function EditMemorialPage({ params }: { params: { id: strin
   const defaults = buildMemorialDefaults(memorial);
   const customBanners = await getCustomBannerPresets();
 
+  const pamphlet = await prisma.ilmPamphlet.findFirst({
+    where: { memorialId: memorial.id },
+    select: { pdfUrl: true },
+  });
+
+  const memorialUrl = `${process.env.NEXT_PUBLIC_APP_URL || "https://inlovingmemory.cloud"}/memorial/${memorial.slug}`;
+
   return (
     <section className="w-full">
       <Link href="/dashboard" className="dash-link text-sm">
@@ -43,6 +51,13 @@ export default async function EditMemorialPage({ params }: { params: { id: strin
       <div className="dash-card-pad mt-6">
         <MemorialForm action={updateMemorialFromForm} defaults={defaults} memorialIdForEdit={memorial.id} customBanners={customBanners} />
       </div>
+
+      <MemorialPamphletForm
+        memorialId={memorial.id}
+        pdfUrl={pamphlet?.pdfUrl ?? null}
+        memorialUrl={memorialUrl}
+      />
+
       <div className="mt-16 border-t border-earth-200 pt-10">
         <h2 className="text-lg font-semibold text-earth-900">Danger zone</h2>
         <p className="mt-2 max-w-xl text-sm text-earth-500">

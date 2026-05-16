@@ -104,6 +104,32 @@ export async function setMediaStatusFromForm(formData: FormData) {
   return setMediaStatus(memorialId, mediaId, status);
 }
 
+export async function submitGriefRequestFromForm(formData: FormData) {
+  const memorialId = formText(formData, "__memorialId");
+  const brief = formText(formData, "brief");
+  if (!memorialId || !brief) redirect("/dashboard?error=invalid");
+  return submitGriefRequest(memorialId, brief);
+}
+
+export async function submitGriefRequest(memorialId: string, brief: string) {
+  const memorial = await requireKeeperForMemorial(memorialId);
+
+  const session = await getServerSession(getAuthOptions());
+  const userId = session?.user && "id" in session.user ? (session.user as { id: string }).id : undefined;
+  if (!userId) redirect("/sign-in");
+
+  await prisma.ilmGriefRequest.create({
+    data: {
+      memorialId,
+      requesterId: userId,
+      brief: brief.trim(),
+      status: "OPEN",
+    },
+  });
+
+  revalidatePath(`/dashboard/memorials/${memorialId}/community`);
+}
+
 export async function setMediaStatus(memorialId: string, mediaId: string, status: IlmSubmissionStatus) {
   const memorial = await requireKeeperForMemorial(memorialId);
 

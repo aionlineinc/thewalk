@@ -10,6 +10,7 @@ import { MemorialEventRsvpForm } from "@/components/memorial/memorial-event-rsvp
 import { MemorialFlowersDonations } from "@/components/memorial/memorial-flowers-donations";
 import { MemorialHero } from "@/components/memorial/memorial-hero";
 import { MemorialOrderOfService } from "@/components/memorial/memorial-order-of-service";
+import { MemorialRestingPlace } from "@/components/memorial/memorial-resting-place";
 import { MemorialPhotoGallery } from "@/components/memorial/memorial-photo-gallery";
 import { MemorialSectionNav } from "@/components/memorial/memorial-section-nav";
 import { MemorialSharedMemories } from "@/components/memorial/memorial-shared-memories";
@@ -73,6 +74,11 @@ export default async function MemorialPage({ params, searchParams }: PageProps) 
       deathDate: true,
       privacyLevel: true,
       pageKeeperId: true,
+      restingPlaceName: true,
+      restingPlaceAddress: true,
+      restingPlaceLat: true,
+      restingPlaceLng: true,
+      restingPlaceMapUrl: true,
       themePreset: true,
       primaryColor: true,
       accentColor: true,
@@ -399,6 +405,14 @@ export default async function MemorialPage({ params, searchParams }: PageProps) 
               </p>
             </div>
           </article>
+
+          <MemorialRestingPlace
+            name={memorial.restingPlaceName}
+            address={memorial.restingPlaceAddress}
+            lat={memorial.restingPlaceLat}
+            lng={memorial.restingPlaceLng}
+            mapUrl={memorial.restingPlaceMapUrl}
+          />
 
           {specialRequest ? (
             <div className="ilm-container">

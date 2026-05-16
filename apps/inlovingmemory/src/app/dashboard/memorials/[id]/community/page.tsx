@@ -5,6 +5,7 @@ import {
   setGuestbookStatusFromForm,
   setPrayerStatusFromForm,
   setMediaStatusFromForm,
+  submitGriefRequestFromForm,
 } from "@/app/dashboard/memorials/[id]/community/actions";
 import { MemorialSubNav } from "@/components/dashboard/memorial-sub-nav";
 import { getIlmSession } from "@/lib/auth";
@@ -53,6 +54,32 @@ export default async function MemorialCommunityPage({ params }: { params: { id: 
         orderBy: { createdAt: "asc" },
         select: { id: true, storageUrl: true, kind: true, authorGuestName: true, createdAt: true },
       },
+      griefRequests: {
+        orderBy: { createdAt: "desc" },
+        select: {
+          id: true,
+          brief: true,
+          status: true,
+          createdAt: true,
+          matchedCounsellor: {
+            select: {
+              id: true,
+              bio: true,
+              user: { select: { name: true } },
+            },
+          },
+        },
+      },
+    },
+  });
+
+  const verifiedCounsellors = await prisma.ilmCounsellor.findMany({
+    where: { verifiedAt: { not: null } },
+    select: {
+      id: true,
+      bio: true,
+      specialisations: true,
+      user: { select: { name: true } },
     },
   });
 
@@ -236,6 +263,99 @@ export default async function MemorialCommunityPage({ params }: { params: { id: 
                 </li>
               ))}
             </ul>
+          )}
+        </section>
+
+        {/* Grief support */}
+        <section aria-labelledby="grief-mod" className="mt-12">
+          <h2 id="grief-mod" className="text-lg font-semibold text-earth-900">
+            Grief support requests
+          </h2>
+          <p className="mt-1 text-sm text-earth-600">
+            Submit a request to be matched with a grief counsellor or minister.
+          </p>
+
+          {/* Request form */}
+          <div className="dash-card-pad mt-4">
+            <form action={submitGriefRequestFromForm} className="space-y-4">
+              <input type="hidden" name="__memorialId" value={memorial.id} />
+              <div>
+                <label className="block text-sm font-medium text-earth-800">
+                  How can we support you?
+                </label>
+                <textarea
+                  name="brief"
+                  required
+                  rows={3}
+                  maxLength={2000}
+                  placeholder="Briefly describe what you're going through and the kind of support you need…"
+                  className="mt-1.5 w-full max-w-xl rounded-lg border border-earth-200 bg-white px-3 py-2 text-sm text-earth-900 outline-none ring-earth-400/30 transition focus:border-earth-400 focus:ring-2"
+                />
+              </div>
+              <button
+                type="submit"
+                className="rounded-lg bg-calm-500 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-calm-600"
+              >
+                Submit request
+              </button>
+            </form>
+          </div>
+
+          {/* Existing requests */}
+          {memorial.griefRequests.length > 0 && (
+            <div className="mt-6 space-y-3">
+              <h3 className="text-sm font-medium text-earth-700">Previous requests</h3>
+              {memorial.griefRequests.map((r) => (
+                <div key={r.id} className="dash-card-pad">
+                  <div className="flex items-center justify-between">
+                    <span
+                      className={`inline-block rounded px-1.5 py-0.5 text-xs font-medium ${
+                        r.status === "OPEN"
+                          ? "bg-amber-100 text-amber-800"
+                          : r.status === "MATCHED"
+                            ? "bg-green-100 text-green-800"
+                            : "bg-earth-100 text-earth-600"
+                      }`}
+                    >
+                      {r.status}
+                    </span>
+                    <span className="text-xs text-earth-400">
+                      {new Date(r.createdAt).toLocaleDateString()}
+                    </span>
+                  </div>
+                  <p className="mt-2 text-sm text-earth-700">{r.brief}</p>
+                  {r.matchedCounsellor && (
+                    <p className="mt-2 text-xs text-calm-600">
+                      Matched with: {r.matchedCounsellor.user.name || "A counsellor"}
+                    </p>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* Available counsellors */}
+          {verifiedCounsellors.length > 0 && (
+            <div className="mt-8">
+              <h3 className="text-sm font-semibold text-earth-900">Available counsellors</h3>
+              <p className="mt-1 text-xs text-earth-500">
+                These verified counsellors are ready to be matched with families on the platform.
+              </p>
+              <div className="mt-3 space-y-2">
+                {verifiedCounsellors.map((c) => (
+                  <div key={c.id} className="dash-card-pad flex items-start gap-4">
+                    <div className="min-w-0 flex-1">
+                      <p className="text-sm font-medium text-earth-900">
+                        {c.user.name || "Counsellor"}
+                      </p>
+                      {c.bio && (
+                        <p className="mt-0.5 text-xs text-earth-600 line-clamp-2">{c.bio}</p>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
           )}
         </section>
 

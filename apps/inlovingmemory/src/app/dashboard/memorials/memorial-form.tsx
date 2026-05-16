@@ -126,6 +126,87 @@ export function MemorialForm({
         </div>
       </div>
 
+      {/* ── Resting place ── */}
+      <fieldset className="space-y-5 rounded-xl border border-earth-200 bg-earth-50/40 px-4 py-5">
+        <legend className="text-sm font-medium text-earth-800">Resting place</legend>
+
+        <div>
+          <label htmlFor="restingPlaceName" className="block text-sm font-medium text-earth-700">
+            Cemetery / location name
+          </label>
+          <input
+            id="restingPlaceName"
+            name="restingPlaceName"
+            type="text"
+            maxLength={200}
+            defaultValue={defaults.restingPlaceName}
+            placeholder="e.g. Greenwood Memorial Park"
+            className="mt-2 w-full max-w-xl rounded-lg border border-earth-200 bg-white px-3 py-2 text-earth-900 shadow-sm outline-none ring-earth-400/30 transition focus:border-earth-400 focus:ring-2"
+          />
+        </div>
+
+        <div>
+          <label htmlFor="restingPlaceAddress" className="block text-sm font-medium text-earth-700">
+            Address
+          </label>
+          <input
+            id="restingPlaceAddress"
+            name="restingPlaceAddress"
+            type="text"
+            maxLength={300}
+            defaultValue={defaults.restingPlaceAddress}
+            placeholder="Full address"
+            className="mt-2 w-full max-w-xl rounded-lg border border-earth-200 bg-white px-3 py-2 text-earth-900 shadow-sm outline-none ring-earth-400/30 transition focus:border-earth-400 focus:ring-2"
+          />
+        </div>
+
+        <div className="grid gap-4 sm:grid-cols-2">
+          <div>
+            <label htmlFor="restingPlaceLat" className="block text-sm font-medium text-earth-700">
+              Latitude <span className="font-normal text-earth-400">(optional)</span>
+            </label>
+            <input
+              id="restingPlaceLat"
+              name="restingPlaceLat"
+              type="number"
+              step="any"
+              defaultValue={defaults.restingPlaceLat}
+              placeholder="e.g. 32.7767"
+              className="mt-2 w-full rounded-lg border border-earth-200 bg-white px-3 py-2 text-earth-900 shadow-sm outline-none ring-earth-400/30 transition focus:border-earth-400 focus:ring-2"
+            />
+          </div>
+          <div>
+            <label htmlFor="restingPlaceLng" className="block text-sm font-medium text-earth-700">
+              Longitude <span className="font-normal text-earth-400">(optional)</span>
+            </label>
+            <input
+              id="restingPlaceLng"
+              name="restingPlaceLng"
+              type="number"
+              step="any"
+              defaultValue={defaults.restingPlaceLng}
+              placeholder="e.g. -96.7970"
+              className="mt-2 w-full rounded-lg border border-earth-200 bg-white px-3 py-2 text-earth-900 shadow-sm outline-none ring-earth-400/30 transition focus:border-earth-400 focus:ring-2"
+            />
+          </div>
+        </div>
+
+        <div>
+          <label htmlFor="restingPlaceMapUrl" className="block text-sm font-medium text-earth-700">
+            Map link URL <span className="font-normal text-earth-400">(optional)</span>
+          </label>
+          <input
+            id="restingPlaceMapUrl"
+            name="restingPlaceMapUrl"
+            type="url"
+            maxLength={500}
+            defaultValue={defaults.restingPlaceMapUrl}
+            placeholder="https://maps.google.com/?q=..."
+            className="mt-2 w-full max-w-xl rounded-lg border border-earth-200 bg-white px-3 py-2 text-earth-900 shadow-sm outline-none ring-earth-400/30 transition focus:border-earth-400 focus:ring-2"
+          />
+        </div>
+      </fieldset>
+
       {/* ── Theme ── */}
       <fieldset className="space-y-5 rounded-xl border border-earth-200 bg-earth-50/40 px-4 py-5">
         <legend className="text-sm font-medium text-earth-800">Page theme</legend>

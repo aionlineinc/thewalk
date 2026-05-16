@@ -1,14 +1,42 @@
 import { getIlmMarketingContent } from "@/lib/cms/ilm-content";
 import { IlmPageHero } from "@/components/ilm-page-hero";
 import { AppPillLink } from "@/components/ui/AppPillLink";
+import { PricingBuyButton } from "@/components/ui/PricingBuyButton";
+import { getServerSession } from "next-auth";
+import { getAuthOptions } from "@/lib/auth";
+import { prisma } from "@/lib/prisma";
 
 export const metadata = {
   title: "Pricing · inLovingMemory",
   description: "Start free. Upgrade for more privacy, media, and a private family vault for generations.",
 };
 
+async function getUserActiveTiers(userId: string | undefined): Promise<Set<string>> {
+  if (!userId) return new Set();
+  const purchases = await prisma.ilmPlanPurchase.findMany({
+    where: { userId, status: "ACTIVE" },
+    select: { tier: true },
+  });
+  return new Set(purchases.map((p) => p.tier));
+}
+
+const prices: Record<string, string> = {
+  PREMIUM: "$89",
+  GENERATIONS: "$49/yr",
+  CONCIERGE: "$299",
+};
+
 export default async function PricingPage() {
   const content = await getIlmMarketingContent();
+  const session = await getServerSession(getAuthOptions());
+  const activeTiers = await getUserActiveTiers(session?.user?.id);
+
+  const tierToEnum: Record<string, string> = {
+    Premium: "PREMIUM",
+    Generations: "GENERATIONS",
+    Concierge: "CONCIERGE",
+  };
+
   return (
     <main className="pb-24">
       <IlmPageHero
@@ -25,18 +53,27 @@ export default async function PricingPage() {
           {content.pricing.tiers.map((t) => {
             const isFeatured = t.name === "Premium";
             const isDim = t.name === "Generations";
+            const tierEnum = tierToEnum[t.name];
+            const hasTier = tierEnum ? activeTiers.has(tierEnum) : false;
+            const price = tierEnum ? prices[tierEnum] : "";
+
+            let buyLabel = "";
+            if (t.name === "Premium") buyLabel = hasTier ? "You have Premium" : `Buy Premium — ${price}`;
+            else if (t.name === "Generations") buyLabel = hasTier ? "You have Generations" : `Buy Generations — ${price}`;
+            else if (t.name === "Concierge") buyLabel = "Contact us";
+
             return (
               <div
                 key={t.name}
                 className={
                   isFeatured
-                    ? "relative overflow-hidden rounded-2xl border border-calm-500/30 bg-calm-500 shadow-xl shadow-calm-700/20"
+                    ? "relative flex flex-col overflow-hidden rounded-2xl border border-calm-500/30 bg-calm-500 shadow-xl shadow-calm-700/20"
                     : isDim
-                      ? "rounded-2xl border border-earth-200 bg-earth-50/60 shadow-sm"
-                      : "rounded-2xl border border-earth-200 bg-white shadow-sm"
+                      ? "flex flex-col rounded-2xl border border-earth-200 bg-earth-50/60 shadow-sm"
+                      : "flex flex-col rounded-2xl border border-earth-200 bg-white shadow-sm"
                 }
               >
-                <div className="p-8">
+                <div className="flex-1 p-8">
                   <p
                     className={
                       isFeatured
@@ -68,6 +105,25 @@ export default async function PricingPage() {
                     ))}
                   </ul>
                 </div>
+
+                {t.name === "Concierge" ? (
+                  <div className="px-8 pb-8">
+                    <a
+                      href="/services/register"
+                      className="mt-6 inline-flex w-full items-center justify-center rounded-lg border border-earth-300 bg-white px-6 py-2.5 text-sm font-semibold text-earth-700 hover:bg-earth-50"
+                    >
+                      Contact us
+                    </a>
+                  </div>
+                ) : tierEnum ? (
+                  <div className="px-8 pb-8">
+                    <PricingBuyButton
+                      tier={tierEnum as "PREMIUM" | "GENERATIONS"}
+                      label={buyLabel}
+                      disabled={hasTier}
+                    />
+                  </div>
+                ) : null}
               </div>
             );
           })}

@@ -39,6 +39,7 @@ model User {
   ilmGenerationsVaultsOwned   IlmGenerationsVault[]       @relation("IlmVaultOwner")
   ilmCounsellorProfile        IlmCounsellor?
   ilmGriefRequests            IlmGriefRequest[]           @relation("IlmGriefRequester")
+  ilmPlanPurchases            IlmPlanPurchase[]
   ilmVaultMemberships         IlmVaultMember[]
   ilmOrgAccountsAdmin         IlmOrgAccount[]             @relation("IlmOrgAdmin")
   serviceProvider             IlmServiceProvider?
@@ -237,6 +238,12 @@ model IlmMemorial {
   biography   String?         @db.Text
   hideFromDirectory     Boolean @default(false)
   hideFromSearchEngines Boolean @default(false)
+
+  restingPlaceName    String?
+  restingPlaceAddress String?
+  restingPlaceLat     Float?
+  restingPlaceLng     Float?
+  restingPlaceMapUrl  String?
 
   pageKeeperId String
   pageKeeper   User   @relation("IlmPageKeeper", fields: [pageKeeperId], references: [id], onDelete: Restrict)
@@ -632,4 +639,24 @@ model IlmServiceOrder {
   @@map("ilm_service_order")
   @@index([providerId])
   @@index([memorialId])
+}
+
+model IlmPlanPurchase {
+  id              String   @id @default(uuid())
+  userId          String
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tier            String
+  status          String   @default("PENDING")
+  stripeSessionId String?  @unique
+  stripePaymentIntentId String?
+  amountPaid      Float?
+  activatedAt     DateTime?
+  expiresAt       DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("ilm_plan_purchase")
+  @@index([userId])
+  @@index([status])
 }
