@@ -32,11 +32,15 @@ export default async function VaultCollectionItemsPage({
 
   if (!memorial || memorial.pageKeeperId !== userId) notFound();
 
-  const vault = await prisma.ilmGenerationsVault.findUnique({
+  let vault = await prisma.ilmGenerationsVault.findUnique({
     where: { linkedMemorialId: memorial.id },
   });
 
-  if (!vault) notFound();
+  if (!vault) {
+    vault = await prisma.ilmGenerationsVault.create({
+      data: { linkedMemorialId: memorial.id, ownerId: userId! },
+    });
+  }
 
   // Verify the collection belongs to this vault
   const collection = await prisma.ilmVaultCollection.findFirst({

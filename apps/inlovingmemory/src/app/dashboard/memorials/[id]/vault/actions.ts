@@ -25,18 +25,25 @@ async function requireVaultAccess(memorialId: string) {
   return userId;
 }
 
+async function getOrCreateVault(memorialId: string, ownerId: string) {
+  const existing = await prisma.ilmGenerationsVault.findUnique({
+    where: { linkedMemorialId: memorialId },
+  });
+  if (existing) return existing;
+
+  return prisma.ilmGenerationsVault.create({
+    data: { linkedMemorialId: memorialId, ownerId },
+  });
+}
+
 export async function createCollection(formData: FormData) {
   const memorialId = (formData.get("memorialId") as string) || "";
-  await requireVaultAccess(memorialId);
+  const userId = await requireVaultAccess(memorialId);
 
   const name = (formData.get("name") as string)?.trim();
   if (!name || name.length > 200) redirect(`/dashboard/memorials/${memorialId}/vault?error=validation`);
 
-  const vault = await prisma.ilmGenerationsVault.findUnique({
-    where: { linkedMemorialId: memorialId },
-  });
-
-  if (!vault) redirect(`/dashboard/memorials/${memorialId}/vault?error=no_vault`);
+  const vault = await getOrCreateVault(memorialId, userId);
 
   await prisma.ilmVaultCollection.create({
     data: { vaultId: vault.id, name },
@@ -129,10 +136,7 @@ export async function inviteMember(formData: FormData) {
   const role = (formData.get("role") as string) || "FAMILY_VIEWER";
   if (!email) redirect(`/dashboard/memorials/${memorialId}/vault/members?error=email`);
 
-  const vault = await prisma.ilmGenerationsVault.findUnique({
-    where: { linkedMemorialId: memorialId },
-  });
-  if (!vault) redirect(`/dashboard/memorials/${memorialId}/vault?error=no_vault`);
+  const vault = await getOrCreateVault(memorialId, userId);
 
   // Find the user by email
   const targetUser = await prisma.user.findFirst({
@@ -187,12 +191,9 @@ export async function removeMember(formData: FormData) {
 
 export async function createMessage(formData: FormData) {
   const memorialId = (formData.get("memorialId") as string) || "";
-  await requireVaultAccess(memorialId);
+  const userId = await requireVaultAccess(memorialId);
 
-  const vault = await prisma.ilmGenerationsVault.findUnique({
-    where: { linkedMemorialId: memorialId },
-  });
-  if (!vault) redirect(`/dashboard/memorials/${memorialId}/vault/messages?error=no_vault`);
+  const vault = await getOrCreateVault(memorialId, userId);
 
   const recipientEmail = (formData.get("recipientEmail") as string)?.trim() || "";
   const body = (formData.get("body") as string)?.trim() || "";

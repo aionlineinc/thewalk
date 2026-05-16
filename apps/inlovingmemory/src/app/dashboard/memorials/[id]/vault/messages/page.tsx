@@ -17,14 +17,21 @@ export default async function VaultMessagesPage({ params }: { params: { id: stri
 
   if (!memorial || memorial.pageKeeperId !== userId) notFound();
 
-  const vault = await prisma.ilmGenerationsVault.findUnique({
+  let vault = await prisma.ilmGenerationsVault.findUnique({
     where: { linkedMemorialId: memorial.id },
     include: {
       messages: { orderBy: { createdAt: "desc" } },
     },
   });
 
-  if (!vault) notFound();
+  if (!vault) {
+    vault = await prisma.ilmGenerationsVault.create({
+      data: { linkedMemorialId: memorial.id, ownerId: userId! },
+      include: {
+        messages: { orderBy: { createdAt: "desc" } },
+      },
+    });
+  }
 
   return (
     <section className="w-full">

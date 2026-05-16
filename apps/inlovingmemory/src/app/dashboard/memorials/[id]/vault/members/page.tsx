@@ -35,7 +35,7 @@ export default async function VaultMembersPage({ params }: { params: { id: strin
 
   if (!memorial || memorial.pageKeeperId !== userId) notFound();
 
-  const vault = await prisma.ilmGenerationsVault.findUnique({
+  let vault = await prisma.ilmGenerationsVault.findUnique({
     where: { linkedMemorialId: memorial.id },
     include: {
       members: {
@@ -45,7 +45,14 @@ export default async function VaultMembersPage({ params }: { params: { id: strin
     },
   });
 
-  if (!vault) notFound();
+  if (!vault) {
+    vault = await prisma.ilmGenerationsVault.create({
+      data: { linkedMemorialId: memorial.id, ownerId: userId! },
+      include: {
+        members: { include: { user: { select: { name: true, email: true } } }, orderBy: { createdAt: "desc" } },
+      },
+    });
+  }
 
   const errorParam = ""; // Could read from searchParams if needed
 

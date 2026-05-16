@@ -18,7 +18,7 @@ export default async function VaultCollectionsPage({ params }: { params: { id: s
 
   if (!memorial || memorial.pageKeeperId !== userId) notFound();
 
-  const vault = await prisma.ilmGenerationsVault.findUnique({
+  let vault = await prisma.ilmGenerationsVault.findUnique({
     where: { linkedMemorialId: memorial.id },
     include: {
       collections: {
@@ -28,7 +28,14 @@ export default async function VaultCollectionsPage({ params }: { params: { id: s
     },
   });
 
-  if (!vault) notFound();
+  if (!vault) {
+    vault = await prisma.ilmGenerationsVault.create({
+      data: { linkedMemorialId: memorial.id, ownerId: userId! },
+      include: {
+        collections: { include: { _count: { select: { items: true } } }, orderBy: { createdAt: "desc" } },
+      },
+    });
+  }
 
   return (
     <section className="w-full">
