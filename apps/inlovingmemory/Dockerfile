@@ -53,6 +53,10 @@ COPY --from=builder /app/node_modules/.bin/prisma ./node_modules/.bin/prisma
 COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
 # Prisma CLI resolves WASM next to the `.bin/prisma` shim at runtime.
 COPY --from=builder /app/node_modules/prisma/build/prisma_schema_build_bg.wasm ./node_modules/.bin/prisma_schema_build_bg.wasm
+# Bundled Prisma CLI shim does require('../package.json') at runtime; relative to
+# node_modules/.bin/ this resolves to node_modules/package.json, which doesn't
+# exist by default in the runner stage. Copy the Prisma package.json there.
+RUN cp /app/node_modules/prisma/package.json /app/node_modules/package.json
 
 RUN chown -R nextjs:nodejs /app
 
