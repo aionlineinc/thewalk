@@ -173,7 +173,7 @@ export function IlmHeader({ session }: { session: Session | null }) {
               {/* Mega menu panel */}
               <div
                 className={`absolute left-1/2 top-full z-30 w-[min(48rem,calc(100vw-2rem))] -translate-x-1/2 pt-3 transition-all duration-300 origin-top ${
-                  activeMenu
+                  activeMenu === "services" || activeMenu === "more"
                     ? "visible translate-y-0 opacity-100 pointer-events-auto"
                     : "invisible -translate-y-4 opacity-0 pointer-events-none"
                 }`}

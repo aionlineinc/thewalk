@@ -57,7 +57,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       <body className="min-h-screen font-sans antialiased">
         <SessionProvider session={session}>
           <IlmHeader session={session} />
-          <div className="min-h-[calc(100vh-64px)]">{children}</div>
+          <div className="min-h-[calc(100vh-64px)] pt-24">{children}</div>
           <IlmFooter />
         </SessionProvider>
       </body>
